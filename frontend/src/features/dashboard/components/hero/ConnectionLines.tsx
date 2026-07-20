@@ -16,13 +16,7 @@ export const ConnectionLines = ({ active = false }: { active?: boolean }) => {
           <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
         </linearGradient>
         {/* Glow effect for active pulses */}
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
-          <feMerge>
-            <feMergeNode in="coloredBlur"/>
-            <feMergeNode in="SourceGraphic"/>
-          </feMerge>
-        </filter>
+
       </defs>
 
       {/* Paths connecting the orbital modules to the core (center). Dotted and extremely subtle for high-end dashboard aesthetics. */}
@@ -47,7 +41,7 @@ export const ConnectionLines = ({ active = false }: { active?: boolean }) => {
 
       {/* Active Pulse Animation Layer */}
       {active && (
-        <g stroke="var(--accent-functional)" strokeWidth="0.5" filter="url(#glow)" className="animate-line-travel" strokeDasharray="5 150">
+        <g stroke="var(--accent-functional)" strokeWidth="0.5" className="animate-line-travel" strokeDasharray="5 150">
           <path d="M 50 10 Q 50 30 50 50" fill="none" />
           <path d="M 10 40 Q 30 45 50 50" fill="none" />
           <path d="M 90 40 Q 70 45 50 50" fill="none" />
