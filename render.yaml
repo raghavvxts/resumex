@@ -5,10 +5,12 @@ services:
     region: ohio
     plan: free
     rootDir: backend
-    buildCommand: "pip install -r requirements.txt"
+    buildCommand: "chmod +x build.sh && ./build.sh"
     startCommand: "gunicorn -w 1 -b 0.0.0.0:$PORT wsgi:app"
     envVars:
       - key: PYTHON_VERSION
         value: 3.10.12
       - key: FLASK_ENV
         value: production
+      - key: PATH
+        value: "/opt/render/project/src/backend/.bin:$PATH"
