@@ -36,11 +36,12 @@ else:
     model_name = None
 
 app = Flask(__name__)
-ALLOWED_ORIGINS = [origin.strip() for origin in os.getenv(
-    "FRONTEND_ORIGINS",
-    "http://localhost:8080,http://127.0.0.1:8080"
-).split(",") if origin.strip()]
-CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
+allowed_origins_env = os.getenv("FRONTEND_ORIGINS", "*")
+if allowed_origins_env == "*":
+    CORS(app, resources={r"/*": {"origins": "*"}})
+else:
+    ALLOWED_ORIGINS = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+    CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
 MIN_JOB_WORDS = 20
