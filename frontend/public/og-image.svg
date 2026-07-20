@@ -1,15 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="100%" stop-color="#1e293b" />
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#07040E" />
+      <stop offset="100%" stop-color="#020104" />
+    </linearGradient>
+    
+    <!-- Card Border Glow -->
+    <linearGradient id="borderGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="rgba(168, 85, 247, 0.4)" />
+      <stop offset="50%" stop-color="rgba(56, 189, 248, 0.4)" />
+      <stop offset="100%" stop-color="rgba(168, 85, 247, 0.05)" />
+    </linearGradient>
+
+    <!-- Accent Gradients -->
+    <linearGradient id="purpleGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    
+    <linearGradient id="tealGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0EA5E9" />
     </linearGradient>
   </defs>
-  <rect width="1200" height="630" fill="url(#bg)" />
-  <rect x="72" y="72" width="1056" height="486" rx="24" fill="#111827" stroke="#334155" stroke-width="2"/>
-  <text x="120" y="230" fill="#f8fafc" font-size="72" font-family="Arial, sans-serif" font-weight="700">AI Resume Matcher</text>
-  <text x="120" y="305" fill="#cbd5e1" font-size="34" font-family="Arial, sans-serif">Match resumes to job descriptions with AI-powered insights.</text>
-  <text x="120" y="360" fill="#94a3b8" font-size="30" font-family="Arial, sans-serif">Section scores • Missing keywords • Actionable recommendations</text>
-  <rect x="120" y="414" width="238" height="66" rx="12" fill="#22c55e" />
-  <text x="164" y="457" fill="#052e16" font-size="32" font-family="Arial, sans-serif" font-weight="700">Analyze</text>
+
+  <!-- Full Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+
+  <!-- Ambient Decorative Light Flares -->
+  <circle cx="200" cy="150" r="300" fill="#8B5CF6" opacity="0.12" filter="blur(100px)" />
+  <circle cx="1000" cy="450" r="250" fill="#0EA5E9" opacity="0.08" filter="blur(80px)" />
+
+  <!-- Main Glassmorphic Outline -->
+  <rect x="60" y="60" width="1080" height="510" rx="32" fill="rgba(255, 255, 255, 0.02)" stroke="url(#borderGrad)" stroke-width="2.5" />
+  
+  <!-- Stylized Branding Header -->
+  <g transform="translate(120, 130)">
+    <!-- Logo Icon Group -->
+    <g transform="translate(0, 0)">
+      <!-- Paper outline -->
+      <path d="M0 6C0 2.68629 2.68629 0 6 0H42L56 14V54C56 57.3137 53.3137 60 50 60H6C2.68629 60 0 57.3137 0 54V6Z" fill="#090514" stroke="url(#purpleGrad)" stroke-width="3" />
+      <!-- Fold -->
+      <path d="M42 0V14H56L42 0Z" fill="url(#purpleGrad)" />
+      <!-- Sparkle -->
+      <path d="M46 46C46 46 46 50 50 50C46 50 46 54 46 54C46 54 46 50 42 50C46 50 46 46 46 46Z" fill="url(#tealGrad)" />
+      <!-- Lines -->
+      <line x1="12" y1="20" x2="24" y2="20" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" />
+      <line x1="12" y1="30" x2="38" y2="30" stroke="rgba(255,255,255,0.4)" stroke-width="3" stroke-linecap="round" />
+      <line x1="12" y1="40" x2="30" y2="40" stroke="rgba(255,255,255,0.4)" stroke-width="3" stroke-linecap="round" />
+    </g>
+    
+    <!-- Title Text -->
+    <text x="80" y="46" fill="#FFFFFF" font-size="54" font-family="system-ui, -apple-system, sans-serif" font-weight="800" letter-spacing="-1.5px">Resume AI</text>
+  </g>
+
+  <!-- Tagline / Headline -->
+  <text x="120" y="270" fill="#F8FAFC" font-size="64" font-family="system-ui, -apple-system, sans-serif" font-weight="700" letter-spacing="-2px">Smarter Resumes.<br/>Bigger Opportunities.</text>
+  
+  <!-- Description list -->
+  <text x="120" y="440" fill="#94A3B8" font-size="24" font-family="system-ui, -apple-system, sans-serif" font-weight="500" letter-spacing="-0.5px">
+    <tspan x="120" dy="0">✦  AI-Powered Keyword &amp; ATS Scoring</tspan>
+    <tspan x="120" dy="40">✦  Interactive Career &amp; Skills Gap Strategist</tspan>
+    <tspan x="120" dy="40">✦  Instant LaTeX PDF Export &amp; Custom Letter Drafts</tspan>
+  </text>
 </svg>

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Resume Analyzer UI Tests', () => {
+test.describe('ResumeX UI Tests', () => {
   test('should successfully load the app, open the drawer, and run an analysis', async ({ page }) => {
     console.log("🚀 Starting Agent-Driven UI Test (Playwright)...");
 

@@ -1,15 +1,51 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="AI Resume Matcher">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Resume AI">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#0f172a" />
-      <stop offset="100%" stop-color="#1e293b" />
+    <!-- Background Gradient -->
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0F081D" />
+      <stop offset="100%" stop-color="#05020A" />
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#22c55e" />
-      <stop offset="100%" stop-color="#10b981" />
+    
+    <!-- Accent Purple Glow -->
+    <linearGradient id="primaryGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#C084FC" />
+      <stop offset="100%" stop-color="#8B5CF6" />
+    </linearGradient>
+    
+    <!-- Accent Teal/Blue Glow -->
+    <linearGradient id="secondaryGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="100%" stop-color="#0EA5E9" />
+    </linearGradient>
+    
+    <!-- White Gradient -->
+    <linearGradient id="whiteGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#E2E8F0" />
     </linearGradient>
   </defs>
-  <rect width="64" height="64" rx="14" fill="url(#bg)" />
-  <path d="M18 46L28 18h8l10 28h-7l-2-6h-10l-2 6h-7zm11-12h6l-3-9-3 9z" fill="#f8fafc"/>
-  <circle cx="49" cy="15" r="6" fill="url(#accent)" />
+
+  <!-- Background Base -->
+  <rect width="64" height="64" rx="16" fill="url(#bgGrad)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1.5" />
+  
+  <!-- Subtle Ambient Glow -->
+  <circle cx="32" cy="32" r="20" fill="#8B5CF6" opacity="0.15" filter="blur(8px)" />
+
+  <!-- Stylized Document Shield -->
+  <path d="M20 18C20 15.7909 21.7909 14 24 14H38L44 20V46C44 48.2091 42.2091 50 40 50H24C21.7909 50 20 48.2091 20 46V18Z" fill="url(#bgGrad)" stroke="url(#primaryGrad)" stroke-width="2" />
+  
+  <!-- Folded Corner -->
+  <path d="M38 14V20H44L38 14Z" fill="url(#primaryGrad)" />
+
+  <!-- Document Lines (Representing Resume Structure) -->
+  <line x1="25" y1="26" x2="33" y2="26" stroke="url(#whiteGrad)" stroke-width="2" stroke-linecap="round" />
+  <line x1="25" y1="32" x2="39" y2="32" stroke="rgba(255, 255, 255, 0.4)" stroke-width="2" stroke-linecap="round" />
+  <line x1="25" y1="38" x2="35" y2="38" stroke="rgba(255, 255, 255, 0.4)" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Sparkling AI Core (Bottom Right overlapping the document) -->
+  <g transform="translate(38, 38)">
+    <circle cx="0" cy="0" r="10" fill="url(#bgGrad)" stroke="url(#secondaryGrad)" stroke-width="1.5" />
+    <!-- Glowing Sparkle Path -->
+    <path d="M0 -6C0 -6 0 0 6 0C0 0 0 6 0 6C0 6 0 0 -6 0C0 0 0 -6 0 -6Z" fill="url(#secondaryGrad)" />
+  </g>
 </svg>

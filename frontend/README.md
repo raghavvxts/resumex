@@ -1,4 +1,4 @@
-AI Resume Analyzer Setup
+ResumeX Frontend Setup
 
 This app has two parts:
 - Flask backend API in backend
