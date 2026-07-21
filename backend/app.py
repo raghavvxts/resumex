@@ -1183,13 +1183,24 @@ def generate_pdf():
                 f.write(rendered_tex)
                 
             # Run tectonic
-            result = subprocess.run(
-                ['tectonic', 'resume.tex'],
-                cwd=temp_dir,
-                capture_output=True,
-                text=True
-            )
-            
+            try:
+                # Try global tectonic first (useful for local development)
+                result = subprocess.run(
+                    ['tectonic', 'resume.tex'],
+                    cwd=temp_dir,
+                    capture_output=True,
+                    text=True
+                )
+            except FileNotFoundError:
+                # Fallback to the local binary installed by build.sh on Render
+                local_tectonic = os.path.join(os.path.dirname(__file__), '.bin', 'tectonic')
+                result = subprocess.run(
+                    [local_tectonic, 'resume.tex'],
+                    cwd=temp_dir,
+                    capture_output=True,
+                    text=True
+                )
+                
             if result.returncode != 0:
                 app.logger.error(f"Tectonic failed: {result.stderr}")
                 return jsonify({"error": "Failed to compile LaTeX PDF."}), 500
