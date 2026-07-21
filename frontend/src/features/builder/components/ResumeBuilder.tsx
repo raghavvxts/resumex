@@ -65,15 +65,15 @@ export const ResumeBuilder = () => {
                   onClick={() => setSelectedTemplate("jakes_resume")}
                   className={`px-7 py-5 rounded-2xl cursor-pointer transition-all ${selectedTemplate === "jakes_resume" ? "border-2 border-purple-500 bg-purple-500/10" : "border border-white/10 hover:border-white/30 hover:bg-white/[0.03]"}`}
                 >
-                  <p className="font-bold text-white mb-1"> Jake's Resume</p>
-                  <p className="text-label text-[#9CA3AF] leading-relaxed">The gold standard for Software Engineers. Clean, ATS-friendly LaTeX.</p>
+                  <p className="font-bold text-white mb-1 pl-1">Jake's Resume</p>
+                  <p className="text-label text-[#9CA3AF] leading-relaxed pl-1">The gold standard for Software Engineers. Clean, ATS-friendly LaTeX.</p>
                 </div>
                 <div 
                   onClick={() => setSelectedTemplate("deedy_resume")}
                   className={`px-7 py-5 rounded-2xl cursor-pointer transition-all ${selectedTemplate === "deedy_resume" ? "border-2 border-purple-500 bg-purple-500/10" : "border border-white/10 hover:border-white/30 hover:bg-white/[0.03]"}`}
                 >
-                  <p className="font-bold text-white mb-1"> Deedy Resume</p>
-                  <p className="text-label text-[#9CA3AF] leading-relaxed">A stylish two-column layout optimized for information density.</p>
+                  <p className="font-bold text-white mb-1 pl-1">Deedy Resume</p>
+                  <p className="text-label text-[#9CA3AF] leading-relaxed pl-1">A stylish two-column layout optimized for information density.</p>
                 </div>
               </div>
             </div>

@@ -7,31 +7,7 @@ export const DashboardPage = () => {
   const { isReady, uploadStatus, setUploadStatus } = useResumeContext();
   const resultsRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // Orchestrate the Upload Ceremony
-    // "reading" -> "projects" -> "skills" -> "ats" -> "suggestions" -> "complete"
-    
-    // We already jump to 'projects' when the API finishes in ConfigDrawer. 
-    // Now we sequence the rest for visual impact.
-    if (uploadStatus === "projects") {
-      const sequence = async () => {
-        const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
-        
-        await wait(800);
-        setUploadStatus("skills");
-        
-        await wait(800);
-        setUploadStatus("ats");
-        
-        await wait(800);
-        setUploadStatus("suggestions");
-        
-        await wait(1200);
-        setUploadStatus("complete");
-      };
-      sequence();
-    }
-  }, [uploadStatus, setUploadStatus]);
+  // Orchestration moved to AppShell.tsx to run globally
 
   // Auto-scroll to results when analysis completes
   useEffect(() => {

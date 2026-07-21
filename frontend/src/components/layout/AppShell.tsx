@@ -11,7 +11,29 @@ import { MaterialSurface } from "../ui/MaterialSurface";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const AppShell = () => {
-  const { isReady, showStrategist, setShowStrategist, strategistQuery, showConfigDrawer } = useResumeContext();
+  const { isReady, showStrategist, setShowStrategist, strategistQuery, showConfigDrawer, uploadStatus, setUploadStatus } = useResumeContext();
+
+  React.useEffect(() => {
+    // Orchestrate the Upload Ceremony
+    if (uploadStatus === "projects") {
+      const sequence = async () => {
+        const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
+        
+        await wait(800);
+        setUploadStatus("skills");
+        
+        await wait(800);
+        setUploadStatus("ats");
+        
+        await wait(800);
+        setUploadStatus("suggestions");
+        
+        await wait(1200);
+        setUploadStatus("complete");
+      };
+      sequence();
+    }
+  }, [uploadStatus, setUploadStatus]);
 
   return (
     <div className={`flex bg-bg-base text-text-primary selection:bg-accent-functional/30 relative overflow-hidden ${isReady ? "min-h-[100dvh]" : "h-[100dvh] overflow-hidden"}`}>
