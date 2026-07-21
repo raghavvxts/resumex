@@ -65,14 +65,14 @@ export const ResumeBuilder = () => {
                   onClick={() => setSelectedTemplate("jakes_resume")}
                   className={`px-7 py-5 rounded-2xl cursor-pointer transition-all ${selectedTemplate === "jakes_resume" ? "border-2 border-purple-500 bg-purple-500/10" : "border border-white/10 hover:border-white/30 hover:bg-white/[0.03]"}`}
                 >
-                  <p className="font-bold text-white mb-1">Jake's Resume</p>
+                  <p className="font-bold text-white mb-1"> Jake's Resume</p>
                   <p className="text-label text-[#9CA3AF] leading-relaxed">The gold standard for Software Engineers. Clean, ATS-friendly LaTeX.</p>
                 </div>
                 <div 
                   onClick={() => setSelectedTemplate("deedy_resume")}
                   className={`px-7 py-5 rounded-2xl cursor-pointer transition-all ${selectedTemplate === "deedy_resume" ? "border-2 border-purple-500 bg-purple-500/10" : "border border-white/10 hover:border-white/30 hover:bg-white/[0.03]"}`}
                 >
-                  <p className="font-bold text-white mb-1">Deedy Resume</p>
+                  <p className="font-bold text-white mb-1"> Deedy Resume</p>
                   <p className="text-label text-[#9CA3AF] leading-relaxed">A stylish two-column layout optimized for information density.</p>
                 </div>
               </div>
@@ -110,7 +110,7 @@ export const ResumeBuilder = () => {
                       {parsedResume.education.map((edu: any, i: number) => (
                         <div key={i} className="mb-2">
                           <p className="text-body-sm font-semibold text-white">{edu.institution || edu.school}</p>
-                          <p className="text-caption text-[#9CA3AF]">{edu.degree} {edu.dates && `• ${edu.dates}`}</p>
+                          <p className="text-caption text-[#9CA3AF]">{edu.degree} {edu.date && `• ${edu.date}`}</p>
                         </div>
                       ))}
                     </div>
@@ -123,7 +123,7 @@ export const ResumeBuilder = () => {
                         <div key={i} className="mb-3">
                           <div className="flex justify-between">
                             <p className="text-body-sm font-semibold text-white">{exp.title || exp.role}</p>
-                            <p className="text-caption text-[#4B5563]">{exp.dates}</p>
+                            <p className="text-caption text-[#4B5563]">{exp.date}</p>
                           </div>
                           <p className="text-caption text-[#9CA3AF] mb-1">{exp.company}</p>
                           {exp.bullets?.slice(0, 3).map((b: string, j: number) => (
@@ -134,13 +134,15 @@ export const ResumeBuilder = () => {
                     </div>
                   )}
                   {/* Skills */}
-                  {parsedResume.skills?.length > 0 && (
+                  {parsedResume.skills && Object.keys(parsedResume.skills).length > 0 && (
                     <div>
                       <p className="label-tiny text-[#6B7280] mb-2">SKILLS</p>
                       <div className="flex flex-wrap gap-1.5">
-                        {(Array.isArray(parsedResume.skills[0]) ? parsedResume.skills.flat() : parsedResume.skills).map((skill: any, i: number) => (
+                        {Object.values(parsedResume.skills).flatMap((val: any) => 
+                          (typeof val === 'string' ? val.split(',').map(s => s.trim()).filter(Boolean) : [])
+                        ).map((skill: string, i: number) => (
                           <span key={i} className="px-2 py-1 rounded-md text-[11px] text-[#D1D5DB] font-medium" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)' }}>
-                            {typeof skill === 'string' ? skill : skill.name || skill.category}
+                            {skill}
                           </span>
                         ))}
                       </div>
