@@ -323,7 +323,7 @@ describe("resume workflow contracts", () => {
     });
     expect(apply).toBeDisabled();
     fireEvent.change(screen.getByLabelText("Original bullet to replace"), {
-      target: { value: "1:0" },
+      target: { value: "experience:1:0" },
     });
     fireEvent.click(apply);
     expect(

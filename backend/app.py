@@ -606,6 +606,13 @@ Job Description:
 {job}
 """
 
+    prompt += """
+Output constraints:
+- Each rewritten_bullets entry must be a finished resume bullet of at most 40 words, ready for the draft and grounded only in supplied facts.
+- Do not put coaching, questions, bracketed placeholders, example metrics, or X/Y/Z stand-ins into rewrites.
+- Put questions about missing evidence in weak_points. Return an empty rewritten_bullets array if no faithful rewrite is possible.
+"""
+
     last_error = ""
     for candidate_model in ai_model_candidates():
         for attempt in range(MAX_AI_RETRIES):

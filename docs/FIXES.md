@@ -54,8 +54,10 @@ See the final deployment notes below for production verification. Use the update
 - Parsing compares source sections, bullet counts, email addresses and percentage metrics, flagging possible omissions. Additional source sections trigger review. Export waits for explicit acknowledgment when warnings exist; original text remains available for comparison.
 - Added an optional local Ollama provider without exposing the model to the public internet. All five synthetic workflows passed; see LOCAL_MODEL_BENCHMARK.md. Gemini remains the default for the hosted site.
 - Saved drafts and versions reject malformed field shapes. Recovery was checked after refresh, at the 20-version limit, and when browser storage fails.
-- Frontend has 17 passing tests. Backend has 19 passing tests, plus separate actual compiler verification. See PERFORMANCE.md for the controlled slow-device/network check.
+- Frontend has 18 passing tests. Backend has 19 passing tests, plus separate actual compiler verification. See PERFORMANCE.md for the controlled slow-device/network check.
 
 Deployment repair: Render had a custom PATH value `/opt/render/project/src/backend/.bin:$PATH`. Environment values do not expand the shell variable, so this hid system commands and caused `/home/render/colors.sh: tput: command not found` before the build script. Removed that override; template export resolves its binary explicitly. No API credentials were changed.
 
 Live backend verification (November 18): Render revision `af1252c` is healthy with Gemini active. Pasted-text parsing, analysis, skills, concise cover letter and chat returned HTTP 200 with valid content. Jake, Deedy and Simple PDFs downloaded and passed text extraction checks. Uploading the generated Jake PDF back into analysis also succeeded and preserved its name and 30% metric. Fixed templates took approximately 8–10 seconds on the free Render instance; preview requests are serialized so edits queue the latest content instead of overlapping exports.
+
+Live review follow-up: the original-bullet chooser now includes both experience and project bullets, and clears stale selections after edits. AI output instructions keep coaching questions and placeholders out of draft-ready rewrites. Added a regression proving a project rewrite leaves experience unchanged.

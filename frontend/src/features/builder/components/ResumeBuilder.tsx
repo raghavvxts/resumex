@@ -40,6 +40,7 @@ export const ResumeBuilder = () => {
   const [error, setError] = useState("");
   useEffect(() => {
     setPreview("");
+    setBulletTarget("");
     generation.current += 1;
     return () => {
       generation.current += 1;
@@ -315,13 +316,24 @@ export const ResumeBuilder = () => {
                       onChange={(e) => setBulletTarget(e.target.value)}
                     >
                       <option value="">Choose an original bullet</option>
-                      {(parsedResume.experience || []).flatMap(
-                        (exp: any, i: number) =>
-                          (exp.bullets || []).map((b: string, j: number) => (
-                            <option key={`${i}:${j}`} value={`${i}:${j}`}>
-                              {exp.company}: {b}
-                            </option>
-                          )),
+                      {["experience", "projects"].flatMap((section) =>
+                        (parsedResume[section] || []).flatMap(
+                          (entry: any, i: number) =>
+                            (entry.bullets || []).map(
+                              (bullet: string, j: number) => (
+                                <option
+                                  key={`${section}:${i}:${j}`}
+                                  value={`${section}:${i}:${j}`}
+                                >
+                                  {entry.company ||
+                                    entry.name ||
+                                    entry.role ||
+                                    `${section} ${i + 1}`}
+                                  : {bullet}
+                                </option>
+                              ),
+                            ),
+                        ),
                       )}
                     </select>
                   </label>
@@ -339,10 +351,10 @@ export const ResumeBuilder = () => {
                               </p>
                               <p>
                                 {bulletTarget
-                                  ? parsedResume.experience?.[
-                                      Number(bulletTarget.split(":")[0])
-                                    ]?.bullets?.[
+                                  ? parsedResume[bulletTarget.split(":")[0]]?.[
                                       Number(bulletTarget.split(":")[1])
+                                    ]?.bullets?.[
+                                      Number(bulletTarget.split(":")[2])
                                     ]
                                   : "Choose an original bullet above to compare."}
                               </p>
@@ -358,12 +370,13 @@ export const ResumeBuilder = () => {
                             className="btn-secondary mt-3 px-4 py-2"
                             disabled={!bulletTarget}
                             onClick={() => {
-                              const [expIndex, bulletIndex] = bulletTarget
-                                .split(":")
-                                .map(Number);
+                              const [section, index, selectedBullet] =
+                                bulletTarget.split(":");
+                              const expIndex = Number(index);
+                              const bulletIndex = Number(selectedBullet);
                               update(
-                                "experience",
-                                parsedResume.experience.map(
+                                section,
+                                parsedResume[section].map(
                                   (exp: any, j: number) =>
                                     j === expIndex
                                       ? {

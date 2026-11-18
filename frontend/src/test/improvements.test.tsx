@@ -381,3 +381,58 @@ it("queues the latest preview while an earlier export is still running", async (
   );
   expect(screen.getByRole("link", { name: "Download PDF" })).toBeVisible();
 });
+
+it("can replace a project bullet without changing experience bullets", () => {
+  const Seed = () => {
+    const c = useResumeContext();
+    return (
+      <button
+        onClick={() => {
+          c.setParsedResume({
+            personal_info: { name: "Alex" },
+            education: [],
+            experience: [{ company: "Example", bullets: ["Keep experience"] }],
+            projects: [{ name: "Resume Tool", bullets: ["Original project"] }],
+            skills: {},
+          });
+          c.setResult({
+            score: 50,
+            missing_keywords: [],
+            suggestions: "",
+            ai_recommendations: {
+              status: "ok",
+              message: "",
+              strengths: [],
+              weak_points: [],
+              rewritten_bullets: ["Reviewed project rewrite"],
+              summary_rewrite: "",
+              skills_rewrite: "",
+              interview_focus: [],
+            },
+          });
+        }}
+      >
+        Seed project rewrite
+      </button>
+    );
+  };
+  render(
+    <ResumeProvider>
+      <Seed />
+      <ResumeBuilder />
+    </ResumeProvider>,
+  );
+  fireEvent.click(screen.getByText("Seed project rewrite"));
+  fireEvent.change(screen.getByLabelText("Original bullet to replace"), {
+    target: { value: "projects:0:0" },
+  });
+  fireEvent.click(
+    screen.getByRole("button", { name: "Replace selected bullet" }),
+  );
+  expect(
+    screen.getByLabelText("Bullets (projects 1, one per line)"),
+  ).toHaveValue("Reviewed project rewrite");
+  expect(
+    screen.getByLabelText("Bullets (experience 1, one per line)"),
+  ).toHaveValue("Keep experience");
+});
