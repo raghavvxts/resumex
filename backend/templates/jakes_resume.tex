@@ -21,7 +21,7 @@
 % \input{glyphtounicode}
 
 % Font options
-\usepackage{charter}
+% Original Jake layout uses the default Computer Modern serif family.
 
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
@@ -97,20 +97,12 @@
 %----------HEADING----------
 \begin{center}
     \textbf{\Huge \scshape << personal_info.name >>} \\ \vspace{1pt}
-    \small 
-    <% if personal_info.phone %>
-    << personal_info.phone >>
-    <% endif %>
-    <% if personal_info.email %>
-    $|$ \href{mailto:<< personal_info.email >>}{\underline{<< personal_info.email >>}}
-    <% endif %>
-    <% if personal_info.linkedin %>
-    $|$ \href{<< personal_info.linkedin >>}{\underline{<< personal_info.linkedin >>}}
-    <% endif %>
-    <% if personal_info.github %>
-    $|$ \href{<< personal_info.github >>}{\underline{<< personal_info.github >>}}
-    <% endif %>
+    \small << contacts | join(' $|$ ') >>
 \end{center}
+<% if summary %>
+\section{Summary}
+<< summary >>
+<% endif %>
 
 %-----------EDUCATION-----------
 <% if education and education|length > 0 %>
@@ -120,6 +112,7 @@
     \resumeSubheading
       {<< ed.institution >>}{<< ed.location >>}
       {<< ed.degree >>}{<< ed.date >>}
+      <% if ed.gpa %>\resumeItemListStart\resumeItem{GPA: << ed.gpa >>}\resumeItemListEnd<% endif %>
     <% endfor %>
   \resumeSubHeadingListEnd
 <% endif %>
@@ -162,20 +155,15 @@
 <% endif %>
 
 %-----------PROGRAMMING SKILLS-----------
-<% if skills and (skills.languages or skills.frameworks or skills.tools) %>
+<% if skills %>
 \section{Technical Skills}
  \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{
-     <% if skills.languages %>
-     \textbf{Languages}{: << skills.languages >>} \\
-     <% endif %>
-     <% if skills.frameworks %>
-     \textbf{Frameworks}{: << skills.frameworks >>} \\
-     <% endif %>
-     <% if skills.tools %>
-     \textbf{Developer Tools}{: << skills.tools >>}
-     <% endif %>
-    }}
+ \small{\item{
+ <% for category, value in skills.items() %>
+ <% if value %>\textbf{<< category >>}{: << value >>} \\
+ <% endif %>
+ <% endfor %>
+ }}
  \end{itemize}
 <% endif %>
 

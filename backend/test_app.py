@@ -60,7 +60,9 @@ class ResumeAnalyzerTests(unittest.TestCase):
             method="POST",
             data={"job_description": "Python backend role with SQL APIs and testing"},
         ):
-            file, job_desc, role_level, years_experience, error_response = resume_app.validate_request()
+            file, job_desc, role_level, years_experience, error_response = (
+                resume_app.validate_request()
+            )
             self.assertIsNone(file)
             self.assertIsNone(job_desc)
             self.assertIsNotNone(error_response)
@@ -68,19 +70,25 @@ class ResumeAnalyzerTests(unittest.TestCase):
     def test_validate_request_optional_job_desc(self):
         from io import BytesIO
         from werkzeug.datastructures import FileStorage
-        file_data = BytesIO(b"%PDF-1.4 mock pdf data")
-        mock_file = FileStorage(stream=file_data, filename="resume.pdf", content_type="application/pdf")
-        
+        from reportlab.pdfgen import canvas
+
+        file_data = BytesIO()
+        pdf = canvas.Canvas(file_data)
+        pdf.drawString(50, 750, "John Doe Summary Python engineer")
+        pdf.save()
+        file_data.seek(0)
+        mock_file = FileStorage(
+            stream=file_data, filename="resume.pdf", content_type="application/pdf"
+        )
+
         with resume_app.app.test_request_context(
             "/analyze",
             method="POST",
-            data={
-                "resume": mock_file,
-                "role_level": "mid",
-                "years_experience": "4"
-            },
+            data={"resume": mock_file, "role_level": "mid", "years_experience": "4"},
         ):
-            file, job_desc, role_level, years_experience, error_response = resume_app.validate_request()
+            file, job_desc, role_level, years_experience, error_response = (
+                resume_app.validate_request()
+            )
             self.assertIsNotNone(file)
             self.assertEqual(job_desc, "")
             self.assertEqual(role_level, "mid")
@@ -88,6 +96,174 @@ class ResumeAnalyzerTests(unittest.TestCase):
             self.assertIsNone(error_response)
 
 
+class WorkflowRegressionTests(unittest.TestCase):
+    def setUp(self):
+        self.client = resume_app.app.test_client()
+
+    def test_pdf_export_round_trip_and_validation(self):
+        from io import BytesIO
+
+        response = self.client.post(
+            "/generate-pdf",
+            json={
+                "personal_info": {"name": "Alex Example", "email": "alex@example.com"},
+                "template_name": "simple_resume",
+                "summary": "Built accessible apps & improved latency 30%.",
+                "experience": [
+                    {
+                        "role": "Engineer",
+                        "company": "Example Labs",
+                        "bullets": ["Reduced latency by 30%."],
+                    }
+                ],
+                "skills": {"tools": "Git, Docker"},
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.mimetype, "application/pdf")
+        reader = resume_app.PyPDF2.PdfReader(BytesIO(response.data))
+        text = "".join(page.extract_text() for page in reader.pages)
+        self.assertIn("Alex Example", text)
+        self.assertIn("Reduced latency by 30%", text)
+        self.assertNotIn("Backend Error", text)
+        self.assertEqual(self.client.post("/generate-pdf", json=[]).status_code, 400)
+        self.assertEqual(
+            self.client.post(
+                "/generate-pdf",
+                json={"personal_info": {}, "template_name": "deedy_resume"},
+            ).status_code,
+            400,
+        )
+
+    def test_audit_recognizes_percentages_and_filters_filler(self):
+        from unittest.mock import patch
+
+        with patch.object(resume_app, "ai_client", None):
+            response = self.client.post(
+                "/analyze",
+                data={
+                    "resume_text": "Alex Example\nSummary\nEngineer\nSkills\nPython\nExperience\nReduced latency by 30%.\nProjects\nDashboard\nEducation\nBSc"
+                },
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(
+            next(
+                item
+                for item in response.json["checklist"]["items"]
+                if item["id"] == "metrics"
+            )["completed"]
+        )
+        words = resume_app.extract_keywords(
+            "We are looking for candidates who must have Python, C++ and technologies."
+        )
+        self.assertTrue({"python", "c++"}.issubset(words))
+        self.assertFalse(
+            {"looking", "candidates", "must", "have", "technologies."} & words
+        )
+
+    def test_chat_context_and_cover_tone(self):
+        from unittest.mock import Mock, patch
+
+        ai = Mock()
+        ai.models.generate_content.return_value.text = "Useful response"
+        data = {
+            "resume_text": "Alex Example\nEngineer with three years React experience",
+            "role_level": "senior",
+            "years_experience": "3",
+            "message": "Improve summary",
+            "history": '[{"role":"user","content":"Remember my project"}]',
+        }
+        with patch.object(resume_app, "ai_client", ai):
+            self.assertEqual(self.client.post("/chat", data=data).status_code, 200)
+            prompt = ai.models.generate_content.call_args.kwargs["contents"]
+            self.assertIn("three years React", prompt)
+            self.assertIn("Remember my project", prompt)
+            self.assertIn("senior", prompt)
+            self.assertEqual(
+                self.client.post(
+                    "/cover-letter", data={**data, "tone": "concise"}
+                ).status_code,
+                200,
+            )
+            self.assertIn(
+                "at most 150 words",
+                ai.models.generate_content.call_args.kwargs["contents"],
+            )
+
+    def test_ai_outages_are_not_fabricated_success(self):
+        from unittest.mock import Mock, patch
+
+        ai = Mock()
+        ai.models.generate_content.side_effect = RuntimeError("quota")
+        with patch.object(resume_app, "ai_client", ai), patch.object(
+            resume_app, "ai_model_candidates", return_value=["test"]
+        ):
+            for route in ("/cover-letter", "/skills-analysis", "/parse-resume"):
+                response = self.client.post(
+                    route, data={"resume_text": "Alex Example React Engineer"}
+                )
+                self.assertEqual(response.status_code, 503, route)
+                self.assertIn("error", response.json)
+
+    def test_malformed_ai_responses_do_not_reach_ui(self):
+        from unittest.mock import Mock, patch
+
+        ai = Mock()
+        ai.models.generate_content.return_value.text = '{"technical": {"score": "bad"}}'
+        with patch.object(resume_app, "ai_client", ai), patch.object(
+            resume_app, "ai_model_candidates", return_value=["test"]
+        ):
+            self.assertEqual(
+                self.client.post(
+                    "/skills-analysis", data={"resume_text": "Alex Example"}
+                ).status_code,
+                503,
+            )
+            self.assertEqual(
+                self.client.post(
+                    "/parse-resume", data={"resume_text": "Alex Example"}
+                ).status_code,
+                503,
+            )
+
+    def test_corrupt_pdf_is_rejected(self):
+        from io import BytesIO
+
+        response = self.client.post(
+            "/analyze", data={"resume": (BytesIO(b"not a pdf"), "resume.pdf")}
+        )
+        self.assertEqual(response.status_code, 400)
+
+
+class AdditionalRegressionTests(unittest.TestCase):
+    def test_concise_letter_has_a_hard_word_limit(self):
+        from unittest.mock import Mock, patch
+
+        ai = Mock()
+        ai.models.generate_content.return_value.text = " ".join(["word"] * 250)
+        with patch.object(resume_app, "ai_client", ai):
+            response = resume_app.app.test_client().post(
+                "/cover-letter",
+                data={"resume_text": "Alex Example Engineer", "tone": "concise"},
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertLessEqual(len(response.json["cover_letter"].split()), 150)
+
+    def test_parse_preserves_source_and_validates_sections(self):
+        from unittest.mock import Mock, patch
+
+        ai = Mock()
+        ai.models.generate_content.return_value.text = (
+            '{"personal_info":{"name":"Alex Example"},"summary":"Original summary"}'
+        )
+        with patch.object(resume_app, "ai_client", ai):
+            response = resume_app.app.test_client().post(
+                "/parse-resume", data={"resume_text": "Alex Example Original summary"}
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["source_text"], "Alex Example Original summary")
+        self.assertEqual(response.json["summary"], "Original summary")
+        self.assertEqual(response.json["experience"], [])
 
 
 if __name__ == "__main__":

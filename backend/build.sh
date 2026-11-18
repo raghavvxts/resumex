@@ -1,17 +1,13 @@
 #!/usr/bin/env bash
-# Exit on error
-set -o errexit
-
-# Install Python dependencies
+set -euo pipefail
+cd "$(dirname "$0")"
 pip install -r requirements.txt
-
-# Download and install Tectonic (LaTeX engine) for PDF generation
-# Tectonic is a self-contained TeX engine that downloads packages on the fly
-echo "Installing Tectonic..."
-curl -sL https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.14.1/tectonic-0.14.1-x86_64-unknown-linux-gnu.tar.gz | tar -xz
-
-# Move it to a bin directory in the project root
 mkdir -p .bin
-mv tectonic .bin/
-
-echo "Build complete."
+if ! command -v tectonic >/dev/null 2>&1 && [ ! -x .bin/tectonic ]; then
+  archive="$(mktemp)"
+  trap 'rm -f "$archive"' EXIT
+  curl --fail --location --retry 3 'https://github.com/tectonic-typesetting/tectonic/releases/download/tectonic%400.17.0/tectonic-0.17.0-x86_64-unknown-linux-musl.tar.gz' -o "$archive"
+  echo "8533d07f9ccbd7a65824b9e0459041bca34af1eb33daba48f59215593753a3b7  $archive" | sha256sum --check
+  tar -xzf "$archive" -C .bin tectonic
+fi
+python warm_templates.py

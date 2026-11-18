@@ -2,8 +2,6 @@ import json
 import os
 import re
 import time
-import tempfile
-import subprocess
 from collections import Counter
 
 from dotenv import load_dotenv
@@ -11,13 +9,18 @@ from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
 from google import genai
 from google.genai import types
-from jinja2 import Environment, FileSystemLoader
 import PyPDF2
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer, ENGLISH_STOP_WORDS
 from sklearn.metrics.pairwise import cosine_similarity
 
 # Load env
 load_dotenv()
+
+# AI provider setup
+AI_PROVIDER = os.getenv("AI_PROVIDER", "gemini").strip().lower()
+if AI_PROVIDER not in {"gemini", "ollama"}:
+    raise ValueError("AI_PROVIDER must be gemini or ollama.")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3.5:4b")
 
 # Gemini setup
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
@@ -28,8 +31,15 @@ DEFAULT_MODEL_CANDIDATES = [
     "gemini-2.0-flash-lite",
 ]
 
-if GEMINI_API_KEY:
-    ai_client = genai.Client(api_key=GEMINI_API_KEY)
+if AI_PROVIDER == "ollama":
+    from model_runtime import OllamaClient
+
+    ai_client = OllamaClient()
+    model_name = OLLAMA_MODEL
+elif GEMINI_API_KEY:
+    ai_client = genai.Client(
+        api_key=GEMINI_API_KEY, http_options=types.HttpOptions(timeout=25000)
+    )
     model_name = GEMINI_MODEL or DEFAULT_MODEL_CANDIDATES[0]
 else:
     ai_client = None
@@ -40,23 +50,98 @@ allowed_origins_env = os.getenv("FRONTEND_ORIGINS", "*")
 if allowed_origins_env == "*":
     CORS(app, resources={r"/*": {"origins": "*"}})
 else:
-    ALLOWED_ORIGINS = [origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()]
+    ALLOWED_ORIGINS = [
+        origin.strip() for origin in allowed_origins_env.split(",") if origin.strip()
+    ]
     CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
 MIN_JOB_WORDS = 20
-MAX_AI_RETRIES = 3
+MAX_AI_RETRIES = 1
+app.config["MAX_CONTENT_LENGTH"] = 11 * 1024 * 1024
 
-@app.route('/health', methods=['GET'])
+
+@app.route("/health", methods=["GET"])
 def health_check():
-    return jsonify({"status": "ok", "timestamp": time.time()}), 200
+    return (
+        jsonify(
+            {
+                "status": "ok",
+                "timestamp": time.time(),
+                "revision": os.getenv("RENDER_GIT_COMMIT", "local"),
+                "ai_provider": AI_PROVIDER,
+            }
+        ),
+        200,
+    )
+
 
 STOPWORDS = {
-    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "has", "he", "in", "is", "it", "its",
-    "of", "on", "that", "the", "to", "was", "were", "will", "with", "you", "your", "we", "our", "or", "this",
-    "these", "those", "there", "their", "can", "could", "should", "would", "like", "using", "use", "used",
-    "via", "etc", "here", "clean", "build", "building", "make", "making", "role", "position",
+    "a",
+    "an",
+    "and",
+    "are",
+    "as",
+    "at",
+    "be",
+    "by",
+    "for",
+    "from",
+    "has",
+    "he",
+    "in",
+    "is",
+    "it",
+    "its",
+    "of",
+    "on",
+    "that",
+    "the",
+    "to",
+    "was",
+    "were",
+    "will",
+    "with",
+    "you",
+    "your",
+    "we",
+    "our",
+    "or",
+    "this",
+    "looking",
+    "must",
+    "have",
+    "candidate",
+    "candidates",
+    "next-generation",
+    "technologies",
+    "develop",
+    "solutions",
+    "these",
+    "those",
+    "there",
+    "their",
+    "can",
+    "could",
+    "should",
+    "would",
+    "like",
+    "using",
+    "use",
+    "used",
+    "via",
+    "etc",
+    "here",
+    "clean",
+    "build",
+    "building",
+    "make",
+    "making",
+    "role",
+    "position",
 }
+
+STOPWORDS.update(ENGLISH_STOP_WORDS)
 
 TOKEN_SYNONYMS = {
     "js": "javascript",
@@ -80,6 +165,7 @@ PHRASE_VARIANTS = {
 
 ROLE_LEVELS = {"intern", "junior", "mid", "senior"}
 
+
 # Extract text from PDF
 def extract_text(file):
     reader = PyPDF2.PdfReader(file)
@@ -90,8 +176,9 @@ def extract_text(file):
 
 
 def normalize_token(token):
-    token = token.strip().lower()
+    token = token.strip().lower().rstrip(".-")
     return TOKEN_SYNONYMS.get(token, token)
+
 
 # Similarity score
 def calculate_similarity(resume, job_desc):
@@ -107,13 +194,14 @@ def calculate_similarity(resume, job_desc):
         return 0.0
     return float(round(float(score) * 100, 2))
 
+
 # Keyword extraction
 def extract_keyword_tokens(text):
     tokens = re.findall(r"[a-zA-Z][a-zA-Z0-9+#.-]{1,}", text.lower())
     cleaned = []
     for token in tokens:
         normalized = normalize_token(token)
-        if normalized not in STOPWORDS:
+        if normalized and normalized not in STOPWORDS:
             cleaned.append(normalized)
     return cleaned
 
@@ -145,11 +233,15 @@ def prioritize_missing_keywords(job_tokens, resume_words, limit=15):
         if len(ranked) >= limit:
             break
     return ranked
+
+
 def extract_name(resume_text):
     lines = [line.strip() for line in resume_text.split("\n") if line.strip()]
     if lines:
         first_line = lines[0]
-        if len(first_line) < 40 and not any(kw in first_line.lower() for kw in ["resume", "cv", "curriculum", "page"]):
+        if len(first_line) < 40 and not any(
+            kw in first_line.lower() for kw in ["resume", "cv", "curriculum", "page"]
+        ):
             name = re.sub(r"[^a-zA-Z\s]", "", first_line).strip()
             if name.isupper() and " " not in name:
                 # If it's RAGHAVVATS or similar, format nicely
@@ -167,7 +259,7 @@ def split_resume_sections(resume_text):
         r"\b(?:work)?(experience)\b|"
         r"\b(?:academic|personal)?(projects?)\b|"
         r"\b(education)\b",
-        re.IGNORECASE
+        re.IGNORECASE,
     )
     matches = list(heading_pattern.finditer(lowered))
     if not matches:
@@ -179,7 +271,7 @@ def split_resume_sections(resume_text):
         section_name = next((g for g in match.groups() if g is not None), "").lower()
         if not section_name:
             continue
-            
+
         if section_name == "objective":
             section_name = "summary"
         if section_name == "project":
@@ -189,7 +281,9 @@ def split_resume_sections(resume_text):
         end = matches[idx + 1].start() if idx + 1 < len(matches) else len(resume_text)
         section_text = resume_text[start:end].strip()
         if section_text:
-            sections[section_name] = (sections.get(section_name, "") + "\n" + section_text).strip()
+            sections[section_name] = (
+                sections.get(section_name, "") + "\n" + section_text
+            ).strip()
     return sections
 
 
@@ -241,18 +335,30 @@ def build_action_plan(score, missing_keywords, section_gaps, role_level):
         )
 
     if score < 50:
-        steps.append("Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.")
+        steps.append(
+            "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities."
+        )
     elif score < 75:
-        steps.append("Strengthen alignment by tailoring summary and skills section to this role.")
+        steps.append(
+            "Strengthen alignment by tailoring summary and skills section to this role."
+        )
     else:
-        steps.append("Maintain current alignment and focus on stronger quantification in achievements.")
+        steps.append(
+            "Maintain current alignment and focus on stronger quantification in achievements."
+        )
 
     if role_level == "intern":
-        steps.append("Emphasize coursework, projects, and learning velocity instead of years of industry ownership.")
+        steps.append(
+            "Emphasize coursework, projects, and learning velocity instead of years of industry ownership."
+        )
     elif role_level == "senior":
-        steps.append("Highlight leadership impact, architecture decisions, and cross-team ownership outcomes.")
+        steps.append(
+            "Highlight leadership impact, architecture decisions, and cross-team ownership outcomes."
+        )
 
-    steps.append("Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours.")
+    steps.append(
+        "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours."
+    )
 
     for gap in section_gaps[:2]:
         steps.append(gap)
@@ -262,8 +368,16 @@ def build_action_plan(score, missing_keywords, section_gaps, role_level):
 
 def build_bullet_templates(missing_keywords, role_level, years_experience):
     templates = []
-    prefix = "Collaborated with a team to" if role_level in {"intern", "junior"} else "Led the design to"
-    impact = "improving delivery speed" if years_experience < 3 else "improving system reliability at scale"
+    prefix = (
+        "Collaborated with a team to"
+        if role_level in {"intern", "junior"}
+        else "Led the design to"
+    )
+    impact = (
+        "improving delivery speed"
+        if years_experience < 3
+        else "improving system reliability at scale"
+    )
 
     for keyword in missing_keywords[:3]:
         templates.append(
@@ -277,10 +391,16 @@ def build_bullet_templates(missing_keywords, role_level, years_experience):
     return templates[:4]
 
 
-def build_checklist(score, keyword_coverage, section_scores, missing_keywords, resume_text):
+def build_checklist(
+    score, keyword_coverage, section_scores, missing_keywords, resume_text
+):
     sections = split_resume_sections(resume_text)
     has_summary = "summary" in sections
-    has_metrics = bool(re.search(r"\b\d+%\b|\b\d+\s*(ms|sec|seconds|hours|days|x)\b", resume_text.lower()))
+    has_metrics = bool(
+        re.search(
+            r"\b\d+%(?!\w)|\b\d+\s*(ms|sec|seconds|hours|days|x)\b", resume_text.lower()
+        )
+    )
     experience_score = float(section_scores.get("experience", 0))
 
     items = [
@@ -300,13 +420,21 @@ def build_checklist(score, keyword_coverage, section_scores, missing_keywords, r
             "id": "summary",
             "label": "Profile summary/objective is present",
             "completed": has_summary,
-            "reason": "Detected summary section" if has_summary else "No summary/objective section detected",
+            "reason": (
+                "Detected summary section"
+                if has_summary
+                else "No summary/objective section detected"
+            ),
         },
         {
             "id": "metrics",
             "label": "At least one quantified achievement exists",
             "completed": has_metrics,
-            "reason": "Detected numeric impact" if has_metrics else "No measurable metrics found",
+            "reason": (
+                "Detected numeric impact"
+                if has_metrics
+                else "No measurable metrics found"
+            ),
         },
         {
             "id": "experience",
@@ -367,7 +495,14 @@ def parse_structured_ai(raw_text):
     try:
         payload = json.loads(cleaned)
     except json.JSONDecodeError:
-        return safe_ai_payload("AI returned non-JSON text. Showing deterministic guidance only.")
+        return safe_ai_payload(
+            "AI returned non-JSON text. Showing deterministic guidance only."
+        )
+
+    if not isinstance(payload, dict):
+        return safe_ai_payload(
+            "AI returned an invalid response. Showing deterministic guidance only."
+        )
 
     def to_list(key):
         value = payload.get(key, [])
@@ -392,19 +527,32 @@ def is_retryable_error(message):
     lowered = message.lower()
     return any(
         token in lowered
-        for token in ["429", "quota", "rate", "500", "503", "timeout", "temporarily unavailable"]
+        for token in [
+            "429",
+            "quota",
+            "rate",
+            "500",
+            "503",
+            "timeout",
+            "temporarily unavailable",
+        ]
     )
 
 
 def ai_model_candidates():
+    if AI_PROVIDER == "ollama":
+        return [OLLAMA_MODEL]
     if GEMINI_MODEL:
-        return [GEMINI_MODEL] + [m for m in DEFAULT_MODEL_CANDIDATES if m != GEMINI_MODEL]
+        return [GEMINI_MODEL] + [
+            m for m in DEFAULT_MODEL_CANDIDATES if m != GEMINI_MODEL
+        ]
     return list(DEFAULT_MODEL_CANDIDATES)
+
 
 def get_ai_recommendations(resume, job, role_level, years_experience):
     if ai_client is None:
         return safe_ai_payload(
-            "Gemini model is not available. Set GEMINI_API_KEY in backend/.env to enable AI recommendations."
+            "AI recommendations are temporarily unavailable. Your section and keyword analysis is still available."
         )
     is_general_audit = not (job or "").strip()
 
@@ -426,7 +574,7 @@ Rules:
 - No markdown, no backticks, no extra fields.
 - Review structure, action-verb strength, formatting, and quantification of impact.
 - Tailor suggestions for experience level tier: {role_level} ({years_experience} years of experience).
-- Rewritten bullets must be highly professional, action-oriented, and quantified.
+- Preserve original facts in all rewrites. Never invent metrics, achievements or skills; ask for missing evidence.
 
 Resume:
 {resume}
@@ -449,7 +597,7 @@ Rules:
 - No markdown, no backticks, no extra fields.
 - Tailor for role level: {role_level}.
 - Tailor for years of experience: {years_experience}.
-- Rewritten bullets must be measurable and ATS-friendly.
+- Rewritten bullets must preserve original facts. Never invent metrics, achievements or skills; ask the candidate for missing evidence.
 
 Resume:
 {resume}
@@ -465,6 +613,9 @@ Job Description:
                 response = ai_client.models.generate_content(
                     model=candidate_model,
                     contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type="application/json"
+                    ),
                 )
                 text = extract_response_text(response)
                 if not text:
@@ -478,7 +629,7 @@ Job Description:
                 last_error = message
 
                 if is_retryable_error(message) and attempt < MAX_AI_RETRIES - 1:
-                    time.sleep(2 ** attempt)
+                    time.sleep(2**attempt)
                     continue
 
                 # Quota exceeded on this model. Try next model candidate.
@@ -488,17 +639,23 @@ Job Description:
                 break
 
     if "quota" in last_error.lower() or "429" in last_error:
-        retry_match = re.search(r"retry in\s+([0-9]+(?:\.[0-9]+)?)s", last_error, flags=re.IGNORECASE)
+        retry_match = re.search(
+            r"retry in\s+([0-9]+(?:\.[0-9]+)?)s", last_error, flags=re.IGNORECASE
+        )
         retry_hint = ""
         if retry_match:
-            retry_hint = f" Please retry in about {round(float(retry_match.group(1)))} seconds."
+            retry_hint = (
+                f" Please retry in about {round(float(retry_match.group(1)))} seconds."
+            )
         return safe_ai_payload(
             "AI recommendations are temporarily unavailable due to quota/rate limits."
             + retry_hint
-            + " Deterministic ATS guidance is still available."
+            + " Section and keyword checks are still available."
         )
 
-    return safe_ai_payload("AI recommendations are temporarily unavailable. Please try again shortly.")
+    return safe_ai_payload(
+        "AI recommendations are temporarily unavailable. Please try again shortly."
+    )
 
 
 def validate_request():
@@ -509,41 +666,108 @@ def validate_request():
     years_experience_raw = (request.form.get("years_experience") or "0").strip()
 
     if file is None and not resume_text_raw:
-        return None, None, None, None, (jsonify({"error": "Missing 'resume' file or 'resume_text'."}), 400)
+        return (
+            None,
+            None,
+            None,
+            None,
+            (jsonify({"error": "Missing 'resume' file or 'resume_text'."}), 400),
+        )
 
     resume_text = resume_text_raw
 
     if file is not None:
         if not file.filename:
-            return None, None, None, None, (jsonify({"error": "Resume filename is empty."}), 400)
+            return (
+                None,
+                None,
+                None,
+                None,
+                (jsonify({"error": "Resume filename is empty."}), 400),
+            )
 
         if not file.filename.lower().endswith(".pdf"):
-            return None, None, None, None, (jsonify({"error": "Only PDF files are accepted."}), 400)
+            return (
+                None,
+                None,
+                None,
+                None,
+                (jsonify({"error": "Only PDF files are accepted."}), 400),
+            )
         file.stream.seek(0, os.SEEK_END)
         file_size = file.stream.tell()
         file.stream.seek(0)
         if file_size > MAX_FILE_SIZE_BYTES:
-            return None, None, None, None, (jsonify({"error": "PDF exceeds 10MB limit."}), 400)
-            
+            return (
+                None,
+                None,
+                None,
+                None,
+                (jsonify({"error": "PDF exceeds 10MB limit."}), 400),
+            )
+
         try:
             resume_text = extract_text(file)
         except (PyPDF2.errors.PdfReadError, PyPDF2.errors.FileNotDecryptedError):
-            return None, None, None, None, (jsonify({"error": "Invalid or corrupted PDF file."}), 400)
+            return (
+                None,
+                None,
+                None,
+                None,
+                (jsonify({"error": "Invalid or corrupted PDF file."}), 400),
+            )
+
+    if len(resume_text) > 30000 or len(job_desc) > 20000:
+        return (
+            None,
+            None,
+            None,
+            None,
+            (
+                jsonify(
+                    {
+                        "error": "Resume exceeds 30,000 characters or job description exceeds 20,000 characters."
+                    }
+                ),
+                400,
+            ),
+        )
 
     if not resume_text.strip():
-        return None, None, None, None, (jsonify({"error": "Could not extract text from the provided resume."}), 400)
+        return (
+            None,
+            None,
+            None,
+            None,
+            (
+                jsonify(
+                    {
+                        "error": "Could not extract text. Scanned PDFs need OCR; paste the resume text instead."
+                    }
+                ),
+                400,
+            ),
+        )
 
     if job_desc:
         job_word_count = len(re.findall(r"\w+", job_desc))
         if job_word_count < MIN_JOB_WORDS:
-            return None, None, None, None, (
-                jsonify({
-                    "error": (
-                        f"Job description is too short ({job_word_count} words). "
-                        f"Please paste at least {MIN_JOB_WORDS} words for accurate matching."
-                    )
-                }),
-                400,
+            return (
+                None,
+                None,
+                None,
+                None,
+                (
+                    jsonify(
+                        {
+                            "error": (
+                                f"Job description is too short ({job_word_count} words). "
+                                f"Please paste at least {MIN_JOB_WORDS} words for accurate matching."
+                            )
+                        }
+                    ),
+                    400,
+                ),
             )
 
     if role_level not in ROLE_LEVELS:
@@ -557,9 +781,12 @@ def validate_request():
 
     return resume_text, job_desc, role_level, years_experience, None
 
+
 @app.route("/analyze", methods=["POST"])
 def analyze():
-    resume_text, job_desc, role_level, years_experience, error_response = validate_request()
+    resume_text, job_desc, role_level, years_experience, error_response = (
+        validate_request()
+    )
     if error_response:
         return error_response
 
@@ -576,17 +803,40 @@ def analyze():
             has_experience = "experience" in sections
             has_projects = "projects" in sections
             has_education = "education" in sections
-            has_metrics = bool(re.search(r"\b\d+%\b|\b\d+\s*(ms|sec|seconds|hours|days|x)\b", resume_text.lower()))
+            has_metrics = bool(
+                re.search(
+                    r"\b\d+%(?!\w)|\b\d+\s*(ms|sec|seconds|hours|days|x)\b",
+                    resume_text.lower(),
+                )
+            )
 
             score = 0.0
-            if has_summary: score += 15
-            if has_skills: score += 20
-            if has_experience: score += 25
-            if has_projects: score += 15
-            if has_education: score += 10
-            if has_metrics: score += 15
+            if has_summary:
+                score += 15
+            if has_skills:
+                score += 20
+            if has_experience:
+                score += 25
+            if has_projects:
+                score += 15
+            if has_education:
+                score += 10
+            if has_metrics:
+                score += 15
 
-            present_sections_count = sum([1 for s in ["summary", "skills", "experience", "projects", "education"] if s in sections])
+            present_sections_count = sum(
+                [
+                    1
+                    for s in [
+                        "summary",
+                        "skills",
+                        "experience",
+                        "projects",
+                        "education",
+                    ]
+                    if s in sections
+                ]
+            )
             keyword_coverage = round((present_sections_count / 5) * 100, 2)
 
             section_scores = {
@@ -594,7 +844,7 @@ def analyze():
                 "skills": 100.0 if has_skills else 0.0,
                 "experience": 100.0 if has_experience else 0.0,
                 "projects": 100.0 if has_projects else 0.0,
-                "education": 100.0 if has_education else 0.0
+                "education": 100.0 if has_education else 0.0,
             }
 
             matched = []
@@ -604,22 +854,36 @@ def analyze():
 
             action_plan = []
             if not has_summary:
-                action_plan.append("Add a high-impact profile summary explaining your core value proposition.")
+                action_plan.append(
+                    "Add a high-impact profile summary explaining your core value proposition."
+                )
             if not has_skills:
-                action_plan.append("Add a categorized Skills section showing your technical stack.")
+                action_plan.append(
+                    "Add a categorized Skills section showing your technical stack."
+                )
             if not has_experience:
-                action_plan.append("Add a detailed professional experience section with chronological order.")
+                action_plan.append(
+                    "Add a detailed professional experience section with chronological order."
+                )
             if not has_projects:
-                action_plan.append("Add a projects section highlighting at least 2 relevant projects.")
+                action_plan.append(
+                    "Add a projects section highlighting at least 2 relevant projects."
+                )
             if not has_metrics:
-                action_plan.append("Incorporate measurable achievements (percentages, time saved, dollar value) in your bullet points.")
-            action_plan.append("Use strong action verbs (e.g. Spearheaded, Designed, Optimised) at the start of experience bullets.")
-            action_plan.append("Organize skills by categories (e.g. Languages, Frameworks, Tools) to pass ATS checks.")
+                action_plan.append(
+                    "Incorporate measurable achievements (percentages, time saved, dollar value) in your bullet points."
+                )
+            action_plan.append(
+                "Use strong action verbs (e.g. Spearheaded, Designed, Optimised) at the start of experience bullets."
+            )
+            action_plan.append(
+                "Group skills by category so reviewers can find relevant experience."
+            )
 
             bullet_templates = [
                 "Spearheaded the design and delivery of [project/system], resulting in [quantified outcome like 25% efficiency gain].",
                 "Optimised backend [service/queries], reducing latency by [measurable metric like 40ms].",
-                "Collaborated with cross-functional teams to integrate [feature/service], improving [delivery speed/adoption]."
+                "Collaborated with cross-functional teams to integrate [feature/service], improving [delivery speed/adoption].",
             ]
 
             checklist = {
@@ -627,7 +891,7 @@ def analyze():
                 "items": [
                     {
                         "id": "score",
-                        "label": "ATS Layout score is at least 70",
+                        "label": "Section completeness score is at least 70",
                         "completed": bool(score >= 70),
                         "reason": f"Current structural score: {score}%",
                     },
@@ -641,27 +905,43 @@ def analyze():
                         "id": "summary",
                         "label": "Profile summary section is present",
                         "completed": has_summary,
-                        "reason": "Detected summary section" if has_summary else "No summary section detected",
+                        "reason": (
+                            "Detected summary section"
+                            if has_summary
+                            else "No summary section detected"
+                        ),
                     },
                     {
                         "id": "metrics",
                         "label": "At least one quantified achievement exists",
                         "completed": has_metrics,
-                        "reason": "Detected numeric impact" if has_metrics else "No measurable metrics found",
+                        "reason": (
+                            "Detected numeric impact"
+                            if has_metrics
+                            else "No measurable metrics found"
+                        ),
                     },
                     {
                         "id": "experience",
                         "label": "Experience section is present",
                         "completed": has_experience,
-                        "reason": "Detected experience section" if has_experience else "No experience section detected",
+                        "reason": (
+                            "Detected experience section"
+                            if has_experience
+                            else "No experience section detected"
+                        ),
                     },
                     {
                         "id": "gaps",
                         "label": "Skills matrix is configured",
                         "completed": has_skills,
-                        "reason": "Detected skills section" if has_skills else "No skills section detected",
-                    }
-                ]
+                        "reason": (
+                            "Detected skills section"
+                            if has_skills
+                            else "No skills section detected"
+                        ),
+                    },
+                ],
             }
 
         else:
@@ -676,22 +956,30 @@ def analyze():
             resume_phrases = extract_phrase_keywords(resume_text)
             job_phrases = extract_phrase_keywords(job_desc)
 
-            missing = prioritize_missing_keywords(job_tokens, resume_words, limit=15)
+            missing = prioritize_missing_keywords(
+                job_tokens, resume_words, limit=len(job_words)
+            )
             missing_phrases = sorted(list(job_phrases - resume_phrases))
             matched_phrases = sorted(list(job_phrases & resume_phrases))
-            matched = [word for word in top_keywords_by_frequency(job_tokens, limit=30) if word in resume_words][:15]
-            keyword_coverage = round((len(job_words & resume_words) / max(len(job_words), 1)) * 100, 2)
+            matched = sorted(job_words & resume_words)
+            keyword_coverage = round(
+                (len(job_words & resume_words) / max(len(job_words), 1)) * 100, 2
+            )
 
             section_scores = calculate_section_scores(resume_text, job_tokens)
 
             section_gaps = infer_section_gaps(resume_text)
             action_plan = build_action_plan(score, missing, section_gaps, role_level)
-            bullet_templates = build_bullet_templates(missing, role_level, years_experience)
-            checklist = build_checklist(score, keyword_coverage, section_scores, missing, resume_text)
+            bullet_templates = build_bullet_templates(
+                missing, role_level, years_experience
+            )
+            checklist = build_checklist(
+                score, keyword_coverage, section_scores, missing, resume_text
+            )
 
         ai_payload = get_ai_recommendations(
-            resume_text[:1800],
-            job_desc[:1800],
+            resume_text,
+            job_desc,
             role_level,
             years_experience,
         )
@@ -710,23 +998,26 @@ def analyze():
         else:
             suggestions = fallback_text
 
-        return jsonify({
-            "score": score,
-            "candidate_name": candidate_name,
-            "role_level": role_level,
-            "years_experience": years_experience,
-            "keyword_coverage": keyword_coverage,
-            "matched_keywords": matched,
-            "missing_keywords": missing,
-            "matched_phrases": matched_phrases,
-            "missing_phrases": missing_phrases,
-            "section_scores": section_scores,
-            "action_plan": action_plan,
-            "bullet_templates": bullet_templates,
-            "checklist": checklist,
-            "ai_recommendations": ai_payload,
-            "suggestions": suggestions,
-        })
+        return jsonify(
+            {
+                "score": score,
+                "candidate_name": candidate_name,
+                "source_text": resume_text,
+                "role_level": role_level,
+                "years_experience": years_experience,
+                "keyword_coverage": keyword_coverage,
+                "matched_keywords": matched,
+                "missing_keywords": missing,
+                "matched_phrases": matched_phrases,
+                "missing_phrases": missing_phrases,
+                "section_scores": section_scores,
+                "action_plan": action_plan,
+                "bullet_templates": bullet_templates,
+                "checklist": checklist,
+                "ai_recommendations": ai_payload,
+                "suggestions": suggestions,
+            }
+        )
     except (PyPDF2.errors.PdfReadError, PyPDF2.errors.FileNotDecryptedError):
         return jsonify({"error": "Invalid or corrupted PDF file."}), 400
     except Exception as exc:
@@ -735,18 +1026,37 @@ def analyze():
         if debug_enabled:
             return jsonify({"error": f"Analysis failed: {exc}"}), 500
         return jsonify({"error": "Analysis failed due to an internal error."}), 500
+
+
 @app.route("/cover-letter", methods=["POST"])
 def generate_cover_letter():
     if ai_client is None:
-        return jsonify({"error": "Gemini API key is not configured."}), 503
+        return (
+            jsonify(
+                {
+                    "error": "AI assistance is temporarily unavailable. Please try again later."
+                }
+            ),
+            503,
+        )
 
-    resume_text, job_desc, role_level, years_experience, error_response = validate_request()
+    resume_text, job_desc, role_level, years_experience, error_response = (
+        validate_request()
+    )
     if error_response:
         return error_response
-    
+
+    tone = request.form.get("tone", "professional")
+    tone_instructions = {
+        "professional": "Formal and clear, 200-300 words",
+        "enthusiastic": "Warm and energetic, 200-300 words",
+        "concise": "Direct and brief, at most 150 words",
+    }
+    if tone not in tone_instructions:
+        return jsonify({"error": "Unsupported tone."}), 400
     try:
         candidate_name = extract_name(resume_text)
-        
+
         prompt = f"""
 You are an expert career coach and executive recruiter.
 Write a professional, compelling, and modern cover letter for the candidate named {candidate_name}.
@@ -756,12 +1066,13 @@ Job Description (if any):
 {job_desc or "General Application"}
 
 Candidate's Resume:
-{resume_text[:2000]}
+{resume_text}
 
 Rules:
 - Do not include brackets like [Company Name] if the information is missing; instead, write naturally to avoid obvious placeholders.
-- The tone should be confident, professional, and enthusiastic.
-- It should be 3-4 paragraphs long.
+- Tone and length: {tone_instructions[tone]}.
+- Use only facts in the resume. Do not assume an internal application or invent company culture.
+- Never invent achievements or metrics.
 - Output ONLY the plain text of the cover letter. No markdown formatting, no JSON, no conversational filler.
 """
 
@@ -775,56 +1086,75 @@ Rules:
                     )
                     text = extract_response_text(response).strip()
                     if text:
+                        max_words = 150 if tone == "concise" else 300
+                        if len(text.split()) > max_words:
+                            text = " ".join(text.split()[:max_words])
+                            last_sentence = max(
+                                text.rfind("."), text.rfind("!"), text.rfind("?")
+                            )
+                            text = (
+                                text[: last_sentence + 1]
+                                if last_sentence > len(text) // 2
+                                else text.rstrip(",;:") + "."
+                            )
                         return jsonify({"cover_letter": text})
                 except Exception as exc:
                     last_error = str(exc)
                     if is_retryable_error(last_error) and attempt < MAX_AI_RETRIES - 1:
-                        time.sleep(2 ** attempt)
+                        time.sleep(2**attempt)
                         continue
                     break
-        
-        # FALLBACK LOGIC: If Gemini API fails (quota / key error), generate a high-fidelity local fallback
-        skills = list(extract_keywords(resume_text))[:6]
-        if not skills:
-            skills = ["Python", "React", "SQL", "Git", "Software Engineering"]
-        
-        fallback_letter = f"""Dear Hiring Team,
 
-I am writing to express my enthusiastic interest in target opportunities. With a solid foundation as a {role_level.title()} and {years_experience} years of hands-on experience, I am confident in my ability to contribute effectively to your engineering goals.
-
-Throughout my career, I have developed proficiency in key technologies including {', '.join(skills[:5])}. I pride myself on writing clean, scalable code and collaborating with cross-functional teams to deliver high-quality software solutions.
-
-I am particularly drawn to this opportunity because of your commitment to technical excellence and innovation. I am eager to apply my experience in problem-solving and software development to help drive your projects forward.
-
-Thank you for your time and consideration. I look forward to the possibility of discussing how my skills and background align with your needs.
-
-Sincerely,
-{candidate_name}"""
-        return jsonify({"cover_letter": fallback_letter})
+        return (
+            jsonify(
+                {
+                    "error": "Cover letter service is temporarily unavailable. Please retry."
+                }
+            ),
+            503,
+        )
 
     except Exception as exc:
         app.logger.exception("Cover Letter endpoint failed")
-        return jsonify({"error": "An internal error occurred while generating the cover letter."}), 500
+        return (
+            jsonify(
+                {
+                    "error": "An internal error occurred while generating the cover letter."
+                }
+            ),
+            500,
+        )
+
 
 @app.route("/skills-analysis", methods=["POST"])
 def analyze_skills():
     if ai_client is None:
-        return jsonify({"error": "Gemini API key is not configured."}), 503
+        return (
+            jsonify(
+                {
+                    "error": "AI assistance is temporarily unavailable. Please try again later."
+                }
+            ),
+            503,
+        )
 
-    resume_text, job_desc, role_level, years_experience, error_response = validate_request()
+    resume_text, job_desc, role_level, years_experience, error_response = (
+        validate_request()
+    )
     if error_response:
         return error_response
-    
+
     try:
         prompt = f"""
 You are an expert technical recruiter and career coach.
+Candidate seniority: {role_level}; years of experience: {years_experience}.
 Analyze the following resume and categorize the candidate's skills into three distinct buckets:
 1. Technical Skills (Languages, frameworks, tools)
 2. Soft Skills (Leadership, communication, problem-solving)
 3. Domain Knowledge (Industry expertise like Finance, Healthcare, System Design, Agile)
 
 For each category, provide:
-- A "score" (0-100) indicating their overall proficiency based on how deeply the skills are demonstrated in their experience (e.g., used in complex projects vs just listed in a skills section).
+- A "score" (0-100) indicating evidence coverage in this resume, not actual proficiency, based on how deeply skills are demonstrated in their experience (e.g., used in complex projects vs just listed in a skills section).
 - A list of "skills" (strings).
 
 Also, if a Job Description is provided, provide a list of up to 3 "gaps" (missing critical skills). If no Job Description is provided, provide up to 3 general skill gaps based on their experience level.
@@ -833,7 +1163,7 @@ Job Description:
 {job_desc or "None provided. Do a general audit."}
 
 Candidate's Resume:
-{resume_text[:2500]}
+{resume_text}
 
 Return ONLY strict JSON with this exact schema, and absolutely NO markdown formatting or backticks:
 {{
@@ -851,47 +1181,47 @@ Return ONLY strict JSON with this exact schema, and absolutely NO markdown forma
                     response = ai_client.models.generate_content(
                         model=candidate_model,
                         contents=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json"
+                        ),
                     )
                     text = extract_response_text(response).strip()
                     text = re.sub(r"^```json\s*", "", text, flags=re.IGNORECASE)
                     text = re.sub(r"^```", "", text)
                     text = re.sub(r"```$", "", text).strip()
-                    
+
                     data = json.loads(text)
+                    for category in ("technical", "soft", "domain"):
+                        value = data.get(category, {})
+                        if (
+                            not isinstance(value, dict)
+                            or not isinstance(value.get("skills"), list)
+                            or not all(
+                                isinstance(skill, str) for skill in value["skills"]
+                            )
+                        ):
+                            raise ValueError("Invalid skills response")
+                        score = value.get("score")
+                        if not isinstance(score, (int, float)) or not 0 <= score <= 100:
+                            raise ValueError("Invalid evidence score")
+                    if not isinstance(data.get("gaps"), list) or not all(
+                        isinstance(gap, str) for gap in data["gaps"]
+                    ):
+                        raise ValueError("Invalid skill gaps")
                     return jsonify(data)
                 except Exception as exc:
                     last_error = str(exc)
                     if is_retryable_error(last_error) and attempt < MAX_AI_RETRIES - 1:
-                        time.sleep(2 ** attempt)
+                        time.sleep(2**attempt)
                         continue
                     break
-        
-        # FALLBACK LOGIC: If Gemini API fails, return parsed/deterministic skills analysis
-        keywords = list(extract_keywords(resume_text))
-        tech_skills = [k for k in keywords if k.lower() in ["python", "react", "javascript", "typescript", "c++", "java", "sql", "git", "node.js", "express", "flask", "django", "docker", "aws", "gcp", "kubernetes"]]
-        if not tech_skills:
-            tech_skills = ["Python", "JavaScript", "SQL", "Git", "React"]
-        
-        fallback_data = {
-            "technical": {
-                "score": 85 if role_level == "senior" else 75 if role_level == "mid" else 65,
-                "skills": tech_skills[:12]
-            },
-            "soft": {
-                "score": 80,
-                "skills": ["Problem Solving", "Team Collaboration", "Effective Communication", "Adaptability", "Time Management"]
-            },
-            "domain": {
-                "score": 75,
-                "skills": ["Software Engineering", "Agile Methodologies", "Object-Oriented Programming", "RESTful API Design"]
-            },
-            "gaps": [
-                "Cloud Infrastructure (AWS/GCP/Azure) and DevOps pipelines",
-                "Unit Testing & Integration Testing methodologies",
-                "System Architecture & Scalability design patterns"
-            ]
-        }
-        return jsonify(fallback_data)
+
+        return (
+            jsonify(
+                {"error": "Skills analysis is temporarily unavailable. Please retry."}
+            ),
+            503,
+        )
 
     except Exception as exc:
         app.logger.exception("Skills Analysis endpoint failed")
@@ -901,7 +1231,14 @@ Return ONLY strict JSON with this exact schema, and absolutely NO markdown forma
 @app.route("/chat", methods=["POST"])
 def chat():
     if ai_client is None:
-        return jsonify({"error": "Gemini API key is not configured."}), 503
+        return (
+            jsonify(
+                {
+                    "error": "AI assistance is temporarily unavailable. Please try again later."
+                }
+            ),
+            503,
+        )
 
     message = (request.form.get("message") or "").strip()
     job_desc = (request.form.get("job_description") or "").strip()
@@ -914,13 +1251,22 @@ def chat():
         return jsonify({"error": "Message is required."}), 400
 
     try:
-        resume_text = extract_text(file) if file else ""
+        resume_text, job_desc, role_level, years_value, error_response = (
+            validate_request()
+        )
+        if error_response:
+            return error_response
+        years_experience = str(years_value)
         candidate_name = extract_name(resume_text) if resume_text else "the candidate"
         history_str = ""
         try:
             history_data = json.loads(chat_history)
-            for m in history_data[-5:]:
-                history_str += f"{m.get('sender', 'user')}: {m.get('text', '')}\n"
+            if not isinstance(history_data, list):
+                raise ValueError("History must be a list")
+            for m in history_data[-10:]:
+                if not isinstance(m, dict):
+                    continue
+                history_str += f"{m.get('role', 'user')}: {m.get('content', '')}\n"
         except:
             pass
 
@@ -933,7 +1279,7 @@ Job Description (if any):
 {job_desc or "General Application"}
 
 Candidate's Resume (if provided):
-{resume_text[:2000] if resume_text else "No resume provided yet."}
+{resume_text if resume_text else "No resume provided yet."}
 
 Recent Chat History:
 {history_str}
@@ -942,7 +1288,7 @@ User Message: {message}
 
 Rules:
 - Provide a helpful, concise, and professional response directly addressing their message.
-- If they ask to rewrite a bullet point, provide 1 or 2 strong, quantified options based on their resume context.
+- If rewriting a bullet, preserve its facts. Never invent metrics, qualifications or achievements; ask for missing evidence.
 - Output ONLY the plain text of your response. No markdown formatting for the whole message, just standard text or basic bullet points.
 """
 
@@ -953,9 +1299,6 @@ Rules:
                     response = ai_client.models.generate_content(
                         model=candidate_model,
                         contents=prompt,
-                        config=types.GenerateContentConfig(
-                            tools=[{"google_search": {}}]
-                        )
                     )
                     text = extract_response_text(response).strip()
                     if text:
@@ -963,19 +1306,74 @@ Rules:
                 except Exception as exc:
                     last_error = str(exc)
                     if is_retryable_error(last_error) and attempt < MAX_AI_RETRIES - 1:
-                        time.sleep(2 ** attempt)
+                        time.sleep(2**attempt)
                         continue
                     break
-        return jsonify({"error": "AI failed to generate a response due to quota limits or errors."}), 500
+        return (
+            jsonify(
+                {
+                    "error": "AI failed to generate a response due to quota limits or errors."
+                }
+            ),
+            500,
+        )
 
     except Exception as exc:
         app.logger.exception("Chat endpoint failed")
-        return jsonify({"error": "An internal error occurred while processing the chat."}), 500
+        return (
+            jsonify({"error": "An internal error occurred while processing the chat."}),
+            500,
+        )
+
+
+def validate_resume_data(data):
+    if not isinstance(data, dict) or not isinstance(data.get("personal_info"), dict):
+        raise ValueError("Resume must include personal information.")
+    for value in data["personal_info"].values():
+        if not isinstance(value, str):
+            raise ValueError("Contact fields must be text.")
+    if not isinstance(data.get("summary", ""), str):
+        raise ValueError("Summary must be text.")
+    for section in ("education", "experience", "projects"):
+        entries = data.get(section, [])
+        if not isinstance(entries, list) or any(
+            not isinstance(entry, dict) for entry in entries
+        ):
+            raise ValueError(f"Invalid {section} entries.")
+        for entry in entries:
+            for key, value in entry.items():
+                if key == "bullets":
+                    if not isinstance(value, list) or not all(
+                        isinstance(bullet, str) for bullet in value
+                    ):
+                        raise ValueError("Bullets must be a list of text.")
+                elif not isinstance(value, str):
+                    raise ValueError("Resume fields must be text.")
+        data[section] = entries
+    skills = data.get("skills", {})
+    if not isinstance(skills, dict) or any(
+        not isinstance(value, str)
+        and not (
+            isinstance(value, list) and all(isinstance(skill, str) for skill in value)
+        )
+        for value in skills.values()
+    ):
+        raise ValueError("Invalid skills.")
+    data["skills"] = skills
+    return data
+
 
 @app.route("/parse-resume", methods=["POST"])
 def parse_resume():
     if ai_client is None:
-        return jsonify({"error": "Gemini API key is not configured."}), 503
+        return (
+            jsonify(
+                {
+                    "error": "AI assistance is temporarily unavailable. Please try again later."
+                }
+            ),
+            503,
+        )
 
     resume_text, _, _, _, error_response = validate_request()
     if error_response:
@@ -987,6 +1385,7 @@ You are an expert resume data extractor.
 Extract the information from the following resume into a STRICT JSON object perfectly matching this schema:
 
 {{
+  "summary": "Original summary if present, otherwise empty",
   "personal_info": {{
     "name": "Full Name",
     "email": "email@example.com",
@@ -1035,7 +1434,7 @@ Rules:
 - Do not make up information.
 
 Resume Text:
-{resume_text[:5000]}
+{resume_text}
 """
 
         last_error = ""
@@ -1045,193 +1444,218 @@ Resume Text:
                     response = ai_client.models.generate_content(
                         model=candidate_model,
                         contents=prompt,
+                        config=types.GenerateContentConfig(
+                            response_mime_type="application/json"
+                        ),
                     )
                     text = extract_response_text(response).strip()
                     text = re.sub(r"^```json\s*", "", text, flags=re.IGNORECASE)
                     text = re.sub(r"^```", "", text)
                     text = re.sub(r"```$", "", text).strip()
-                    
+
                     data = json.loads(text)
+                    data = validate_resume_data(data)
+                    from parsing_safeguards import parsing_warnings
+
+                    data["parsing_warnings"] = parsing_warnings(resume_text, data)
+                    data["source_text"] = resume_text
                     return jsonify(data)
                 except Exception as exc:
                     last_error = str(exc)
                     if is_retryable_error(last_error) and attempt < MAX_AI_RETRIES - 1:
-                        time.sleep(2 ** attempt)
+                        time.sleep(2**attempt)
                         continue
                     break
-                    
-        # Fallback if AI fails (e.g. quota limit or parsing error)
-        # We will extract a small snippet of the resume so the UI at least updates!
-        fallback_snippet = " ".join(resume_text.split()[:40]) + "..." if resume_text else "No text found."
-        
-        fallback_data = {
-            "personal_info": {
-                "name": extract_name(resume_text) or "Candidate Name",
-                "email": "Update API Key",
-                "phone": "Backend Quota Reached",
-                "linkedin": "",
-                "github": ""
-            },
-            "experience": [
+
+        return (
+            jsonify(
                 {
-                    "company": "API Quota Limit Reached",
-                    "role": "Backend Error",
-                    "location": "",
-                    "date": "",
-                    "bullets": [
-                        "Your resume was uploaded, but the AI parser has exhausted its quota.",
-                        "Because the backend hit the Google Gemini API rate limits, we cannot intelligently extract your experience.",
-                        "Please update the GEMINI_API_KEY in backend/.env with a new key.",
-                        f"Raw text preview: {fallback_snippet}"
-                    ]
+                    "error": "Resume parsing is temporarily unavailable. Your original resume has not been changed."
                 }
-            ],
-            "education": [
-                {
-                    "institution": "API Quota Limit Reached",
-                    "location": "",
-                    "degree": "Backend Error",
-                    "date": ""
-                }
-            ],
-            "projects": [
-                {
-                    "name": "API Quota Limit Reached",
-                    "technologies": "Backend Error",
-                    "date": "",
-                    "bullets": [
-                        "Please update the GEMINI_API_KEY in backend/.env."
-                    ]
-                }
-            ],
-            "skills": {
-                "languages": "Update API Key",
-                "frameworks": "Backend Error",
-                "tools": ""
-            }
-        }
-        return jsonify(fallback_data), 200
+            ),
+            503,
+        )
 
     except Exception as exc:
         app.logger.exception("Parse Resume endpoint failed")
         return jsonify({"error": "An internal error occurred."}), 500
 
+
 @app.route("/generate-pdf", methods=["POST"])
 def generate_pdf():
+    from io import BytesIO
+    from html import escape
+    from reportlab.lib import colors
+    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+
+    data = request.get_json(silent=True)
     try:
-        resume_data = request.json
-        if not resume_data:
-            return jsonify({"error": "No resume data provided."}), 400
-
-        # Setup custom Jinja2 environment for LaTeX
-        env = Environment(
-            block_start_string='<%',
-            block_end_string='%>',
-            variable_start_string='<<',
-            variable_end_string='>>',
-            comment_start_string='<#',
-            comment_end_string='#>',
-            trim_blocks=True,
-            autoescape=False,
-            loader=FileSystemLoader(os.path.join(os.path.dirname(__file__), 'templates'))
+        data = validate_resume_data(data)
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    if len(json.dumps(data)) > 100_000:
+        return (
+            jsonify(
+                {
+                    "error": "Resume is too long to export. Keep it below 100,000 characters."
+                }
+            ),
+            400,
         )
-        
-        # We need a function to escape latex special characters in the json data
-        def escape_latex(s):
-            if not isinstance(s, str):
-                return s
-            # Escaping minimal set of latex special chars
-            chars = {
-                '&': r'\&',
-                '%': r'\%',
-                '$': r'\$',
-                '#': r'\#',
-                '_': r'\_',
-                '{': r'\{',
-                '}': r'\}',
-                '~': r'\textasciitilde{}',
-                '^': r'\textasciicircum{}',
-                '\\': r'\textbackslash{}',
-            }
-            return "".join(chars.get(c, c) for c in s)
-            
-        def escape_dict(d):
-            if isinstance(d, dict):
-                return {k: escape_dict(v) for k, v in d.items()}
-            elif isinstance(d, list):
-                return [escape_dict(v) for v in d]
-            elif isinstance(d, str):
-                return escape_latex(d)
-            return d
-            
-        escaped_data = escape_dict(resume_data)
-        
-        template_name = resume_data.get("template_name", "jakes_resume")
-        template_file = f"{template_name}.tex"
-        
-        try:
-            template = env.get_template(template_file)
-        except Exception:
-            template = env.get_template('jakes_resume.tex')
-            
-        rendered_tex = template.render(**escaped_data)
+    template = data.get("template_name", "jakes_resume")
+    if not isinstance(template, str) or template not in {
+        "jakes_resume",
+        "deedy_resume",
+        "simple_resume",
+    }:
+        return jsonify({"error": "Unsupported resume template."}), 400
+    if not data["personal_info"].get("name", "").strip():
+        return jsonify({"error": "Add your name before exporting."}), 400
+    try:
+        if template != "simple_resume":
+            from pdf_exports import render_template_pdf
 
-        # Create a temporary directory to run tectonic
-        with tempfile.TemporaryDirectory() as temp_dir:
-            tex_file = os.path.join(temp_dir, 'resume.tex')
-            with open(tex_file, 'w') as f:
-                f.write(rendered_tex)
-                
-            # Run tectonic
-            try:
-                # Try global tectonic first (useful for local development)
-                result = subprocess.run(
-                    ['tectonic', 'resume.tex'],
-                    cwd=temp_dir,
-                    capture_output=True,
-                    text=True
-                )
-            except FileNotFoundError:
-                # Fallback to the local binary installed by build.sh on Render
-                local_tectonic = os.path.join(os.path.dirname(__file__), '.bin', 'tectonic')
-                result = subprocess.run(
-                    [local_tectonic, 'resume.tex'],
-                    cwd=temp_dir,
-                    capture_output=True,
-                    text=True
-                )
-                
-            if result.returncode != 0:
-                app.logger.error(f"Tectonic failed: {result.stderr}")
-                return jsonify({"error": "Failed to compile LaTeX PDF."}), 500
-                
-            pdf_path = os.path.join(temp_dir, 'resume.pdf')
-            if not os.path.exists(pdf_path):
-                return jsonify({"error": "PDF was not generated."}), 500
-                
-            # Read pdf data to memory to send it
-            with open(pdf_path, 'rb') as f:
-                pdf_data = f.read()
-                
-            from io import BytesIO
+            output = BytesIO(render_template_pdf(data, template))
             return send_file(
-                BytesIO(pdf_data),
-                mimetype='application/pdf',
+                output,
+                mimetype="application/pdf",
                 as_attachment=True,
-                download_name='resume.pdf'
+                download_name="resume.pdf",
             )
+        output = BytesIO()
+        from pathlib import Path
+        from reportlab.pdfbase import pdfmetrics
+        from reportlab.pdfbase.ttfonts import TTFont
 
-    except Exception as exc:
-        app.logger.exception("Generate PDF endpoint failed")
-        return jsonify({"error": "An internal error occurred."}), 500
+        font_dir = Path(__file__).parent / "templates/deedy/fonts/lato"
+        if "ResumeLato" not in pdfmetrics.getRegisteredFontNames():
+            pdfmetrics.registerFont(
+                TTFont("ResumeLato", str(font_dir / "Lato-Reg.ttf"))
+            )
+            pdfmetrics.registerFont(
+                TTFont("ResumeLatoBold", str(font_dir / "Lato-Bol.ttf"))
+            )
+        rendered_text = json.dumps(
+            {
+                key: data[key]
+                for key in (
+                    "personal_info",
+                    "summary",
+                    "education",
+                    "experience",
+                    "projects",
+                    "skills",
+                )
+                if key in data
+            },
+            ensure_ascii=False,
+        )
+        supported = pdfmetrics.getFont("ResumeLato").face.charToGlyph
+        if any(ord(char) > 31 and ord(char) not in supported for char in rendered_text):
+            raise ValueError(
+                "This template’s fonts cannot display some characters. Check names and symbols before exporting."
+            )
+        styles = getSampleStyleSheet()
+        for style in styles.byName.values():
+            style.fontName = (
+                "ResumeLatoBold"
+                if style.name.startswith("Heading") or style.name == "Title"
+                else "ResumeLato"
+            )
+        styles.add(
+            ParagraphStyle(
+                name="ResumeName",
+                parent=styles["Title"],
+                fontSize=20,
+                alignment=TA_CENTER,
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="ResumeBody", parent=styles["BodyText"], fontSize=10, leading=14
+            )
+        )
+        story = []
 
-@app.route("/health", methods=["GET"])
-def health():
-    return jsonify({
-        "status": "ok",
-        "gemini_enabled": ai_client is not None,
-        "gemini_model": model_name,
-    })
+        def para(value, style="ResumeBody"):
+            story.append(Paragraph(escape(str(value or "")), styles[style]))
+
+        info = data["personal_info"]
+        para(info.get("name", ""), "ResumeName")
+        para(
+            " | ".join(
+                str(info[k])
+                for k in ("email", "phone", "linkedin", "github", "portfolio")
+                if info.get(k)
+            )
+        )
+        if data.get("summary"):
+            para("Summary", "Heading2")
+            para(data["summary"])
+        for section in ("education", "experience", "projects"):
+            entries = data.get(section, [])
+            if not entries:
+                continue
+            para(section.title(), "Heading2")
+            for item in entries:
+                keys = {
+                    "education": ("institution", "degree", "location", "date", "gpa"),
+                    "experience": ("role", "company", "location", "date"),
+                    "projects": ("name", "technologies", "date"),
+                }[section]
+                para(" | ".join(str(item[k]) for k in keys if item.get(k)))
+                bullets = item.get("bullets", [])
+                if not isinstance(bullets, list):
+                    return jsonify({"error": "Bullets must be a list."}), 400
+                for bullet in bullets:
+                    para("• " + str(bullet))
+                story.append(Spacer(1, 6))
+        skills = data.get("skills", {})
+        if any(skills.values()):
+            para("Skills", "Heading2")
+            for key, value in skills.items():
+                if value:
+                    para(
+                        key.title()
+                        + ": "
+                        + (
+                            ", ".join(map(str, value))
+                            if isinstance(value, list)
+                            else str(value)
+                        )
+                    )
+        SimpleDocTemplate(
+            output,
+            leftMargin=42,
+            rightMargin=42,
+            topMargin=36,
+            bottomMargin=36,
+            title=str(info.get("name", "Resume")),
+        ).build(story)
+        output.seek(0)
+        return send_file(
+            output,
+            mimetype="application/pdf",
+            as_attachment=True,
+            download_name="resume.pdf",
+        )
+    except ValueError as exc:
+        return jsonify({"error": str(exc)}), 400
+    except RuntimeError as exc:
+        return jsonify({"error": str(exc)}), 503
+    except Exception:
+        app.logger.exception("PDF generation failed")
+        return (
+            jsonify(
+                {
+                    "error": "PDF generation failed. Please check your resume fields and retry."
+                }
+            ),
+            500,
+        )
+
 
 if __name__ == "__main__":
     app.run(

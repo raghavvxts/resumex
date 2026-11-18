@@ -5,3 +5,6 @@ scikit-learn
 google-genai
 python-dotenv
 gunicorn
+reportlab>=4.0,<5
+
+Jinja2>=3.1,<4

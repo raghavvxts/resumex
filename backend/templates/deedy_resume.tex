@@ -1,0 +1,54 @@
+% Adapted from Debarghya Das' Deedy Resume, OpenFonts edition (Apache-2.0).
+% Layout, commands and font assets originate at github.com/deedy/Deedy-Resume.
+\documentclass[]{deedy-resume-openfont}
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}
+\begin{document}
+\vspace*{6mm}
+\namesection{<< first_name >>}{<< last_name >>}{<< contacts | join(' $|$ ') >>}
+\begin{minipage}[t]{0.33\textwidth}
+<% if education %>
+\section{Education}
+<% for ed in education %>
+\subsection{<< ed.institution >>}
+\descript{<< ed.degree >>}
+\location{<< ed.date >> <% if ed.location %> | << ed.location >><% endif %>}
+<% if ed.gpa %>GPA: << ed.gpa >>\\<% endif %>
+\sectionsep
+<% endfor %>
+<% endif %>
+<% if skills %>
+\section{Skills}
+<% for category, value in skills.items() %>
+<% if value %>\subsection{<< category >>}
+<< value >>\sectionsep
+<% endif %>
+<% endfor %>
+<% endif %>
+\end{minipage}\hfill
+\begin{minipage}[t]{0.66\textwidth}
+<% if summary %>\section{Summary}
+<< summary >>\sectionsep
+<% endif %>
+<% if experience %>\section{Experience}
+<% for exp in experience %>
+\runsubsection{<< exp.company >>}
+\descript{<< exp.role or exp.title >>}
+\location{<< exp.date >> <% if exp.location %>| << exp.location >><% endif %>}
+<% if exp.bullets %>
+\vspace{\topsep}\begin{tightemize}
+<% for bullet in exp.bullets %>\item << bullet >>
+<% endfor %>\end{tightemize}
+<% endif %>\sectionsep
+<% endfor %><% endif %>
+<% if projects %>\section{Projects}
+<% for project in projects %>
+\runsubsection{<< project.name >>}
+<% if project.technologies %>\descript{<< project.technologies >>}<% endif %>
+<% if project.date %>\location{<< project.date >>}<% endif %>
+<% if project.bullets %>\vspace{\topsep}\begin{tightemize}
+<% for bullet in project.bullets %>\item << bullet >>
+<% endfor %>\end{tightemize}<% endif %>\sectionsep
+<% endfor %><% endif %>
+\end{minipage}
+\end{document}
