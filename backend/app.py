@@ -26,9 +26,9 @@ OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen3.5:4b")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "").strip()
 DEFAULT_MODEL_CANDIDATES = [
+    "gemini-3.5-flash",
+    "gemini-3.5-flash-lite",
     "gemini-2.5-flash",
-    "gemini-2.0-flash",
-    "gemini-2.0-flash-lite",
 ]
 
 if AI_PROVIDER == "ollama":
@@ -1189,7 +1189,35 @@ Return ONLY strict JSON with this exact schema, and absolutely NO markdown forma
                         model=candidate_model,
                         contents=prompt,
                         config=types.GenerateContentConfig(
-                            response_mime_type="application/json"
+                            response_mime_type="application/json",
+                            response_json_schema={
+                                "type": "object",
+                                "properties": {
+                                    **{
+                                        category: {
+                                            "type": "object",
+                                            "properties": {
+                                                "score": {
+                                                    "type": "number",
+                                                    "minimum": 0,
+                                                    "maximum": 100,
+                                                },
+                                                "skills": {
+                                                    "type": "array",
+                                                    "items": {"type": "string"},
+                                                },
+                                            },
+                                            "required": ["score", "skills"],
+                                        }
+                                        for category in ("technical", "soft", "domain")
+                                    },
+                                    "gaps": {
+                                        "type": "array",
+                                        "items": {"type": "string"},
+                                    },
+                                },
+                                "required": ["technical", "soft", "domain", "gaps"],
+                            },
                         ),
                     )
                     text = extract_response_text(response).strip()
@@ -1217,6 +1245,12 @@ Return ONLY strict JSON with this exact schema, and absolutely NO markdown forma
                         raise ValueError("Invalid skill gaps")
                     return jsonify(data)
                 except Exception as exc:
+                    app.logger.warning(
+                        "Skills provider failure: model=%s type=%s status=%s",
+                        candidate_model,
+                        type(exc).__name__,
+                        getattr(exc, "code", "n/a"),
+                    )
                     last_error = str(exc)
                     if is_retryable_error(last_error) and attempt < MAX_AI_RETRIES - 1:
                         time.sleep(2**attempt)
