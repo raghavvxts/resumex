@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Sidebar } from "./Sidebar";
 import { Topbar } from "./Topbar";
 import { MobileNavbar } from "./MobileNavbar";
@@ -11,42 +11,58 @@ import { MaterialSurface } from "../ui/MaterialSurface";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const AppShell = () => {
-  const { isReady, showStrategist, setShowStrategist, strategistQuery, showConfigDrawer, uploadStatus, setUploadStatus } = useResumeContext();
-
+  const location = useLocation();
+  const mainRef = React.useRef<HTMLElement>(null);
   React.useEffect(() => {
-    // Orchestrate the Upload Ceremony
-    if (uploadStatus === "projects") {
-      const sequence = async () => {
-        const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
-        
-        await wait(800);
-        setUploadStatus("skills");
-        
-        await wait(800);
-        setUploadStatus("ats");
-        
-        await wait(800);
-        setUploadStatus("suggestions");
-        
-        await wait(1200);
-        setUploadStatus("complete");
-      };
-      sequence();
-    }
-  }, [uploadStatus, setUploadStatus]);
+    if (mainRef.current) mainRef.current.scrollTop = 0;
+  }, [location.pathname]);
+  const {
+    isReady,
+    parsedResume,
+    showStrategist,
+    setShowStrategist,
+    strategistQuery,
+    showConfigDrawer,
+    uploadStatus,
+    setUploadStatus,
+  } = useResumeContext();
+
+  const isHomepage =
+    !isReady &&
+    (location.pathname === "/" || location.pathname === "/dashboard");
 
   return (
-    <div className={`flex bg-bg-base text-text-primary selection:bg-accent-functional/30 relative overflow-hidden ${isReady ? "min-h-[100dvh]" : "h-[100dvh] overflow-hidden"}`}>
+    <div
+      className={`flex bg-bg-base text-text-primary selection:bg-accent-functional/30 relative overflow-hidden h-[100dvh] ${isHomepage ? "app-shell--homepage" : ""}`}
+    >
       {/* The Global Material Environment */}
-      <MaterialSurface />
+      {isHomepage ? (
+        <div className="homepage-background" aria-hidden="true">
+          <img
+            src="/images/homepage-background.jpg"
+            alt=""
+            width={1672}
+            height={941}
+            loading="eager"
+            decoding="async"
+          />
+          <div className="homepage-background-shade" />
+        </div>
+      ) : (
+        <MaterialSurface />
+      )}
 
       {/* Embedded Components (Layer 2 - Glass & Layer 3 - Interactive) */}
       <Sidebar />
 
-      <div className="flex-1 flex flex-col relative z-10 min-w-0 h-full">
-        {isReady && <Topbar />}
+      <div className="flex-1 flex flex-col relative z-10 min-w-0 h-full overflow-hidden">
+        {(isReady || parsedResume) && <Topbar />}
 
-        <main className={`flex-1 relative overflow-y-auto pb-24 lg:pb-0`}>
+        <main
+          ref={mainRef}
+          id="main-content"
+          className={`flex-1 relative overflow-y-auto pb-24 lg:pb-0`}
+        >
           <AnimatePresence mode="wait">
             <Outlet />
           </AnimatePresence>
@@ -55,10 +71,10 @@ export const AppShell = () => {
 
       {!showConfigDrawer && !showStrategist && <MobileNavbar />}
 
-      <StrategistDrawer 
-        isOpen={showStrategist} 
-        onClose={() => setShowStrategist(false)} 
-        initialQuery={strategistQuery} 
+      <StrategistDrawer
+        isOpen={showStrategist}
+        onClose={() => setShowStrategist(false)}
+        initialQuery={strategistQuery}
       />
 
       <ConfigDrawer />

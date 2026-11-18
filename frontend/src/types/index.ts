@@ -1,4 +1,7 @@
 export interface AnalysisResult {
+  analysis_mode?: "template" | "custom" | "audit";
+  target_label?: string;
+  source_text?: string;
   score: number;
   candidate_name?: string;
   role_level?: string;
@@ -13,7 +16,12 @@ export interface AnalysisResult {
   bullet_templates?: string[];
   checklist?: {
     completion_percent: number;
-    items: Array<{ id: string; label: string; completed: boolean; reason: string }>;
+    items: Array<{
+      id: string;
+      label: string;
+      completed: boolean;
+      reason: string;
+    }>;
   };
   ai_recommendations?: {
     status: string;

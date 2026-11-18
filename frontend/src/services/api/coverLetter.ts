@@ -1,3 +1,4 @@
+import { request } from "./request";
 import { environment } from "../../config/environment";
 
 export const generateCoverLetter = async (
@@ -7,18 +8,18 @@ export const generateCoverLetter = async (
   jobDesc: string,
   roleLevel: string,
   yearsExperience: number,
-  tone: string
+  tone: string,
 ): Promise<string> => {
   const fd = new FormData();
   if (resumeInputMode === "pdf" && file) fd.append("resume", file);
   if (resumeInputMode === "text") fd.append("resume_text", resumeText);
-  
+
   fd.append("job_description", jobDesc);
   fd.append("role_level", roleLevel);
   fd.append("years_experience", String(yearsExperience));
   fd.append("tone", tone);
 
-  const response = await fetch(`${environment.apiUrl}/cover-letter`, {
+  const response = await request(`${environment.apiUrl}/cover-letter`, {
     method: "POST",
     body: fd,
   });

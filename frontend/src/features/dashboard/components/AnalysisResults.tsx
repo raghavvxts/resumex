@@ -1,204 +1,207 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { FileText as FileIcon, Sparkles, Shield, Briefcase, TrendingUp, PenTool, BarChart3, Lightbulb, AlertTriangle } from "lucide-react";
+import { Link } from "react-router-dom";
 import { useResumeContext } from "../../../contexts/ResumeContext";
-import { ScoreRing, BarProgress, Dot } from "../../../components/ui/Progress";
-import { SkillsRadarChart } from "../../../components/ui/Charts";
-import { COMPANY_NAMES, ROLE_NAMES } from "../../../constants";
 
 export const AnalysisResults = () => {
-  const { result, loading, isReady, mode, selectedCompany, selectedRole, setShowConfigDrawer, setShowStrategist, setStrategistQuery, setShowResumeModal } = useResumeContext();
-
-  const matchedKw = result?.matched_keywords?.length || 0;
-  const totalKw = (result?.matched_keywords?.length || 0) + (result?.missing_keywords?.length || 0);
-  const atsScore = result ? Math.round((result.keyword_coverage || 0)) : 0;
-  const missingKw = result?.missing_keywords?.slice(0, 12) || [];
-
-  const scoreLabel = result ? (result.score >= 70 ? "Great Resume" : result.score >= 40 ? "Good Resume" : "Needs Improvement") : "Awaiting Scan";
-  const scoreDesc = result
-    ? (result.score >= 70 ? "Solid fundamentals. A few improvements can make it exceptional." : result.score >= 40 ? "Good base. Add more keywords and quantified achievements." : "Add more detail, keywords, and structure.")
-    : "Upload your resume to see how well it matches the target role.";
-
-  const openStrategistWithQuery = (q: string) => {
-    if (!isReady) return;
-    setStrategistQuery(q);
+  const {
+    result,
+    resumeText,
+    setShowConfigDrawer,
+    mode,
+    setShowStrategist,
+    setStrategistQuery,
+    setShowResumeModal,
+  } = useResumeContext();
+  if (!result) return null;
+  const audit = (result.analysis_mode || mode) === "audit";
+  const findings = [
+    ...new Set(
+      [
+        ...(result.action_plan || []),
+        ...(result.ai_recommendations?.weak_points || []),
+      ].filter(Boolean),
+    ),
+  ].slice(0, 3);
+  const discuss = (finding: string) => {
+    setStrategistQuery(
+      `Help me address this finding using only facts from my resume: ${finding}`,
+    );
     setShowStrategist(true);
   };
-
-  const cardBase = "glass-card p-6 flex flex-col";
-  const skeletonCls = (extra = "") => `${cardBase} ${extra} ${!isReady && loading ? "skeleton-pulse" : ""}`;
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="p-4 sm:p-6 md:p-8 flex flex-col relative z-10"
-    >
-      {/* ─── Header ─── */}
-      <div className="flex items-center justify-between mb-8">
+    <div className="max-w-6xl mx-auto p-4 sm:p-8 space-y-8">
+      <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h2 className="text-title font-bold text-white tracking-tight font-display">
-            {isReady ? "Analysis Report" : "Dashboard"}
-          </h2>
-          <p className="text-[#6B7280] text-body-sm mt-1">
-            {isReady
-              ? `${result?.candidate_name || "Candidate"} · ${mode === "template" ? `${COMPANY_NAMES[selectedCompany]} — ${ROLE_NAMES[selectedRole]}` : mode === "audit" ? "General ATS Audit" : "Custom Job Description"}`
-              : "No analysis currently active."}
+          <p className="text-sm text-text-secondary mb-2">
+            1. Analyze <span aria-hidden="true">→</span> 2. Review{" "}
+            <span aria-hidden="true">→</span> 3. Edit & export
+          </p>
+          <h1 className="text-2xl font-bold">Analysis Report</h1>
+          <p className="mt-2 text-text-secondary">
+            {result.candidate_name || "Your resume"} ·{" "}
+            {result.target_label ||
+              (audit ? "General resume audit" : "Target job")}
           </p>
         </div>
-        <div className="flex gap-2">
-          {isReady && (
-            <button onClick={() => setShowResumeModal(true)}
-              className="btn-secondary px-5 py-2.5 text-[13px] font-semibold gap-2">
-              <FileIcon className="w-4 h-4" />
-              View Dossier
-            </button>
-          )}
-          {!isReady && (
-            <button onClick={() => setShowConfigDrawer(true)}
-              className="btn-primary px-6 py-2.5 text-[14px] font-semibold gap-2">
-              <Sparkles className="w-4 h-4" />
-              Start Scan
-            </button>
-          )}
+        <Link className="btn-primary px-5 py-3" to="/builder">
+          Review & edit resume
+        </Link>
+      </header>
+      {result.source_text && result.source_text !== resumeText && (
+        <div
+          role="status"
+          className="border border-amber-300/30 rounded-xl p-4 text-sm"
+        >
+          <p>
+            This report reflects your previous scan. Your resume has changed.
+          </p>
+          <button
+            className="underline mt-2"
+            onClick={() => setShowConfigDrawer(true)}
+          >
+            Analyze latest edits
+          </button>
         </div>
-      </div>
-
-      <div className={`relative flex-1 transition-opacity duration-500 ${!isReady && loading ? "opacity-30 blur-sm pointer-events-none" : ""}`}>
-
-        {/* ─── Row 1: Score + ATS + Role Match + Radar ─── */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-
-          {/* Score Ring — tall left card (spans 2 rows) */}
-          <div className={`${skeletonCls("justify-center items-center gap-4 lg:col-span-1 lg:row-span-2 min-h-[300px]")}`}>
-            <ScoreRing score={result?.score || 0} color="#FFFFFF" loading={!isReady} />
-            <div className="text-center mt-2">
-              <p className="text-caption font-bold uppercase tracking-widest text-[#9CA3AF] mb-2">Overall Match</p>
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <Dot color="#FFFFFF" loading={!isReady} />
-                <span className={`text-[15px] font-bold ${!isReady ? "text-[#6B7280]" : "text-white"}`}>{scoreLabel}</span>
+      )}
+      <section aria-labelledby="priority-heading" className="space-y-4">
+        <div>
+          <h2 id="priority-heading" className="text-xl font-semibold">
+            {findings.length
+              ? `${findings.length} thing${findings.length === 1 ? "" : "s"} to fix first`
+              : "Your next step"}
+          </h2>
+          <p className="text-text-secondary mt-2">
+            Start here. Use only skills and achievements you can support.
+          </p>
+        </div>
+        <div className="grid xl:grid-cols-3 gap-4">
+          {findings.map((finding, i) => (
+            <article
+              key={finding}
+              className="rounded-2xl border border-white/15 bg-[#121214] p-5 flex flex-col items-start gap-4"
+            >
+              <span className="text-sm text-purple-300 font-semibold">
+                Priority {i + 1}
+              </span>
+              <p className="text-base leading-relaxed flex-1">{finding}</p>
+              <div className="flex flex-wrap gap-3">
+                <Link to="/builder" className="btn-secondary px-4 py-2 text-sm">
+                  Edit resume
+                </Link>
+                <button
+                  className="text-sm underline underline-offset-4"
+                  onClick={() => discuss(finding)}
+                >
+                  Get guidance
+                </button>
               </div>
-              <p className="text-label text-[#9CA3AF] leading-relaxed max-w-[200px] mx-auto">{scoreDesc}</p>
-            </div>
+            </article>
+          ))}
+        </div>
+        {!findings.length && (
+          <p className="rounded-xl border border-white/15 p-5">
+            No priority findings were returned. Review your parsed details and
+            PDF before exporting.
+          </p>
+        )}
+      </section>
+      {result.ai_recommendations?.status !== "ok" &&
+        result.ai_recommendations?.message && (
+          <p
+            role="status"
+            className="text-sm text-amber-200 border-l-2 border-amber-300 pl-4"
+          >
+            {result.ai_recommendations.message}
+          </p>
+        )}
+      <section
+        aria-label="Score summary"
+        className="border border-white/15 rounded-2xl grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/15"
+      >
+        <div className="p-5">
+          <p className="text-sm text-text-secondary">
+            {audit ? "Resume completeness" : "Text similarity estimate"}
+          </p>
+          <p className="text-3xl font-semibold mt-2">
+            {Math.round(result.score)}
+            <span className="text-sm font-normal text-text-secondary">
+              {" "}
+              / 100
+            </span>
+          </p>
+        </div>
+        <div className="p-5">
+          <p className="text-sm text-text-secondary">
+            {audit ? "Sections present" : "Requirement keyword coverage"}
+          </p>
+          <p className="text-3xl font-semibold mt-2">
+            {Math.round(result.keyword_coverage || 0)}%
+          </p>
+        </div>
+      </section>
+      <p className="text-sm text-text-secondary">
+        Scores describe the text in this resume. They do not measure your actual
+        proficiency or predict hiring outcomes.
+      </p>
+      <details className="rounded-2xl border border-white/15 p-5">
+        <summary className="cursor-pointer font-semibold">
+          See supporting details
+        </summary>
+        <div className="space-y-6 mt-5">
+          <div>
+            <h3 className="font-semibold mb-3">
+              {audit ? "Section coverage" : "Section relevance estimates"}
+            </h3>
+            <dl className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              {Object.entries(result.section_scores || {}).map(
+                ([section, score]) => (
+                  <div key={section} className="rounded-lg bg-white/5 p-3">
+                    <dt className="capitalize text-sm text-text-secondary">
+                      {section.replace(/_/g, " ")}
+                    </dt>
+                    <dd className="mt-1">{Math.round(score)}%</dd>
+                  </div>
+                ),
+              )}
+            </dl>
           </div>
-
-          {/* ATS Score */}
-          <div className={`${skeletonCls("justify-between lg:col-span-1 min-h-[140px]")}`}>
-            <div className="flex items-center justify-between mb-1">
-              <p className="text-caption font-bold uppercase tracking-widest text-[#9CA3AF]">ATS Score</p>
-              <Shield className="w-4 h-4 text-[#9CA3AF]" />
-            </div>
+          {!audit && (
             <div>
-              <p className={`text-4xl font-bold font-display ${!isReady ? "text-[#4B5563]" : "text-white"}`}>
-                {isReady ? atsScore : "--"}<span className={`text-xl ${!isReady ? "text-[#374151]" : "text-white"}`}>%</span>
+              <h3 className="font-semibold mb-2">
+                Requirements not evidenced in this resume
+              </h3>
+              <p className="text-sm text-text-secondary mb-3">
+                A missing keyword does not mean you lack the skill. Add
+                supporting experience only if it is accurate.
               </p>
-              <div className="mt-2 mb-2"><BarProgress value={atsScore} color="bg-white/30" height="h-2" loading={!isReady} /></div>
-              <p className="text-caption text-[#4B5563]">Keyword compatibility</p>
-            </div>
-          </div>
-
-          {/* Role Match */}
-          <div className={`${skeletonCls("justify-between lg:col-span-1 min-h-[140px]")}`}>
-            <div className="flex items-center justify-between mb-1">
-              <p className="text-caption font-bold uppercase tracking-widest text-[#9CA3AF]">Role Match</p>
-              <Briefcase className="w-4 h-4 text-[#9CA3AF]" />
-            </div>
-            <div>
-              <p className={`text-4xl font-bold font-display ${!isReady ? "text-[#4B5563]" : "text-white"}`}>
-                {isReady ? result?.score : "--"}<span className={`text-xl ${!isReady ? "text-[#374151]" : "text-white"}`}>%</span>
-              </p>
-              <div className="mt-2 mb-2"><BarProgress value={result?.score || 0} color="bg-white/30" height="h-2" loading={!isReady} /></div>
-              <p className="text-caption text-[#4B5563]">Target job alignment</p>
-            </div>
-          </div>
-
-          {/* Skills Radar — wide card next to score ring row 2 */}
-          <div className={`${skeletonCls("justify-center items-center lg:col-span-2 min-h-[280px]")}`}>
-            <p className={`text-[12px] font-bold uppercase tracking-widest mb-2 ${!isReady ? "text-[#6B7280]" : "text-[#9CA3AF]"}`}>Skills Mapping</p>
-            <SkillsRadarChart scores={result?.section_scores} loading={!isReady} />
-          </div>
-
-          {/* Missing Keywords — NEW */}
-          <div className={`${skeletonCls("lg:col-span-2 min-h-[140px]")}`} style={{ background: isReady && missingKw.length > 0 ? "rgba(245,158,11,0.03)" : undefined, border: isReady && missingKw.length > 0 ? "1px solid rgba(245,158,11,0.12)" : undefined }}>
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-caption font-bold uppercase tracking-widest text-[#9CA3AF]">Missing Keywords</p>
-              <AlertTriangle className={`w-4 h-4 ${isReady && missingKw.length > 0 ? "text-amber-500" : "text-[#9CA3AF]"}`} />
-            </div>
-            {isReady && missingKw.length > 0 ? (
-              <div className="flex flex-wrap gap-1.5 mt-1">
-                {missingKw.map((kw, i) => (
-                  <span key={i}
-                    onClick={() => openStrategistWithQuery(`How do I add "${kw}" to my resume?`)}
-                    className="px-2 py-1 rounded-md text-[11px] font-semibold cursor-pointer transition-all hover:bg-amber-500/20"
-                    style={{ background: "rgba(245,158,11,0.08)", color: "#F59E0B", border: "1px solid rgba(245,158,11,0.2)" }}
-                    title={`Click to get advice on adding "${kw}"`}
+              <div className="flex flex-wrap gap-2">
+                {(result.missing_keywords || []).map((keyword) => (
+                  <button
+                    key={keyword}
+                    className="border border-amber-300/30 text-amber-200 rounded-lg px-3 py-2 text-sm"
+                    onClick={() =>
+                      discuss(
+                        `The target mentions ${keyword}, but my resume does not show it.`,
+                      )
+                    }
                   >
-                    {kw}
-                  </span>
+                    {keyword}
+                  </button>
                 ))}
               </div>
-            ) : (
-              <p className={`text-label mt-2 ${!isReady ? "text-[#374151]" : "text-emerald-400"}`}>
-                {isReady ? "✓ No critical gaps found" : "--"}
-              </p>
-            )}
-          </div>
-
-          {/* Keywords Found */}
-          <div className={`${skeletonCls("justify-between lg:col-span-1 min-h-[140px]")}`}>
-            <div className="flex items-center justify-between mb-1">
-              <p className="text-caption font-bold uppercase tracking-widest text-[#9CA3AF]">Keywords Found</p>
-              <TrendingUp className="w-4 h-4 text-[#9CA3AF]" />
+              {!result.missing_keywords?.length && (
+                <p>No missing keywords were detected.</p>
+              )}
             </div>
-            <div>
-              <p className={`text-4xl font-bold font-display ${!isReady ? "text-[#4B5563]" : "text-white"}`}>
-                {isReady ? matchedKw : "--"}
-                <span className={`text-lg font-sans font-normal ${!isReady ? "text-[#374151]" : "text-[#9CA3AF]"}`}> / {isReady ? totalKw : "--"}</span>
-              </p>
-              <div className="mt-2 mb-2"><BarProgress value={totalKw > 0 ? (matchedKw / totalKw) * 100 : 0} color="bg-white/30" height="h-2" loading={!isReady} /></div>
-              <p className="text-caption text-[#4B5563]">Keywords matched</p>
-            </div>
-          </div>
-
+          )}
+          <button
+            className="btn-secondary px-4 py-2"
+            onClick={() => setShowResumeModal(true)}
+          >
+            View writing suggestions
+          </button>
         </div>
-
-        {/* ─── Row 3: AI Suggestions ─── */}
-        <div className={`${cardBase} ${!isReady && loading ? "skeleton-pulse" : ""} mb-6`}>
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.1)" }}>
-                <Sparkles className={`w-4 h-4 ${!isReady ? "text-[#4B5563]" : "text-white"}`} />
-              </div>
-              <div>
-                <p className={`text-[14px] font-bold ${!isReady ? "text-[#6B7280]" : "text-white"}`}>AI Suggestions</p>
-                <p className="text-caption text-[#9CA3AF]">Click any card to open the AI Strategist.</p>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { icon: PenTool,   title: "Improve Summary",    desc: "Make your profile more impactful in 2 lines.", prompt: "How can I improve my resume summary?" },
-              { icon: BarChart3, title: "Add Project Metrics", desc: "Include measurable outcomes (%, $, users).", prompt: "How can I add measurable outcomes?" },
-              { icon: Shield,    title: "Optimize for ATS",   desc: "Use industry keywords for better visibility.", prompt: "Can you analyze my resume and optimize it?" },
-              { icon: Lightbulb, title: "Enhance Skills",     desc: "Group skills by category for clarity.", prompt: "How should I structure my skills?" },
-            ].map((s, i) => (
-              <div
-                key={i}
-                onClick={() => openStrategistWithQuery(s.prompt)}
-                className={`p-4 rounded-xl transition-all flex flex-col justify-center min-h-[120px] group ${isReady ? "cursor-pointer hover:bg-white/10 hover:border-white/15 hover:-translate-y-0.5" : ""}`}
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <s.icon className={`w-4 h-4 transition-colors ${!isReady ? "text-[#4B5563]" : "text-white group-hover:text-purple-400"}`} />
-                  <p className={`text-[13px] font-bold ${!isReady ? "text-[#6B7280]" : "text-white"}`}>{s.title}</p>
-                </div>
-                <p className={`text-[12px] leading-relaxed ${!isReady ? "text-[#4B5563]" : "text-[#9CA3AF]"}`}>{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </motion.div>
+      </details>
+    </div>
   );
 };

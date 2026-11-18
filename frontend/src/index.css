@@ -1,17 +1,16 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --bg-base: #09090B;
     --bg-surface: #121214;
     
     --text-primary: #FFFFFF;
     --text-secondary: #D4D4D8;
-    --text-muted: #71717A;
+    --text-muted: #A1A1AA;
     
     --accent-functional: #A855F7;
     --accent-success: #34D399;
@@ -59,7 +58,7 @@
   * { @apply border-border; box-sizing: border-box; }
   body {
     @apply bg-black text-[#F5F5F7];
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-ui);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
@@ -68,7 +67,7 @@
 
 @layer utilities {
   .font-display {
-    font-family: 'Playfair Display', serif;
+    font-family: var(--font-ui);
   }
 }
 
@@ -492,3 +491,17 @@ input[type=number]::-webkit-inner-spin-button { opacity: 0.3; }
 
 /* Divider line */
 .divider { border-top: 1px solid rgba(255,255,255,0.06); }
+
+:focus-visible { outline: 2px solid #C084FC; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; } }
+
+/* Static artwork replaces the animated graphite environment on the homepage. */
+body:has(.app-shell--homepage)::before,
+body:has(.app-shell--homepage)::after { display: none; }
+.homepage-background { position: absolute; inset: 0; z-index: 0; pointer-events: none; background: #080d25; }
+.homepage-background img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.homepage-background-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(4,8,22,.72) 0%, rgba(4,8,22,.4) 48%, rgba(4,8,22,.05) 100%); }
+@media (max-width: 767px) {
+  .homepage-background img { object-position: 66% center; }
+  .homepage-background-shade { background: linear-gradient(180deg, rgba(4,8,22,.72) 0%, rgba(4,8,22,.64) 55%, rgba(4,8,22,.28) 100%); }
+}

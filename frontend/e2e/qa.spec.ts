@@ -1,44 +1,66 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('ResumeX UI Tests', () => {
-  test('should successfully load the app, open the drawer, and run an analysis', async ({ page }) => {
-    console.log("🚀 Starting Agent-Driven UI Test (Playwright)...");
-
-    page.on('console', msg => console.log('BROWSER LOG:', msg.text()));
-    page.on('pageerror', error => console.log('BROWSER ERROR:', error.message));
-
-    // 1. Navigate to the app
-    await page.goto('/');
-
-    // 2. Wait for page to load and check if it's the Empty State
-    const emptyStateHeader = page.locator('h3:has-text("Ready for Analysis")');
-    await expect(emptyStateHeader).toBeVisible({ timeout: 5000 });
-    console.log("✅ Homepage loaded successfully (Empty State).");
-
-    // 3. Click 'Start Your First Scan'
-    const startBtn = page.locator('button:has-text("Start Your First Scan")');
-    await expect(startBtn).toBeVisible();
-    await startBtn.click();
-
-    // 4. Wait for Drawer to open (we wait for the drop-zone to be visible)
-    const dropZone = page.locator('.drop-zone');
-    await expect(dropZone).toBeVisible({ timeout: 3000 });
-    console.log("✅ Configuration drawer opened.");
-
-    // 5. Upload PDF
-    const fileInput = page.locator('input[type="file"]');
-    // Point to the PDF in the project root
-    await fileInput.setInputFiles('../resume.pdf');
-    console.log("✅ PDF uploaded.");
-
-    // 6. Click 'Run Analysis'
-    const runBtn = page.locator('button:has-text("Run Analysis")');
-    await runBtn.click();
-
-    // 7. Wait for Drawer to close and Analysis to finish
-    console.log("Waiting for analysis to complete...");
-    const reportHeader = page.locator('h2:has-text("Analysis Report")');
-    await expect(reportHeader).toBeVisible({ timeout: 45000 });
-    console.log("✅ Analysis completed successfully. Dashboard populated.");
+const resume =
+  "Alex Example\nSummary\nEngineer with three years React experience.\nExperience\nReduced latency by 30%.\nSkills\nReact Python SQL\nProjects\nDashboard\nEducation\nBSc";
+test("text analysis, seniority, editable builder, draft recovery and clear", async ({
+  page,
+}) => {
+  await page.route("**/analyze", async (route) => {
+    expect(route.request().postData()).toContain("senior");
+    await route.fulfill({
+      json: {
+        score: 100,
+        candidate_name: "Alex Example",
+        source_text: resume,
+        keyword_coverage: 100,
+        missing_keywords: [],
+        section_scores: {
+          summary: 100,
+          skills: 100,
+          experience: 100,
+          projects: 100,
+          education: 100,
+        },
+        action_plan: ["Review your achievements"],
+        ai_recommendations: { status: "ok", rewritten_bullets: [] },
+      },
+    });
   });
+  await page.route("**/parse-resume", (route) =>
+    route.fulfill({
+      json: {
+        personal_info: { name: "Alex Example" },
+        experience: [],
+        education: [],
+        projects: [],
+        skills: { languages: "Python" },
+        source_text: resume,
+      },
+    }),
+  );
+  await page.goto("/");
+  await page.getByRole("button", { name: "Paste Text", exact: true }).click();
+  await page.getByLabel("Resume text", { exact: true }).fill(resume);
+  await page.getByLabel("Seniority", { exact: true }).selectOption("senior");
+  await page.getByRole("button", { name: "Run Analysis", exact: true }).click();
+  await expect(
+    page.getByRole("heading", { name: "Analysis Report" }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(/resume completeness/i, { exact: false }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Edit & export", exact: true }).click();
+  await page.getByLabel("Name", { exact: true }).fill("Alex Updated");
+  await page
+    .getByRole("checkbox", { name: "Save draft on this device" })
+    .check();
+  await page.reload();
+  await expect(page.getByLabel("Name", { exact: true })).toHaveValue(
+    "Alex Updated",
+  );
+  await page.getByRole("button", { name: "Clear data", exact: true }).click();
+  await page.getByRole("link", { name: "Dashboard", exact: true }).click();
+  await expect(
+    page.getByRole("button", { name: "Paste Text", exact: true }),
+  ).toBeVisible();
 });

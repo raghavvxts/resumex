@@ -1,3 +1,4 @@
+% Modified for Resumaxer: Lato contact header for clearer text extraction.
 % Intro Options
 \ProvidesClass{deedy-resume-openfont}[2014/04/30 CV class]
 \NeedsTeXFormat{LaTeX2e}

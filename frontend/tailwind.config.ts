@@ -15,6 +15,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-ui)"],
+        display: ["var(--font-ui)"],
+      },
       spacing: {
         0: "0",
         px: "1px",

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Sparkles, Zap, Mail, ChevronDown, ChevronUp } from "lucide-react";
 import { useResumeContext } from "../../../contexts/ResumeContext";
 import { generateCoverLetter } from "../../../services/api/coverLetter";
@@ -8,16 +8,33 @@ import { CopyButton, AILoader } from "../../../components/ui/Shared";
 
 const TONES = [
   { key: "professional", label: "Professional", desc: "Formal and polished" },
-  { key: "enthusiastic", label: "Enthusiastic", desc: "Energetic and passionate" },
+  {
+    key: "enthusiastic",
+    label: "Enthusiastic",
+    desc: "Energetic and passionate",
+  },
   { key: "concise", label: "Concise", desc: "Brief and impactful" },
 ] as const;
 
 export const CoverLetterView = () => {
-  const { file, resumeText, jobDescription, setJobDescription, selectedRole, yearsExperience } = useResumeContext();
+  const {
+    sessionVersion,
+    file,
+    resumeText,
+    jobDescription,
+    setJobDescription,
+    roleLevel,
+    resumeInputMode,
+    letter,
+    setLetter,
+    tone,
+    setTone,
+    yearsExperience,
+  } = useResumeContext();
+  const activeVersion = useRef(sessionVersion);
+  activeVersion.current = sessionVersion;
   const [loading, setLoading] = useState(false);
-  const [letter, setLetter] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [tone, setTone] = useState<string>("professional");
   const [showJdInput, setShowJdInput] = useState(false);
 
   const generate = async () => {
@@ -25,10 +42,20 @@ export const CoverLetterView = () => {
       setError("Please upload or paste a resume first.");
       return;
     }
+    const version = sessionVersion;
     setLoading(true);
     setError(null);
     try {
-      const letterText = await generateCoverLetter(file, resumeText, file ? "pdf" : "text", jobDescription, selectedRole, yearsExperience, tone);
+      const letterText = await generateCoverLetter(
+        file,
+        resumeText,
+        resumeInputMode,
+        jobDescription,
+        roleLevel,
+        yearsExperience,
+        tone,
+      );
+      if (activeVersion.current !== version) return;
       setLetter(letterText);
     } catch (e: any) {
       setError(e.message);
@@ -38,18 +65,25 @@ export const CoverLetterView = () => {
   };
 
   if (!file && !resumeText) {
-    return <PlaceholderView 
-      title="Cover Letter Generator" 
-      icon={Mail} 
-      description="Upload your resume and a job description to automatically generate a tailored cover letter." 
-    />;
+    return (
+      <PlaceholderView
+        title="Cover Letter Generator"
+        icon={Mail}
+        description="Upload your resume and a job description to automatically generate a tailored cover letter."
+      />
+    );
   }
 
   return (
     <div className="max-w-3xl mx-auto py-10 px-4 sm:px-6 md:px-8">
       <div className="mb-8">
-        <h2 className="text-title font-bold text-white mb-2">Cover Letter Generator</h2>
-        <p className="text-[#9CA3AF] text-body-sm">Generate a tailored cover letter based on your resume and job description.</p>
+        <h2 className="text-title font-bold text-white mb-2">
+          Cover Letter Generator
+        </h2>
+        <p className="text-[#9CA3AF] text-body-sm">
+          Generate a tailored cover letter based on your resume and job
+          description.
+        </p>
       </div>
 
       {/* Collapsible JD Input */}
@@ -58,42 +92,63 @@ export const CoverLetterView = () => {
           onClick={() => setShowJdInput(!showJdInput)}
           className="flex items-center gap-2 text-body-sm text-[#9CA3AF] hover:text-white transition-colors mb-3"
         >
-          {showJdInput ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-          {jobDescription ? "Edit Job Description" : "Add Job Description (optional)"}
+          {showJdInput ? (
+            <ChevronUp className="w-4 h-4" />
+          ) : (
+            <ChevronDown className="w-4 h-4" />
+          )}
+          {jobDescription
+            ? "Edit Job Description"
+            : "Add Job Description (optional)"}
         </button>
         {showJdInput && (
           <textarea
             value={jobDescription}
-            onChange={e => setJobDescription(e.target.value)}
-            onInput={e => setJobDescription((e.target as HTMLTextAreaElement).value)}
+            onChange={(e) => setJobDescription(e.target.value)}
+            onInput={(e) =>
+              setJobDescription((e.target as HTMLTextAreaElement).value)
+            }
+            aria-label="Cover letter job description"
             placeholder="Paste the target job description for a more tailored cover letter..."
             rows={4}
             className="glass-input w-full px-3.5 py-3 text-body-sm resize-none"
           />
         )}
         {jobDescription && !showJdInput && (
-          <p className="text-caption text-[#4B5563] pl-6">✓ Job description loaded ({jobDescription.trim().split(/\s+/).length} words)</p>
+          <p className="text-caption text-[#A1A1AA] pl-6">
+            ✓ Job description loaded (
+            {jobDescription.trim().split(/\s+/).length} words)
+          </p>
         )}
       </div>
 
       {/* Tone Selector */}
-      {!letter && !loading && (
+      {!loading && (
         <div className="mb-8">
-          <p className="label-tiny text-[#6B7280] mb-3">TONE</p>
+          <p className="label-tiny text-[#A1A1AA] mb-3">TONE</p>
           <div className="grid grid-cols-3 gap-3">
-            {TONES.map(t => (
-              <div
+            {TONES.map((t) => (
+              <button
+                type="button"
+                aria-pressed={tone === t.key}
                 key={t.key}
-                onClick={() => setTone(t.key)}
+                onClick={() => {
+                  setTone(t.key);
+                  setLetter("");
+                }}
                 className={`p-3 rounded-xl cursor-pointer transition-all text-center ${
                   tone === t.key
                     ? "border-2 border-purple-500/50 bg-purple-500/10"
                     : "border border-white/10 hover:border-white/20 hover:bg-white/[0.03]"
                 }`}
               >
-                <p className={`text-body-sm font-semibold ${tone === t.key ? "text-white" : "text-[#9CA3AF]"}`}>{t.label}</p>
-                <p className="text-caption text-[#4B5563] mt-0.5">{t.desc}</p>
-              </div>
+                <p
+                  className={`text-body-sm font-semibold ${tone === t.key ? "text-white" : "text-[#9CA3AF]"}`}
+                >
+                  {t.label}
+                </p>
+                <p className="text-caption text-[#A1A1AA] mt-0.5">{t.desc}</p>
+              </button>
             ))}
           </div>
         </div>
@@ -101,7 +156,10 @@ export const CoverLetterView = () => {
 
       {!letter && !loading && (
         <div className="flex justify-center py-6">
-          <button onClick={generate} className="btn-primary px-10 py-4 text-[17px] font-semibold gap-3 hover:-translate-y-0.5 transition-all shadow-xl">
+          <button
+            onClick={generate}
+            className="btn-primary px-10 py-4 text-[17px] font-semibold gap-3 hover:-translate-y-0.5 transition-all shadow-xl"
+          >
             <Sparkles className="w-5 h-5" />
             Generate Cover Letter
           </button>
@@ -115,22 +173,48 @@ export const CoverLetterView = () => {
       )}
 
       {error && (
-        <div className="p-4 rounded-xl mb-6" style={{ background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)" }}>
+        <div
+          className="p-4 rounded-xl mb-6"
+          style={{
+            background: "rgba(239,68,68,0.08)",
+            border: "1px solid rgba(239,68,68,0.2)",
+          }}
+        >
           <p className="text-red-400 text-body-sm">{error}</p>
         </div>
       )}
 
       {letter && !loading && (
         <div className="glass-card p-8 relative group">
-          <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+          <div className="flex justify-end mb-4">
             <CopyButton text={letter} />
           </div>
-          <div className="whitespace-pre-wrap text-body-sm text-[#E5E7EB] leading-[1.9]">
-            {letter}
-          </div>
+          <label className="block text-sm mb-2" htmlFor="letter-editor">
+            Edit your letter
+          </label>
+          <textarea
+            id="letter-editor"
+            className="glass-input w-full min-h-[420px] p-4 leading-relaxed"
+            value={letter}
+            onChange={(e) => setLetter(e.target.value)}
+          />
+          <a
+            className="btn-secondary px-4 py-2 inline-flex mt-4"
+            href={`data:text/plain;charset=utf-8,${encodeURIComponent(letter)}`}
+            download="cover-letter.txt"
+          >
+            Download text
+          </a>
           <div className="mt-8 flex items-center justify-between">
-            <p className="text-caption text-[#4B5563]">Tone: {TONES.find(t => t.key === tone)?.label}</p>
-            <button onClick={() => { setLetter(null); }} className="btn-secondary px-6 py-3 text-[14px] font-medium gap-2">
+            <p className="text-caption text-[#A1A1AA]">
+              Tone: {TONES.find((t) => t.key === tone)?.label}
+            </p>
+            <button
+              onClick={() => {
+                setLetter("");
+              }}
+              className="btn-secondary px-6 py-3 text-[14px] font-medium gap-2"
+            >
               <Zap className="w-4 h-4" />
               Regenerate
             </button>
