@@ -1,3 +1,4 @@
+import { resumeFormData } from "./resumeFormData";
 import { request } from "./request";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { environment } from "../../config/environment";
@@ -10,13 +11,14 @@ export const generateSkillsAnalysis = async (
   roleLevel: string,
   yearsExperience: number,
 ): Promise<any> => {
-  const fd = new FormData();
-  if (resumeInputMode === "pdf" && file) fd.append("resume", file);
-  if (resumeInputMode === "text") fd.append("resume_text", resumeText);
-
-  fd.append("job_description", jobDesc);
-  fd.append("role_level", roleLevel);
-  fd.append("years_experience", String(yearsExperience));
+  const fd = resumeFormData(
+    file,
+    resumeText,
+    resumeInputMode,
+    jobDesc,
+    roleLevel,
+    yearsExperience,
+  );
 
   const response = await request(`${environment.apiUrl}/skills-analysis`, {
     method: "POST",

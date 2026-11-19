@@ -127,6 +127,18 @@ export const ConfigDrawer = () => {
     setUploadStatus("reading");
 
     try {
+      // Parsing and analysis are independent; overlap their network/provider latency.
+      const parsed = parseResumeStructural(
+        file,
+        resumeText,
+        resumeInputMode,
+        jd,
+        roleLevel,
+        yearsExperience,
+      ).then(
+        (data) => ({ data, error: null }),
+        (error) => ({ data: null, error }),
+      );
       const data = await analyzeResume(
         file,
         resumeText,
@@ -155,28 +167,22 @@ export const ConfigDrawer = () => {
         experience: bullets,
       });
 
-      // The rest of the Upload Ceremony stages will be orchestrated by the HeroSection or a dedicated effect,
-      // but for safety, we advance to 'projects' here to signal the API is done.
       setUploadStatus("complete");
-      setLoading(false); // reset loading state
-      setShowConfigDrawer(false); // Close drawer only after API is done so user can see the ceremony
-
-      parseResumeStructural(
-        file,
-        resumeText,
-        resumeInputMode,
-        jd,
-        roleLevel,
-        yearsExperience,
-      )
-        .then((d) => {
-          if (currentVersion.current !== version) return;
-          setParsedResume(d);
-          if (d.source_text) setResumeText(d.source_text);
-        })
-        .catch((e) => {
-          if (currentVersion.current === version) setError(e.message);
-        });
+      setLoading(false);
+      setShowConfigDrawer(false);
+      void parsed.then(({ data, error }) => {
+        if (currentVersion.current !== version) return;
+        if (error) {
+          setError(
+            error instanceof Error
+              ? error.message
+              : "Resume parsing failed. Please retry.",
+          );
+          return;
+        }
+        setParsedResume(data);
+        if (data.source_text) setResumeText(data.source_text);
+      });
     } catch (e) {
       if (currentVersion.current !== version) return;
       setError(e instanceof Error ? e.message : "Something went wrong.");

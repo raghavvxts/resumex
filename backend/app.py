@@ -56,6 +56,9 @@ else:
     CORS(app, resources={r"/*": {"origins": ALLOWED_ORIGINS}})
 
 MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
+MAX_RESUME_CHARACTERS = 30000
+MAX_JOB_CHARACTERS = 20000
+MAX_PDF_PAGES = 50
 MIN_JOB_WORDS = 20
 MAX_AI_RETRIES = 1
 app.config["MAX_CONTENT_LENGTH"] = 11 * 1024 * 1024
@@ -169,10 +172,17 @@ ROLE_LEVELS = {"intern", "junior", "mid", "senior"}
 # Extract text from PDF
 def extract_text(file):
     reader = PyPDF2.PdfReader(file)
-    text = ""
+    if len(reader.pages) > MAX_PDF_PAGES:
+        raise ValueError("PDF exceeds 50 pages. Upload only your resume pages.")
+    parts = []
+    length = 0
     for page in reader.pages:
-        text += page.extract_text() or ""
-    return text
+        text = page.extract_text() or ""
+        length += len(text)
+        if length > MAX_RESUME_CHARACTERS:
+            raise ValueError("Resume exceeds 30,000 characters.")
+        parts.append(text)
+    return "\n".join(parts)
 
 
 def normalize_token(token):
@@ -715,6 +725,8 @@ def validate_request():
 
         try:
             resume_text = extract_text(file)
+        except ValueError as exc:
+            return None, None, None, None, (jsonify({"error": str(exc)}), 400)
         except (PyPDF2.errors.PdfReadError, PyPDF2.errors.FileNotDecryptedError):
             return (
                 None,
@@ -724,7 +736,7 @@ def validate_request():
                 (jsonify({"error": "Invalid or corrupted PDF file."}), 400),
             )
 
-    if len(resume_text) > 30000 or len(job_desc) > 20000:
+    if len(resume_text) > MAX_RESUME_CHARACTERS or len(job_desc) > MAX_JOB_CHARACTERS:
         return (
             None,
             None,

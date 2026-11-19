@@ -47,7 +47,15 @@ export const AppShell = () => {
           id="main-content"
           className="app-main flex-1 min-h-0 relative overflow-y-auto"
         >
-          <Outlet />
+          <React.Suspense
+            fallback={
+              <p role="status" className="p-6 text-text-secondary">
+                Loading workspace…
+              </p>
+            }
+          >
+            <Outlet />
+          </React.Suspense>
         </main>
       </div>
 

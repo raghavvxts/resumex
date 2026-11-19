@@ -1,3 +1,4 @@
+import { resumeFormData } from "./resumeFormData";
 import { request } from "./request";
 import { environment } from "../../config/environment";
 
@@ -11,13 +12,15 @@ export const chatWithStrategist = async (
   roleLevel: string,
   yearsExperience: number,
 ): Promise<string> => {
-  const fd = new FormData();
-  if (resumeInputMode === "pdf" && file) fd.append("resume", file);
-  if (resumeInputMode === "text") fd.append("resume_text", resumeText);
-  fd.append("job_description", jobDesc);
+  const fd = resumeFormData(
+    file,
+    resumeText,
+    resumeInputMode,
+    jobDesc,
+    roleLevel,
+    yearsExperience,
+  );
   fd.append("message", message);
-  fd.append("role_level", roleLevel);
-  fd.append("years_experience", String(yearsExperience));
   fd.append("history", JSON.stringify(chatHistory));
 
   const response = await request(`${environment.apiUrl}/chat`, {

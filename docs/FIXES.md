@@ -85,3 +85,14 @@ Compatible dependency patches applied with npm audit fix; type checking, lint, 1
 Download is always available once required fields and parsing review are complete. It generates the latest resume independently of preview. Simple is the default, auto-preview is opt-in, and Jake/Deedy failures fall back to Simple with a visible notice. Validation errors and cancelled sessions do not trigger fallback. Reject non-PDF success responses, defer object-URL cleanup for browser download compatibility, and prevent stale downloads after edits.
 
 Verified actual browser downloads for Simple, Jake, and Deedy against production backend, opened/rendered the resulting PDFs, and added regression coverage for download without preview, template fallback, stale content, and invalid PDF responses.
+
+## Project optimization pass
+
+- Removed unused React Query provider, theme library, typography plugin, and SWC tooling. Updated Vite, Vitest, router, and compatible transitive dependencies; npm audit reports zero findings after the updates.
+- Split builder, skills, and cover-letter routes; preserve the shell and accessible loading status during navigation. Initial production JavaScript reduced from approximately 404.5 kB to 356.8 kB (uncompressed), with gzip approximately 127.7 to 115.5 kB. These are bundle sizes, not real-device speed measurements.
+- Reuse memoized resume serialization for draft persistence and saved-version comparisons; keep immediate saving and recovery behavior. Consolidated API FormData construction without changing endpoints or request fields.
+- PDF extraction joins page text with separators, rejects over 50 pages before extraction, and stops extracting once the existing 30,000-character limit is exceeded. Added regression tests for page boundaries and both limits.
+- Standardized Node 24 CI, loopback-only local development by default, and explicit browser build targets to avoid silently dropping previously supported browsers during the tooling upgrade.
+- Start independent resume parsing and analysis together, keeping partial-analysis availability and session cancellation guards. Regression test verifies parsing begins before analysis resolves.
+
+Validation: 24 frontend tests pass; backend suite runs 24 tests with 2 compiler-dependent tests skipped locally. Typecheck, lint, production build, and full npm audit pass. Browser checks cover real analysis, editing, PDF download/preview, and route layout at phone, landscape, tablet, and laptop dimensions.

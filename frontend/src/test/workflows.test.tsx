@@ -5,6 +5,7 @@ import {
   fireEvent,
   waitFor,
   cleanup,
+  act,
 } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ResumeProvider, useResumeContext } from "../contexts/ResumeContext";
@@ -99,6 +100,51 @@ describe("resume workflow contracts", () => {
     expect(screen.getByTestId("state").textContent).toContain('"result":null');
     expect(screen.getByTestId("state").textContent).toContain(
       '"status":"idle"',
+    );
+  });
+  it("starts parsing while analysis is still pending", async () => {
+    let finish!: (value: Response) => void;
+    const fetchMock = vi
+      .spyOn(globalThis, "fetch")
+      .mockImplementation(async (url) => {
+        if (String(url).endsWith("/analyze"))
+          return new Promise<Response>((resolve) => {
+            finish = resolve;
+          });
+        return new Response(
+          JSON.stringify({
+            personal_info: { name: "Alex" },
+            source_text: resume,
+          }),
+        );
+      });
+    render(
+      <ResumeProvider>
+        <Probe />
+        <ConfigDrawer />
+      </ResumeProvider>,
+    );
+    fireEvent.click(screen.getByText("Prepare"));
+    fireEvent.click(screen.getByRole("button", { name: "Run Analysis" }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    expect(screen.getByTestId("state").textContent).toContain(
+      '"status":"reading"',
+    );
+    await act(async () =>
+      finish(
+        new Response(
+          JSON.stringify({
+            score: 75,
+            missing_keywords: [],
+            ai_recommendations: { status: "ok", rewritten_bullets: [] },
+          }),
+        ),
+      ),
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("state").textContent).toContain(
+        '"status":"complete"',
+      ),
     );
   });
   it("saves only with opt-in and restores the draft", async () => {

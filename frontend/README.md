@@ -1,4 +1,6 @@
-ResumeX Frontend Setup
+Resumaxer Frontend Setup
+
+Use Node.js 24 LTS (also supported: Node 22.12+ or 26+). Run `npm ci` for a reproducible install.
 
 This app has two parts:
 - Flask backend API in backend
@@ -30,7 +32,7 @@ Backend runs on http://127.0.0.1:5000 by default.
 - Install dependencies:
 
 ```bash
-npm install
+npm ci
 ```
 
 - Create frontend/.env from frontend/.env.example.

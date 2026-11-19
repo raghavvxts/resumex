@@ -4,6 +4,31 @@ import app as resume_app
 
 
 class ResumeAnalyzerTests(unittest.TestCase):
+    def test_pdf_extraction_separates_pages(self):
+        from unittest.mock import Mock, patch
+        pages = [Mock(), Mock()]
+        pages[0].extract_text.return_value = "Skills"
+        pages[1].extract_text.return_value = "Experience"
+        with patch.object(resume_app.PyPDF2, "PdfReader", return_value=Mock(pages=pages)):
+            self.assertEqual(resume_app.extract_text(None), "Skills\nExperience")
+
+    def test_pdf_page_limit_prevents_extraction(self):
+        from unittest.mock import Mock, patch
+        page = Mock()
+        with patch.object(resume_app.PyPDF2, "PdfReader", return_value=Mock(pages=[page] * 51)):
+            with self.assertRaisesRegex(ValueError, "50 pages"):
+                resume_app.extract_text(None)
+        page.extract_text.assert_not_called()
+
+    def test_pdf_text_limit_stops_before_later_pages(self):
+        from unittest.mock import Mock, patch
+        first, later = Mock(), Mock()
+        first.extract_text.return_value = "x" * (resume_app.MAX_RESUME_CHARACTERS + 1)
+        with patch.object(resume_app.PyPDF2, "PdfReader", return_value=Mock(pages=[first, later])):
+            with self.assertRaisesRegex(ValueError, "30,000 characters"):
+                resume_app.extract_text(None)
+        later.extract_text.assert_not_called()
+
     def test_normalize_token_synonyms(self):
         self.assertEqual(resume_app.normalize_token("JS"), "javascript")
         self.assertEqual(resume_app.normalize_token("ml"), "machine-learning")

@@ -6,6 +6,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useMemo,
   ReactNode,
 } from "react";
 import { cancelRequests } from "../services/api/request";
@@ -196,25 +197,49 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     setJobDescriptionState(value);
   };
 
-  const snapshot = {
-    resumeText,
-    parsedResume,
-    result,
-    jobDescription,
-    roleLevel,
-    yearsExperience,
-    mode,
-    skillsData,
-    letter,
-    tone,
-    selectedCompany,
-    selectedRole,
-    parsedTextForModal,
-  };
+  const snapshot = useMemo(
+    () => ({
+      resumeText,
+      parsedResume,
+      result,
+      jobDescription,
+      roleLevel,
+      yearsExperience,
+      mode,
+      skillsData,
+      letter,
+      tone,
+      selectedCompany,
+      selectedRole,
+      parsedTextForModal,
+    }),
+    [
+      resumeText,
+      parsedResume,
+      result,
+      jobDescription,
+      roleLevel,
+      yearsExperience,
+      mode,
+      skillsData,
+      letter,
+      tone,
+      selectedCompany,
+      selectedRole,
+      parsedTextForModal,
+    ],
+  );
+  const snapshotJSON = useMemo(
+    () => (draftEnabled || activeVersionId ? JSON.stringify(snapshot) : ""),
+    [snapshot, draftEnabled, activeVersionId],
+  );
   const activeVersion = versions.find((v) => v.id === activeVersionId);
+  const activeSnapshotJSON = useMemo(
+    () => (activeVersion ? JSON.stringify(activeVersion.data) : ""),
+    [activeVersion],
+  );
   const versionDirty = Boolean(
-    activeVersion &&
-      JSON.stringify(snapshot) !== JSON.stringify(activeVersion.data),
+    activeVersion && snapshotJSON !== activeSnapshotJSON,
   );
   const writeVersions = (next: ResumeVersion[]) => {
     try {
@@ -244,7 +269,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
       id: crypto.randomUUID(),
       name: name.trim().slice(0, 80),
       savedAt: new Date().toISOString(),
-      data: JSON.parse(JSON.stringify(snapshot)),
+      data: JSON.parse(snapshotJSON || JSON.stringify(snapshot)),
     };
     if (!writeVersions([...versions, version])) return false;
     setActiveVersionId(version.id);
@@ -254,8 +279,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     const version = versions.find((v) => v.id === id);
     if (!version) return false;
     // Preserve the current work before replacing it, even if autosave is disabled.
+    const currentSnapshotJSON = snapshotJSON || JSON.stringify(snapshot);
     const currentIsSaved = versions.some(
-      (v) => JSON.stringify(v.data) === JSON.stringify(snapshot),
+      (v) => JSON.stringify(v.data) === currentSnapshotJSON,
     );
     if (
       parsedResume &&
@@ -302,24 +328,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (draftEnabled) {
       try {
-        localStorage.setItem(
-          DRAFT_KEY,
-          JSON.stringify({
-            resumeText,
-            parsedResume,
-            result,
-            jobDescription,
-            roleLevel,
-            yearsExperience,
-            mode,
-            skillsData,
-            letter,
-            tone,
-            selectedCompany,
-            selectedRole,
-            parsedTextForModal,
-          }),
-        );
+        localStorage.setItem(DRAFT_KEY, snapshotJSON);
         setDraftError("");
       } catch {
         setDraftError(
@@ -334,22 +343,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
         /* Storage unavailable. */
       }
     }
-  }, [
-    draftEnabled,
-    resumeText,
-    parsedResume,
-    result,
-    jobDescription,
-    roleLevel,
-    yearsExperience,
-    mode,
-    skillsData,
-    letter,
-    tone,
-    selectedCompany,
-    selectedRole,
-    parsedTextForModal,
-  ]);
+  }, [draftEnabled, snapshotJSON]);
 
   const clearData = () => {
     startSession();
