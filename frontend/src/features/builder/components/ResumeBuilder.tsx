@@ -6,6 +6,9 @@ import { PlaceholderView } from "../../../components/ui/PlaceholderView";
 import { ResumeVersions } from "./ResumeVersions";
 import { resumeToText } from "../../../lib/resumeVersions";
 import { PDFPreview } from "../../../components/ui/PDFPreview";
+import { downloadBlob } from "../../../lib/download";
+import { printResume } from "../../../lib/browserPdf";
+import { suggestionWarnings } from "../../../lib/suggestionReview";
 import { FileText } from "lucide-react";
 
 export const ResumeBuilder = () => {
@@ -26,6 +29,7 @@ export const ResumeBuilder = () => {
   currentResume.current = parsedResume;
   const [previous, setPrevious] = useState<any>(null);
   const [bulletTarget, setBulletTarget] = useState("");
+  const [confirmedClaims, setConfirmedClaims] = useState<string[]>([]);
   const [skipped, setSkipped] = useState<string[]>([]);
   const [autoPreview, setAutoPreview] = useState(false);
   const template = parsedResume?.template_name || "simple_resume";
@@ -43,6 +47,7 @@ export const ResumeBuilder = () => {
   useEffect(() => {
     setPreview("");
     setBulletTarget("");
+    setConfirmedClaims([]);
     generation.current += 1;
     return () => {
       generation.current += 1;
@@ -111,6 +116,10 @@ export const ResumeBuilder = () => {
   };
   const download = async () => {
     if (downloading) return;
+    if (!navigator.onLine) {
+      localPDF();
+      return;
+    }
     const snapshot = parsedResume;
     setDownloading(true);
     setError("");
@@ -143,29 +152,63 @@ export const ResumeBuilder = () => {
         );
         return;
       }
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "resume.pdf";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      // Safari needs the object URL to remain alive after the click.
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      downloadBlob(blob, "resume.pdf");
       setExportNotice(
         (notice) => notice || "PDF ready. Your download has started.",
       );
     } catch (cause) {
-      if (currentResume.current === snapshot)
+      if (currentResume.current === snapshot) {
         setError(
-          cause instanceof Error
-            ? cause.message
-            : "PDF download failed. Please retry.",
+          `${cause instanceof Error ? cause.message : "PDF download failed."} Opening Browser PDF; you can retry it below if the print dialog was blocked.`,
         );
+        localPDF();
+      }
     } finally {
       setDownloading(false);
     }
   };
+  const localPDF = () => {
+    printResume(parsedResume);
+    setExportNotice(
+      "Choose Save as PDF and disable headers and footers in the print dialog. Browser PDF uses a single-column layout and stays on your device.",
+    );
+  };
+  const claimReview = (key: string, original: string, suggestion: string) => {
+    const flags = suggestionWarnings(original, suggestion);
+    if (!flags.length) return null;
+    return (
+      <div className="rounded-xl border border-amber-300/30 p-3 space-y-2 text-sm">
+        {flags.map((flag) => (
+          <p key={flag} className="text-amber-200">
+            {flag}
+          </p>
+        ))}
+        <label className="flex gap-2 items-start">
+          <input
+            type="checkbox"
+            checked={confirmedClaims.includes(key)}
+            onChange={(e) =>
+              setConfirmedClaims((values) =>
+                e.target.checked
+                  ? [...values, key]
+                  : values.filter((value) => value !== key),
+              )
+            }
+          />
+          I verified these claims against my actual experience.
+        </label>
+      </div>
+    );
+  };
+  const selectedBullet = bulletTarget
+    ? parsedResume?.[bulletTarget.split(":")[0]]?.[
+        Number(bulletTarget.split(":")[1])
+      ]?.bullets?.[Number(bulletTarget.split(":")[2])] || ""
+    : "";
+  const summaryFlags = suggestionWarnings(
+    parsedResume?.summary || "",
+    result?.ai_recommendations?.summary_rewrite || "",
+  );
   if (!parsedResume)
     return (
       <div className="workspace-page builder-empty-page space-y-5">
@@ -248,6 +291,10 @@ export const ResumeBuilder = () => {
           </button>
         )}
       </header>
+      <p className="text-sm text-text-secondary">
+        For automated application systems, choose Simple or Jake for a
+        single-column reading order.
+      </p>
       <div className="builder-toolbar">
         <label className="block min-w-0 space-y-2 text-sm">
           <span>PDF template</span>
@@ -324,7 +371,8 @@ export const ResumeBuilder = () => {
             )}
             <p>
               Use only suggestions that accurately describe your experience.
-              Choose exactly which bullet to replace.
+              Choose exactly which bullet to replace. Automated checks flag new
+              numbers and selected claim types; they cannot verify every fact.
             </p>
             {result.ai_recommendations.summary_rewrite &&
               !skipped.includes("summary") && (
@@ -343,8 +391,17 @@ export const ResumeBuilder = () => {
                       <p>{result.ai_recommendations.summary_rewrite}</p>
                     </div>
                   </div>
+                  {claimReview(
+                    "summary",
+                    parsedResume.summary || "",
+                    result.ai_recommendations.summary_rewrite,
+                  )}
                   <button
                     className="btn-secondary px-4 py-2"
+                    disabled={
+                      summaryFlags.length > 0 &&
+                      !confirmedClaims.includes("summary")
+                    }
                     onClick={() =>
                       update(
                         "summary",
@@ -370,7 +427,10 @@ export const ResumeBuilder = () => {
                     aria-label="Original bullet to replace"
                     className="glass-input w-full p-3"
                     value={bulletTarget}
-                    onChange={(e) => setBulletTarget(e.target.value)}
+                    onChange={(e) => {
+                      setBulletTarget(e.target.value);
+                      setConfirmedClaims([]);
+                    }}
                   >
                     <option value="">Choose an original bullet</option>
                     {["experience", "projects"].flatMap((section) =>
@@ -423,9 +483,16 @@ export const ResumeBuilder = () => {
                             <p>{bullet}</p>
                           </div>
                         </div>
+                        {bulletTarget &&
+                          claimReview(`bullet-${i}`, selectedBullet, bullet)}
                         <button
                           className="btn-secondary mt-3 px-4 py-2"
-                          disabled={!bulletTarget}
+                          disabled={
+                            !bulletTarget ||
+                            (suggestionWarnings(selectedBullet, bullet).length >
+                              0 &&
+                              !confirmedClaims.includes(`bullet-${i}`))
+                          }
                           onClick={() => {
                             const [section, index, selectedBullet] =
                               bulletTarget.split(":");
@@ -642,6 +709,17 @@ export const ResumeBuilder = () => {
               {downloading ? "Preparing download…" : "Download PDF"}
             </button>
           </div>
+          <button
+            className="btn-secondary px-4 py-2"
+            disabled={needsReview || !parsedResume.personal_info?.name?.trim()}
+            onClick={localPDF}
+          >
+            Browser PDF
+          </button>
+          <p className="text-xs text-text-secondary">
+            Browser PDF works without our server. Choose Save as PDF in your
+            browser’s print dialog.
+          </p>
           {exportNotice && (
             <p role="status" className="text-sm text-text-secondary">
               {exportNotice}
@@ -662,6 +740,31 @@ export const ResumeBuilder = () => {
             </div>
           )}
         </aside>
+      </div>
+      <div
+        className="mobile-export-bar lg:hidden"
+        aria-label="Quick PDF export"
+      >
+        <button
+          className="btn-primary px-4 py-3"
+          aria-label="Download PDF from mobile toolbar"
+          disabled={
+            downloading ||
+            needsReview ||
+            !parsedResume.personal_info?.name?.trim()
+          }
+          onClick={() => void download()}
+        >
+          {downloading ? "Preparing…" : "Download PDF"}
+        </button>
+        <button
+          className="btn-secondary px-4 py-3"
+          aria-label="Browser PDF from mobile toolbar"
+          disabled={needsReview || !parsedResume.personal_info?.name?.trim()}
+          onClick={localPDF}
+        >
+          Browser PDF
+        </button>
       </div>
     </div>
   );

@@ -96,3 +96,13 @@ Verified actual browser downloads for Simple, Jake, and Deedy against production
 - Start independent resume parsing and analysis together, keeping partial-analysis availability and session cancellation guards. Regression test verifies parsing begins before analysis resolves.
 
 Validation: 24 frontend tests pass; backend suite runs 24 tests with 2 compiler-dependent tests skipped locally. Typecheck, lint, production build, and full npm audit pass. Browser checks cover real analysis, editing, PDF download/preview, and route layout at phone, landscape, tablet, and laptop dimensions.
+
+## Export resilience, backups, and suggestion review
+
+Added a browser-only, single-column PDF path using the native print/Save as PDF flow; no backend or external font dependency. It is always available beside server download and is prepared automatically after failed server export. Offline download goes directly to browser printing. Mobile export controls stay above the dock and respect safe areas.
+
+Added portable JSON draft/version backups. Imports validate file size and structure, preserve current work before replacing it, merge saved versions without discarding different letters/settings, reject storage/capacity failures without replacing the current draft, and discard untrusted derived AI result objects. Import enables device autosave and explains this before selection.
+
+Original/suggested comparisons now flag new numeric claims, selected leadership/credential/outcome language and selected technical skills. Flagged revisions require a verification checkbox before applying. Suggestion preview also shows source reference and warnings. Simple/Jake single-column guidance is visible before template selection. These are heuristic checks, not factual verification.
+
+Expanded regression coverage and CI to compile actual Jake/Deedy templates. Native Safari browser export, multilingual multipage content, backup round trip and five viewport sizes checked. Physical iPhone/iPad testing remains unverified; see DEVICE_QA.md. Dependency audit remains clean.

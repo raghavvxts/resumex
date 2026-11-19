@@ -160,6 +160,31 @@ class WorkflowRegressionTests(unittest.TestCase):
             400,
         )
 
+    def test_simple_export_preserves_long_and_accented_resumes(self):
+        from io import BytesIO
+        for name in ("Zoë O'Connor", "Alex " + "Longname" * 25):
+            with self.subTest(name=name[:20]):
+                response = self.client.post("/generate-pdf", json={
+                    "personal_info": {"name": name}, "template_name": "simple_resume",
+                    "experience": [{"role": "Engineer", "bullets": [
+                        f"Achievement {i}: Built accessible software & improved API latency by 30%."
+                        for i in range(120)
+                    ]}],
+                })
+                self.assertEqual(response.status_code, 200)
+                reader = resume_app.PyPDF2.PdfReader(BytesIO(response.data))
+                text = "".join(page.extract_text() for page in reader.pages)
+                self.assertGreater(len(reader.pages), 1)
+                self.assertIn("Achievement 119", text)
+                self.assertIn("30%", text)
+
+    def test_unsupported_server_font_returns_actionable_error(self):
+        response = self.client.post("/generate-pdf", json={
+            "personal_info": {"name": "李明"}, "template_name": "simple_resume",
+        })
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("characters", response.json["error"])
+
     def test_audit_recognizes_percentages_and_filters_filler(self):
         from unittest.mock import patch
 

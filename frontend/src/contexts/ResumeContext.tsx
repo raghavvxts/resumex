@@ -9,6 +9,7 @@ import React, {
   useMemo,
   ReactNode,
 } from "react";
+import { readBackup, backupSnapshot } from "../lib/backup";
 import { cancelRequests } from "../services/api/request";
 import {
   readVersions,
@@ -19,6 +20,8 @@ import {
 import { AnalysisResult } from "../types";
 
 interface ResumeContextType {
+  exportBackup: () => string;
+  importBackup: (text: string) => boolean;
   versions: ResumeVersion[];
   saveVersion: (name: string) => boolean;
   loadVersion: (id: string) => boolean;
@@ -275,22 +278,9 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     setActiveVersionId(version.id);
     return true;
   };
-  const loadVersion = (id: string) => {
-    const version = versions.find((v) => v.id === id);
-    if (!version) return false;
-    // Preserve the current work before replacing it, even if autosave is disabled.
-    const currentSnapshotJSON = snapshotJSON || JSON.stringify(snapshot);
-    const currentIsSaved = versions.some(
-      (v) => JSON.stringify(v.data) === currentSnapshotJSON,
-    );
-    if (
-      parsedResume &&
-      !currentIsSaved &&
-      !saveVersion(`Before loading ${version.name}`)
-    )
-      return false;
+  const restoreSnapshot = (data: Record<string, any>, activeId: string) => {
     startSession();
-    const d = JSON.parse(JSON.stringify(version.data));
+    const d = JSON.parse(JSON.stringify(data));
     setFile(null);
     setResumeInputMode("text");
     setResumeText(d.resumeText);
@@ -316,7 +306,79 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     setLoading(false);
     setUploadStatus("idle");
     setError("");
-    setActiveVersionId(id);
+    setActiveVersionId(activeId);
+  };
+  const exportBackup = () =>
+    JSON.stringify(
+      {
+        format: "resumaxer-backup",
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        draft: JSON.parse(snapshotJSON || JSON.stringify(snapshot)),
+        versions,
+      },
+      null,
+      2,
+    );
+  const importBackup = (text: string) => {
+    try {
+      const backup = readBackup(text);
+      const next = [...versions];
+      for (const incoming of backup.versions) {
+        if (
+          !next.some(
+            (existing) =>
+              existing.name === incoming.name &&
+              JSON.stringify(backupSnapshot(existing.data)) ===
+                JSON.stringify(incoming.data),
+          )
+        )
+          next.push(incoming);
+      }
+      const current = snapshotJSON || JSON.stringify(snapshot);
+      if (
+        (parsedResume || resumeText) &&
+        !next.some((v) => JSON.stringify(v.data) === current)
+      ) {
+        next.push({
+          id: crypto.randomUUID(),
+          name: "Before importing backup",
+          savedAt: new Date().toISOString(),
+          data: JSON.parse(current),
+        });
+      }
+      if (next.length > 20)
+        throw new Error(
+          "Not enough version slots. Export your current backup, then remove old versions before importing. Nothing was changed.",
+        );
+      if (!writeVersions(next)) return false;
+      restoreSnapshot(backup.draft, "");
+      setDraftEnabled(true);
+      return true;
+    } catch (cause) {
+      setDraftError(
+        cause instanceof Error
+          ? cause.message
+          : "Backup could not be imported.",
+      );
+      return false;
+    }
+  };
+  const loadVersion = (id: string) => {
+    const version = versions.find((v) => v.id === id);
+    if (!version) return false;
+    // Preserve the current work before replacing it, even if autosave is disabled.
+    const currentSnapshotJSON = snapshotJSON || JSON.stringify(snapshot);
+    const currentIsSaved = versions.some(
+      (v) => JSON.stringify(v.data) === currentSnapshotJSON,
+    );
+    if (
+      parsedResume &&
+      !currentIsSaved &&
+      !saveVersion(`Before loading ${version.name}`)
+    )
+      return false;
+    restoreSnapshot(version.data, id);
     return true;
   };
   const deleteVersion = (id: string) => {
@@ -386,6 +448,8 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
     <ResumeContext.Provider
       value={{
         versions,
+        exportBackup,
+        importBackup,
         saveVersion,
         loadVersion,
         deleteVersion,

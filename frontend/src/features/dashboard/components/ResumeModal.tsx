@@ -1,5 +1,7 @@
 import { useDialog } from "../../../hooks/use-dialog";
 import React from "react";
+import { Link } from "react-router-dom";
+import { suggestionWarnings } from "../../../lib/suggestionReview";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, FileText as FileIcon, ChevronRight } from "lucide-react";
 import { useResumeContext } from "../../../contexts/ResumeContext";
@@ -8,6 +10,8 @@ import { CopyButton } from "../../../components/ui/Shared";
 export const ResumeModal = () => {
   const {
     file,
+    resumeText,
+    parsedResume,
     result,
     parsedTextForModal,
     showResumeModal,
@@ -104,12 +108,40 @@ export const ResumeModal = () => {
                 )}
               </div>
 
+              <details className="border border-white/15 rounded-xl p-4">
+                <summary className="cursor-pointer">
+                  Original resume reference
+                </summary>
+                <p className="whitespace-pre-wrap break-words mt-3 text-sm">
+                  {resumeText || "Original text is not available yet."}
+                </p>
+              </details>
+              <Link
+                className="btn-primary px-4 py-2"
+                to="/builder"
+                onClick={() => setShowResumeModal(false)}
+              >
+                Compare and verify suggestions in the editor
+              </Link>
               {parsedTextForModal.summary && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <p className="label-tiny">AI Rewritten Summary</p>
                     <CopyButton text={parsedTextForModal.summary} />
                   </div>
+                  <p className="text-sm text-text-secondary">
+                    Original summary:{" "}
+                    {parsedResume?.summary ||
+                      "Compare with the source resume above."}
+                  </p>
+                  {suggestionWarnings(
+                    parsedResume?.summary || resumeText,
+                    parsedTextForModal.summary,
+                  ).map((flag) => (
+                    <p key={flag} className="text-sm text-amber-200">
+                      {flag}
+                    </p>
+                  ))}
                   <div
                     className="p-4 rounded-xl italic text-label text-[#9CA3AF] leading-relaxed"
                     style={{
@@ -143,9 +175,16 @@ export const ResumeModal = () => {
                       }}
                     >
                       <ChevronRight className="w-4 h-4 text-[#A1A1AA] shrink-0 mt-0.5" />
-                      <p className="text-caption text-[#9CA3AF] leading-relaxed flex-1">
-                        {b}
-                      </p>
+                      <div className="flex-1 min-w-0 space-y-2">
+                        <p className="text-caption text-[#9CA3AF] leading-relaxed">
+                          {b}
+                        </p>
+                        {suggestionWarnings(resumeText, b).map((flag) => (
+                          <p key={flag} className="text-sm text-amber-200">
+                            {flag}
+                          </p>
+                        ))}
+                      </div>
                       <CopyButton text={b} />
                     </div>
                   ))}

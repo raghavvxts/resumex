@@ -28,5 +28,15 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install -r backend/requirements.txt
+      - uses: actions/cache@v4
+        with:
+          path: |
+            backend/.bin
+            ~/.cache/Tectonic
+          key: tectonic-0.17.0-${{ runner.os }}-${{ hashFiles('backend/templates/**/*.tex') }}
+      - run: bash build.sh
+        working-directory: backend
       - run: python -m unittest test_app test_exports -v
         working-directory: backend
+        env:
+          RUN_TEMPLATE_TESTS: '1'

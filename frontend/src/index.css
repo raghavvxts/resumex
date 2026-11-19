@@ -551,3 +551,8 @@ body:has(.app-shell)::after { display: none; }
   .builder-toolbar { grid-template-columns: minmax(0,1fr); gap: 14px; }
   .builder-toolbar > .resume-versions { margin-top: 0; }
 }
+
+.mobile-export-bar { position: fixed; z-index: 35; left: 16px; right: 16px; bottom: calc(6rem + env(safe-area-inset-bottom)); display: flex; gap: 8px; padding: 8px; border-radius: 18px; background: var(--nav-bg); border: 1px solid var(--action-border); backdrop-filter: blur(18px); }
+.mobile-export-bar > button { flex: 1; min-width: 0; font-size: 13px; }
+@media (max-width: 1023px) { .builder-page { padding-bottom: 120px; } .app-main:has(.builder-page) { scroll-padding-bottom: 12rem; } .app-shell:has([role="dialog"]) .mobile-export-bar { display: none; } }
+@media (min-width: 1024px) { .mobile-export-bar { display: none; } }
