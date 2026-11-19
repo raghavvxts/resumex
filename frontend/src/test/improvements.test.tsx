@@ -146,7 +146,9 @@ it("debounces PDF updates and exports the latest edited text", async () => {
     .spyOn(globalThis, "fetch")
     .mockImplementation(
       async () =>
-        new Response("PDF", { headers: { "Content-Type": "application/pdf" } }),
+        new Response("%PDF-fixture", {
+          headers: { "Content-Type": "application/pdf" },
+        }),
     );
   render(
     <ResumeProvider>
@@ -155,6 +157,7 @@ it("debounces PDF updates and exports the latest edited text", async () => {
     </ResumeProvider>,
   );
   fireEvent.click(screen.getByText("Seed original"));
+  fireEvent.click(screen.getByRole("checkbox", { name: "Auto-preview" }));
   fireEvent.change(screen.getByLabelText("Summary", { exact: true }), {
     target: { value: "First edit" },
   });
@@ -168,9 +171,9 @@ it("debounces PDF updates and exports the latest edited text", async () => {
   expect(JSON.parse(String(fetchMock.mock.calls[0][1]?.body)).summary).toBe(
     "Latest edit",
   );
-  expect(screen.getByRole("link", { name: "Download PDF" })).toBeVisible();
+  expect(screen.getByRole("button", { name: "Download PDF" })).toBeVisible();
   fireEvent.click(screen.getByRole("checkbox", { name: "Auto-preview" }));
-  expect(screen.getByRole("link", { name: "Download PDF" })).toBeVisible();
+  expect(screen.getByRole("button", { name: "Download PDF" })).toBeVisible();
   expect(screen.getByTestId("snapshot").textContent).toContain("Latest edit");
 });
 it("puts actionable findings before the score summary", () => {
@@ -262,7 +265,7 @@ it("requires omission review and sends the selected PDF template", async () => {
   });
   const fetchMock = vi
     .spyOn(globalThis, "fetch")
-    .mockImplementation(async () => new Response("PDF"));
+    .mockImplementation(async () => new Response("%PDF-fixture"));
   const Seed = () => {
     const c = useResumeContext();
     return (
@@ -290,6 +293,7 @@ it("requires omission review and sends the selected PDF template", async () => {
     </ResumeProvider>,
   );
   fireEvent.click(screen.getByText("Seed omissions"));
+  fireEvent.click(screen.getByRole("checkbox", { name: "Auto-preview" }));
   await act(() => vi.advanceTimersByTimeAsync(900));
   expect(fetchMock).not.toHaveBeenCalled();
   expect(
@@ -356,7 +360,7 @@ it("queues the latest preview while an earlier export is still running", async (
           finish = resolve;
         }),
     )
-    .mockImplementation(async () => new Response("PDF"));
+    .mockImplementation(async () => new Response("%PDF-fixture"));
   render(
     <ResumeProvider>
       <Probe />
@@ -364,6 +368,7 @@ it("queues the latest preview while an earlier export is still running", async (
     </ResumeProvider>,
   );
   fireEvent.click(screen.getByText("Seed original"));
+  fireEvent.click(screen.getByRole("checkbox", { name: "Auto-preview" }));
   await act(() => vi.advanceTimersByTimeAsync(800));
   fireEvent.change(screen.getByLabelText("Summary", { exact: true }), {
     target: { value: "Latest queued edit" },
@@ -372,14 +377,14 @@ it("queues the latest preview while an earlier export is still running", async (
   expect(fetchMock).toHaveBeenCalledTimes(1);
   expect(screen.getByRole("button", { name: /Generating/ })).toBeDisabled();
   await act(async () => {
-    finish(new Response("PDF"));
+    finish(new Response("%PDF-fixture"));
   });
   await act(() => vi.advanceTimersByTimeAsync(800));
   expect(fetchMock).toHaveBeenCalledTimes(2);
   expect(JSON.parse(String(fetchMock.mock.calls[1][1]?.body)).summary).toBe(
     "Latest queued edit",
   );
-  expect(screen.getByRole("link", { name: "Download PDF" })).toBeVisible();
+  expect(screen.getByRole("button", { name: "Download PDF" })).toBeVisible();
 });
 
 it("can replace a project bullet without changing experience bullets", () => {

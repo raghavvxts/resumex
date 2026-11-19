@@ -79,3 +79,9 @@ Responsive audit: all five routes checked at 402×874 (iPhone 16 Pro), 874×402 
 Removed unused graphite/hero/chart components and obsolete design helpers; removed the unused Recharts dependency (39 packages). Updated frontend architecture notes to describe the actual shared layout.
 
 Compatible dependency patches applied with npm audit fix; type checking, lint, 19 tests, and production build pass afterward. Audit still reports issues requiring separate toolchain/router major-version work; this layout update does not claim a clean dependency audit.
+
+## Direct PDF downloads
+
+Download is always available once required fields and parsing review are complete. It generates the latest resume independently of preview. Simple is the default, auto-preview is opt-in, and Jake/Deedy failures fall back to Simple with a visible notice. Validation errors and cancelled sessions do not trigger fallback. Reject non-PDF success responses, defer object-URL cleanup for browser download compatibility, and prevent stale downloads after edits.
+
+Verified actual browser downloads for Simple, Jake, and Deedy against production backend, opened/rendered the resulting PDFs, and added regression coverage for download without preview, template fallback, stale content, and invalid PDF responses.

@@ -2,9 +2,18 @@ import { request } from "./request";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { environment } from "../../config/environment";
 
+export class PDFGenerationError extends Error {
+  constructor(
+    message: string,
+    public status: number,
+  ) {
+    super(message);
+  }
+}
+
 export const generatePDF = async (
   resumeData: any,
-  templateName: string = "jakes_resume",
+  templateName: string = "simple_resume",
 ): Promise<Blob> => {
   const updatedResume = JSON.parse(JSON.stringify(resumeData));
   updatedResume.template_name = templateName;
@@ -17,8 +26,15 @@ export const generatePDF = async (
 
   if (!response.ok) {
     const data = await response.json().catch(() => null);
-    throw new Error(data?.error || "Failed to generate PDF. Please retry.");
+    throw new PDFGenerationError(
+      data?.error || "Failed to generate PDF. Please retry.",
+      response.status,
+    );
   }
 
-  return response.blob();
+  const bytes = await response.arrayBuffer();
+  if (new TextDecoder().decode(bytes.slice(0, 5)) !== "%PDF-") {
+    throw new Error("The server returned an invalid PDF. Please retry.");
+  }
+  return new Blob([bytes], { type: "application/pdf" });
 };

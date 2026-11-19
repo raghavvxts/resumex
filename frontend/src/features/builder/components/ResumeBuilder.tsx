@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState, useRef } from "react";
 import { useResumeContext } from "../../../contexts/ResumeContext";
-import { generatePDF } from "../../../services/api/builder";
+import { generatePDF, PDFGenerationError } from "../../../services/api/builder";
 import { PlaceholderView } from "../../../components/ui/PlaceholderView";
 import { ResumeVersions } from "./ResumeVersions";
 import { resumeToText } from "../../../lib/resumeVersions";
@@ -27,8 +27,8 @@ export const ResumeBuilder = () => {
   const [previous, setPrevious] = useState<any>(null);
   const [bulletTarget, setBulletTarget] = useState("");
   const [skipped, setSkipped] = useState<string[]>([]);
-  const [autoPreview, setAutoPreview] = useState(true);
-  const template = parsedResume?.template_name || "jakes_resume";
+  const [autoPreview, setAutoPreview] = useState(false);
+  const template = parsedResume?.template_name || "simple_resume";
   const warnings: string[] = parsedResume?.parsing_warnings || [];
   const needsReview = warnings.length > 0 && !parsedResume?.parsing_reviewed;
   const previewTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -38,6 +38,8 @@ export const ResumeBuilder = () => {
   const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [downloading, setDownloading] = useState(false);
+  const [exportNotice, setExportNotice] = useState("");
   useEffect(() => {
     setPreview("");
     setBulletTarget("");
@@ -107,6 +109,63 @@ export const ResumeBuilder = () => {
         setCompleted((value) => value + 1);
     }
   };
+  const download = async () => {
+    if (downloading) return;
+    const snapshot = parsedResume;
+    setDownloading(true);
+    setError("");
+    setExportNotice("");
+    try {
+      let blob: Blob;
+      try {
+        blob = await generatePDF(snapshot, template);
+      } catch (cause) {
+        if (
+          template === "simple_resume" ||
+          (cause instanceof PDFGenerationError &&
+            [400, 413, 422].includes(cause.status)) ||
+          (cause instanceof Error && /cancel/i.test(cause.message))
+        )
+          throw cause;
+        if (currentResume.current !== snapshot) return;
+        setExportNotice(
+          "Selected template failed. Preparing Simple PDF instead…",
+        );
+        blob = await generatePDF(snapshot, "simple_resume");
+        if (currentResume.current === snapshot)
+          setExportNotice(
+            "Downloaded Simple PDF because the selected template could not be generated.",
+          );
+      }
+      if (currentResume.current !== snapshot) {
+        setExportNotice(
+          "Your resume changed during export. Download again to export your latest edits.",
+        );
+        return;
+      }
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "resume.pdf";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      // Safari needs the object URL to remain alive after the click.
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      setExportNotice(
+        (notice) => notice || "PDF ready. Your download has started.",
+      );
+    } catch (cause) {
+      if (currentResume.current === snapshot)
+        setError(
+          cause instanceof Error
+            ? cause.message
+            : "PDF download failed. Please retry.",
+        );
+    } finally {
+      setDownloading(false);
+    }
+  };
   if (!parsedResume)
     return (
       <div className="workspace-page builder-empty-page space-y-5">
@@ -171,11 +230,11 @@ export const ResumeBuilder = () => {
           href="#pdf-preview"
           className="builder-preview-link inline-block underline text-sm mt-3"
         >
-          Jump to PDF preview
+          Jump to PDF download & preview
         </a>
         <p className="text-text-secondary mt-2">
-          Review your details, then check the exported PDF. Auto-preview updates
-          after you pause typing.
+          Download your latest edits directly. Preview is optional; enable
+          auto-preview if you want it to update while editing.
         </p>
         {previous && (
           <button
@@ -248,7 +307,7 @@ export const ResumeBuilder = () => {
       )}
       {Boolean(
         result?.ai_recommendations?.summary_rewrite ||
-          result?.ai_recommendations?.rewritten_bullets?.length,
+        result?.ai_recommendations?.rewritten_bullets?.length,
       ) && (
         <details className="glass-card p-5">
           <summary className="cursor-pointer font-semibold">
@@ -545,11 +604,11 @@ export const ResumeBuilder = () => {
           </div>
           <p role="status" className="text-sm text-text-secondary">
             {error
-              ? "Preview failed. Please retry generation."
+              ? "PDF generation failed. Please retry."
               : loading
                 ? "Updating PDF…"
                 : preview
-                  ? "Preview is up to date. Download exports this exact file."
+                  ? "Preview is up to date. Download generates your latest edits."
                   : autoPreview
                     ? "Your latest edits are waiting for a preview."
                     : "Preview paused. Generate a PDF when you are ready."}
@@ -571,16 +630,23 @@ export const ResumeBuilder = () => {
                   ? "Refresh preview"
                   : "Generate preview"}
             </button>
-            {preview && (
-              <a
-                className="btn-primary px-4 py-2"
-                href={preview}
-                download="resume.pdf"
-              >
-                Download PDF
-              </a>
-            )}
+            <button
+              className="btn-primary px-4 py-2"
+              disabled={
+                downloading ||
+                needsReview ||
+                !parsedResume.personal_info?.name?.trim()
+              }
+              onClick={() => void download()}
+            >
+              {downloading ? "Preparing download…" : "Download PDF"}
+            </button>
           </div>
+          {exportNotice && (
+            <p role="status" className="text-sm text-text-secondary">
+              {exportNotice}
+            </p>
+          )}
           {error && (
             <p role="alert" className="text-red-300">
               {error}

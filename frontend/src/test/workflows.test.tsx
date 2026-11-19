@@ -253,14 +253,15 @@ describe("resume workflow contracts", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "Generate PDF preview" }),
     );
-    await screen.findByRole("link", { name: "Download PDF" });
+    await screen.findByText("Rendered PDF preview");
     const exported = JSON.parse(String(fetchMock.mock.calls[0][1]?.body));
     expect(exported.summary).toBe("Reviewed summary");
     expect(exported.experience[0].bullets).toEqual(["Original achievement"]);
     fireEvent.change(screen.getByLabelText("Summary", { exact: true }), {
       target: { value: "Changed again" },
     });
-    expect(screen.queryByRole("link", { name: "Download PDF" })).toBeNull();
+    expect(screen.queryByText("Rendered PDF preview")).toBeNull();
+    expect(screen.getByRole("button", { name: "Download PDF" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "Undo last edit" }));
     expect(screen.getByLabelText("Summary", { exact: true })).toHaveValue(
       "Reviewed summary",
