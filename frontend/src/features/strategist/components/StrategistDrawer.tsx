@@ -97,7 +97,10 @@ export const StrategistDrawer = ({
           Close
         </button>
       </header>
-      <div className="flex-1 overflow-y-auto p-4 space-y-4" aria-live="polite">
+      <div
+        className="flex-1 min-h-0 overflow-y-auto p-4 space-y-4"
+        aria-live="polite"
+      >
         {messages.length === 0 && (
           <p>
             Ask about your resume or target role. Check suggested facts before
@@ -107,7 +110,7 @@ export const StrategistDrawer = ({
         {messages.map((m, i) => (
           <div
             key={i}
-            className={`p-3 rounded-xl whitespace-pre-wrap ${m.sender === "user" ? "bg-purple-500/20" : "bg-white/5"}`}
+            className={`p-3 rounded-xl whitespace-pre-wrap break-words ${m.sender === "user" ? "bg-purple-500/20" : "bg-white/5"}`}
           >
             <span className="text-xs text-text-secondary block mb-1">
               {m.sender === "user" ? "You" : "Assistant"}

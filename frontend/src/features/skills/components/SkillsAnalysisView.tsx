@@ -60,12 +60,14 @@ export const SkillsAnalysisView = () => {
 
   if (!file && !resumeText)
     return (
-      <PlaceholderView
-        title="Skills Analysis"
-        icon={BrainCircuit}
-        iconColor="text-emerald-400"
-        description="Upload your resume to map out your technical gaps and get upskilling recommendations."
-      />
+      <div className="workspace-page">
+        <PlaceholderView
+          title="Skills Analysis"
+          icon={BrainCircuit}
+          iconColor="text-emerald-400"
+          description="Upload your resume to map out your technical gaps and get upskilling recommendations."
+        />
+      </div>
     );
 
   const CategorySection = ({
@@ -81,10 +83,10 @@ export const SkillsAnalysisView = () => {
   }) => {
     if (!dataObj) return null;
     return (
-      <div className="glass-card p-6 mb-6">
-        <div className="flex items-center justify-between mb-4">
+      <div className="glass-card min-w-0 p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
           <h3 className="text-[16px] font-bold text-white">{title}</h3>
-          <div className="flex items-center gap-3 flex-1 max-w-[200px]">
+          <div className="flex items-center gap-3 w-full sm:w-36">
             <span className="text-label font-semibold text-[#9CA3AF] shrink-0">
               {dataObj.score}/100
             </span>
@@ -106,12 +108,12 @@ export const SkillsAnalysisView = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-10 px-4 sm:px-6 md:px-8">
+    <div className="workspace-page space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h2 className="text-title font-bold text-white mb-2">
+          <h1 className="text-title font-bold text-white mb-2">
             Skills Analysis
-          </h2>
+          </h1>
           <p className="text-[#9CA3AF] text-body-sm">
             Evidence found in your resume, not a verified assessment of
             proficiency.
@@ -154,7 +156,7 @@ export const SkillsAnalysisView = () => {
 
       {data && !loading && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             <CategorySection
               title="Technical Expertise"
               dataObj={data.technical}
@@ -194,7 +196,7 @@ export const SkillsAnalysisView = () => {
                     <button
                       type="button"
                       key={i}
-                      className="flex flex-col gap-2 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 hover:bg-amber-500/10 transition-all cursor-pointer group"
+                      className="w-full text-left flex flex-col gap-2 p-4 rounded-xl bg-amber-500/5 border border-amber-500/20 hover:bg-amber-500/10 transition-all cursor-pointer group"
                       onClick={() => {
                         setShowStrategist(true);
                         setStrategistQuery(
@@ -206,7 +208,7 @@ export const SkillsAnalysisView = () => {
                         <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
                         <span className="flex-1">{gap}</span>
                       </div>
-                      <div className="flex justify-end text-amber-400 text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity translate-x-[-10px] group-hover:translate-x-0">
+                      <div className="flex justify-end text-amber-400 text-xs font-bold opacity-100 transition-opacity translate-x-[-10px] group-hover:translate-x-0">
                         Fix This →
                       </div>
                     </button>

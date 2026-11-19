@@ -29,7 +29,7 @@ export const AnalysisResults = () => {
     setShowStrategist(true);
   };
   return (
-    <div className="max-w-6xl mx-auto p-4 sm:p-8 space-y-8">
+    <div className="workspace-page space-y-6">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-sm text-text-secondary mb-2">
@@ -78,7 +78,7 @@ export const AnalysisResults = () => {
           {findings.map((finding, i) => (
             <article
               key={finding}
-              className="rounded-2xl border border-white/15 bg-[#121214] p-5 flex flex-col items-start gap-4"
+              className="glass-card min-w-0 p-5 flex flex-col items-start gap-4"
             >
               <span className="text-sm text-purple-300 font-semibold">
                 Priority {i + 1}
@@ -116,7 +116,7 @@ export const AnalysisResults = () => {
         )}
       <section
         aria-label="Score summary"
-        className="border border-white/15 rounded-2xl grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/15"
+        className="glass-card grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-white/15"
       >
         <div className="p-5">
           <p className="text-sm text-text-secondary">
@@ -143,7 +143,7 @@ export const AnalysisResults = () => {
         Scores describe the text in this resume. They do not measure your actual
         proficiency or predict hiring outcomes.
       </p>
-      <details className="rounded-2xl border border-white/15 p-5">
+      <details className="glass-card p-5">
         <summary className="cursor-pointer font-semibold">
           See supporting details
         </summary>

@@ -318,6 +318,7 @@ describe("resume workflow contracts", () => {
       </ResumeProvider>,
     );
     fireEvent.click(screen.getByText("Seed rewrite"));
+    fireEvent.click(screen.getByText("Review AI suggestions"));
     const apply = screen.getByRole("button", {
       name: "Replace selected bullet",
     });

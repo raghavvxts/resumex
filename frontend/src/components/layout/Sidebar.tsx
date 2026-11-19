@@ -27,6 +27,7 @@ const NavItem = ({
   return (
     <Link
       to={path}
+      aria-current={active ? "page" : undefined}
       className="relative flex items-center gap-3 mx-4 my-1 px-4 py-3 cursor-pointer select-none group rounded-xl transition-all duration-300 hover:bg-white/[0.02] border border-transparent hover:border-white/[0.04]"
       onMouseEnter={() => setHoveredElement(interactionKey)}
       onMouseLeave={() => setHoveredElement(null)}
@@ -36,10 +37,9 @@ const NavItem = ({
           layoutId="activeNavIndicator"
           className="absolute inset-0 rounded-xl"
           style={{
-            background: "rgba(168, 85, 247, 0.25)",
-            border: "1px solid rgba(192, 132, 252, 0.3)",
-            boxShadow:
-              "0 8px 32px -8px rgba(168, 85, 247, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.15)",
+            background: "var(--action-bg)",
+            border: "1px solid var(--action-border)",
+            boxShadow: "var(--action-shadow)",
             backdropFilter: "blur(40px) saturate(200%)",
             WebkitBackdropFilter: "blur(40px) saturate(200%)",
           }}

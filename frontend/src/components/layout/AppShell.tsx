@@ -7,8 +7,6 @@ import { StrategistDrawer } from "../../features/strategist/components/Strategis
 import { ConfigDrawer } from "../../features/dashboard/components/ConfigDrawer";
 import { ResumeModal } from "../../features/dashboard/components/ResumeModal";
 import { useResumeContext } from "../../contexts/ResumeContext";
-import { MaterialSurface } from "../ui/MaterialSurface";
-import { motion, AnimatePresence } from "framer-motion";
 
 export const AppShell = () => {
   const location = useLocation();
@@ -23,34 +21,20 @@ export const AppShell = () => {
     setShowStrategist,
     strategistQuery,
     showConfigDrawer,
-    uploadStatus,
-    setUploadStatus,
   } = useResumeContext();
 
-  const isHomepage =
-    !isReady &&
-    (location.pathname === "/" || location.pathname === "/dashboard");
-
   return (
-    <div
-      className={`flex bg-bg-base text-text-primary selection:bg-accent-functional/30 relative overflow-hidden h-[100dvh] ${isHomepage ? "app-shell--homepage" : ""}`}
-    >
-      {/* The Global Material Environment */}
-      {isHomepage ? (
-        <div className="homepage-background" aria-hidden="true">
-          <img
-            src="/images/homepage-background.jpg"
-            alt=""
-            width={1672}
-            height={941}
-            loading="eager"
-            decoding="async"
-          />
-          <div className="homepage-background-shade" />
-        </div>
-      ) : (
-        <MaterialSurface />
-      )}
+    <div className="app-shell flex bg-bg-base text-text-primary selection:bg-accent-functional/30 relative overflow-hidden h-[100dvh]">
+      <div className="app-background" aria-hidden="true">
+        <img
+          src="/images/homepage-background.jpg"
+          alt=""
+          width={1672}
+          height={941}
+          decoding="async"
+        />
+        <div className="app-background-shade" />
+      </div>
 
       {/* Embedded Components (Layer 2 - Glass & Layer 3 - Interactive) */}
       <Sidebar />
@@ -61,11 +45,9 @@ export const AppShell = () => {
         <main
           ref={mainRef}
           id="main-content"
-          className={`flex-1 relative overflow-y-auto pb-24 lg:pb-0`}
+          className="app-main flex-1 min-h-0 relative overflow-y-auto"
         >
-          <AnimatePresence mode="wait">
-            <Outlet />
-          </AnimatePresence>
+          <Outlet />
         </main>
       </div>
 

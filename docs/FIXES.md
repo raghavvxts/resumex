@@ -64,3 +64,18 @@ Live review follow-up: the original-bullet chooser now includes both experience 
 
 Provider compatibility follow-up: replaced the retired Gemini 2.0 fallbacks with Gemini 3.5 Flash / 3.5 Flash-Lite; 2.5 Flash remains a legacy fallback. The configured model still takes precedence. Skills-provider failures log only model name, exception type and HTTP status, without resumes or credentials. Supported IDs checked against [Google’s model documentation](https://ai.google.dev/gemini-api/docs/models) and [deprecation schedule](https://ai.google.dev/gemini-api/docs/deprecations).
 Skills generation now supplies a JSON Schema with required categories, numeric score bounds and string arrays, in addition to validating responses before rendering.
+
+## Shared background and layout follow-up
+
+- Moved the generated artwork into the shared application shell, so dashboard, builder, skills and cover-letter routes use the same background. Removed the route-specific animated surface.
+- Standardized workspace gutters, headings and card surfaces. Grouped empty-state actions and aligned saved-version controls.
+- Compacted the session toolbar, removed its duplicate editor link on the builder, and kept mobile actions on a shorter row.
+- Aligned the builder form and sticky PDF pane. AI suggestions expand above both columns; template/version controls no longer occupy separate full-width rows by default. Expanded version controls use the full toolbar width.
+- Improved mobile PDF action/pagination sizing, skills-card wrapping, tone selection, scan-panel spacing, assistant message wrapping and bottom-navigation safe-area spacing.
+- Verified layouts at 320, 390, 768, 1280 and 1440 pixels, including populated forms, actual PDF rendering, report cards and skills results. Added a navigation regression ensuring artwork remains mounted across routes and entering the editor. Frontend suite: 19 tests.
+
+Responsive audit: all five routes checked at 402×874 (iPhone 16 Pro), 874×402 (landscape), 820×1180 (tablet), and 1512×982 (MacBook). Populated dashboard, builder, skills, and cover routes also checked at 320×740. No horizontal overflow found. Mobile input drawer visually checked; dock uses shared primary-button colors and safe-area spacing. These are browser viewport simulations, not physical-device tests.
+
+Removed unused graphite/hero/chart components and obsolete design helpers; removed the unused Recharts dependency (39 packages). Updated frontend architecture notes to describe the actual shared layout.
+
+Compatible dependency patches applied with npm audit fix; type checking, lint, 19 tests, and production build pass afterward. Audit still reports issues requiring separate toolchain/router major-version work; this layout update does not claim a clean dependency audit.

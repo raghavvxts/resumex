@@ -97,23 +97,25 @@ export const PDFPreview = ({ url }: { url: string }) => {
   return (
     <div className="space-y-3">
       {document && (
-        <div className="flex flex-wrap justify-between items-center gap-3 text-sm">
+        <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 text-sm">
           <button
-            className="btn-secondary px-3 py-2"
+            className="btn-secondary min-w-0 px-2 py-2"
+            aria-label="Previous page"
             disabled={page === 1}
             onClick={() => setPage((p) => p - 1)}
           >
-            Previous page
+            Previous
           </button>
           <span>
             Page {page} of {document.numPages}
           </span>
           <button
-            className="btn-secondary px-3 py-2"
+            className="btn-secondary min-w-0 px-2 py-2"
+            aria-label="Next page"
             disabled={page === document.numPages}
             onClick={() => setPage((p) => p + 1)}
           >
-            Next page
+            Next
           </button>
         </div>
       )}

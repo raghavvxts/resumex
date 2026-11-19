@@ -234,7 +234,7 @@ export const ConfigDrawer = () => {
               </div>
             ) : (
               <>
-                <div className="px-8 pt-8 pb-4 flex items-center justify-between">
+                <div className="px-5 sm:px-8 pt-5 sm:pt-8 pb-4 flex items-start justify-between gap-3">
                   <div>
                     <h3 className="text-heading font-bold text-white tracking-tight">
                       New Scan
@@ -248,13 +248,13 @@ export const ConfigDrawer = () => {
                   <button
                     aria-label="Close scan settings"
                     onClick={() => setShowConfigDrawer(false)}
-                    className="p-2 rounded-xl text-[#A1A1AA] hover:bg-white/5 hover:text-white transition-all"
+                    className="shrink-0 p-2 rounded-xl text-[#A1A1AA] hover:bg-white/5 hover:text-white transition-all"
                   >
                     <X className="w-6 h-6" />
                   </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-8 space-y-10">
+                <div className="flex-1 min-h-0 overflow-y-auto p-5 sm:p-8 space-y-6 sm:space-y-8">
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <p className="label-tiny text-[#A1A1AA]">
@@ -612,7 +612,7 @@ export const ConfigDrawer = () => {
                 </div>
 
                 {/* Sticky Run Analysis footer — always visible, outside scroll area */}
-                <div className="px-8 pb-8 pt-5 border-t border-white/[0.06] bg-black/30 backdrop-blur-sm flex-shrink-0">
+                <div className="px-5 sm:px-8 pb-5 sm:pb-8 pt-5 border-t border-white/[0.06] bg-black/30 backdrop-blur-sm flex-shrink-0">
                   <button
                     onClick={handleAnalyze}
                     disabled={

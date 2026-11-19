@@ -109,8 +109,7 @@ export const ResumeBuilder = () => {
   };
   if (!parsedResume)
     return (
-      <div className="max-w-4xl mx-auto p-4 space-y-4">
-        <ResumeVersions />
+      <div className="workspace-page builder-empty-page space-y-5">
         <PlaceholderView
           title="Resume Builder"
           icon={FileText}
@@ -118,28 +117,24 @@ export const ResumeBuilder = () => {
             parseError ||
             "Analyze your resume to create an editable draft. Parsing can take a little longer than analysis."
           }
-        />
-        <button
-          className="btn-secondary mx-6 px-6 py-3"
-          onClick={() =>
-            setParsedResume({
-              personal_info: { name: "" },
-              summary: "",
-              education: [],
-              experience: [],
-              projects: [],
-              skills: {},
-            })
-          }
         >
-          Start an empty resume
-        </button>
-        <button
-          className="btn-secondary mx-6 px-6 py-3"
-          onClick={() => setShowConfigDrawer(true)}
-        >
-          Retry parsing / change input
-        </button>
+          <button
+            className="btn-secondary px-5 py-3"
+            onClick={() =>
+              setParsedResume({
+                personal_info: { name: "" },
+                summary: "",
+                education: [],
+                experience: [],
+                projects: [],
+                skills: {},
+              })
+            }
+          >
+            Start an empty resume
+          </button>
+        </PlaceholderView>
+        <ResumeVersions />
       </div>
     );
   const field = (
@@ -166,7 +161,7 @@ export const ResumeBuilder = () => {
     </label>
   );
   return (
-    <div className="max-w-[1600px] mx-auto p-4 sm:p-6 space-y-6">
+    <div className="workspace-page builder-page space-y-5">
       <header>
         <p className="text-sm text-text-secondary mb-2">
           Review → Edit → Export
@@ -174,30 +169,43 @@ export const ResumeBuilder = () => {
         <h1 className="text-2xl font-bold">Resume Builder</h1>
         <a
           href="#pdf-preview"
-          className="inline-block underline text-sm mt-3 xl:hidden"
+          className="builder-preview-link inline-block underline text-sm mt-3"
         >
           Jump to PDF preview
         </a>
         <p className="text-text-secondary mt-2">
-          Review your facts on the left. The PDF on the right updates after you
-          pause typing.
+          Review your details, then check the exported PDF. Auto-preview updates
+          after you pause typing.
         </p>
+        {previous && (
+          <button
+            className="btn-secondary mt-3 px-4 py-2"
+            onClick={() => {
+              commit(previous);
+              setPrevious(null);
+            }}
+          >
+            Undo last edit
+          </button>
+        )}
       </header>
-      <ResumeVersions />
-      <label className="block space-y-2">
-        <span>PDF template</span>
-        <select
-          className="glass-input w-full p-3"
-          value={template}
-          onChange={(e) => update("template_name", e.target.value)}
-        >
-          <option value="jakes_resume">Jake — classic single column</option>
-          <option value="deedy_resume">Deedy — compact two columns</option>
-          <option value="simple_resume">
-            Simple — wraps and paginates long resumes
-          </option>
-        </select>
-      </label>
+      <div className="builder-toolbar">
+        <label className="block min-w-0 space-y-2 text-sm">
+          <span>PDF template</span>
+          <select
+            className="glass-input w-full p-3"
+            value={template}
+            onChange={(e) => update("template_name", e.target.value)}
+          >
+            <option value="jakes_resume">Jake — classic single column</option>
+            <option value="deedy_resume">Deedy — compact two columns</option>
+            <option value="simple_resume">
+              Simple — wraps and paginates long resumes
+            </option>
+          </select>
+        </label>
+        <ResumeVersions />
+      </div>
       {template === "deedy_resume" && (
         <p className="text-sm text-text-secondary">
           Two-column PDFs can be read in a different order by automated systems.
@@ -238,182 +246,171 @@ export const ResumeBuilder = () => {
           </label>
         </section>
       )}
-      <div className="grid xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] gap-6 items-start">
-        <div className="min-w-0 space-y-6">
-          {previous && (
-            <button
-              className="btn-secondary px-4 py-2"
-              onClick={() => {
-                commit(previous);
-                setPrevious(null);
-              }}
-            >
-              Undo last edit
-            </button>
-          )}
-          {Boolean(
-            result?.ai_recommendations?.summary_rewrite ||
-              result?.ai_recommendations?.rewritten_bullets?.length,
-          ) && (
-            <section className="glass-card p-5 space-y-4">
-              <h2 className="text-xl">Review AI suggestions</h2>
-              {!!skipped.length && (
-                <button
-                  className="text-sm underline"
-                  onClick={() => setSkipped([])}
-                >
-                  Show skipped suggestions ({skipped.length})
-                </button>
-              )}
-              <p>
-                Use only suggestions that accurately describe your experience.
-                Choose exactly which bullet to replace.
-              </p>
-              {result.ai_recommendations.summary_rewrite &&
-                !skipped.includes("summary") && (
-                  <div className="space-y-3">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="border border-white/15 rounded-xl p-4">
-                        <p className="text-sm text-text-secondary mb-2">
-                          Original
-                        </p>
-                        <p>{parsedResume.summary || "No summary yet"}</p>
-                      </div>
-                      <div className="border border-purple-300/25 rounded-xl p-4">
-                        <p className="text-sm text-purple-200 mb-2">
-                          Suggested revision
-                        </p>
-                        <p>{result.ai_recommendations.summary_rewrite}</p>
-                      </div>
+      {Boolean(
+        result?.ai_recommendations?.summary_rewrite ||
+          result?.ai_recommendations?.rewritten_bullets?.length,
+      ) && (
+        <details className="glass-card p-5">
+          <summary className="cursor-pointer font-semibold">
+            Review AI suggestions
+          </summary>
+          <div className="space-y-4 mt-4">
+            {!!skipped.length && (
+              <button
+                className="text-sm underline"
+                onClick={() => setSkipped([])}
+              >
+                Show skipped suggestions ({skipped.length})
+              </button>
+            )}
+            <p>
+              Use only suggestions that accurately describe your experience.
+              Choose exactly which bullet to replace.
+            </p>
+            {result.ai_recommendations.summary_rewrite &&
+              !skipped.includes("summary") && (
+                <div className="space-y-3">
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="border border-white/15 rounded-xl p-4">
+                      <p className="text-sm text-text-secondary mb-2">
+                        Original
+                      </p>
+                      <p>{parsedResume.summary || "No summary yet"}</p>
                     </div>
-                    <button
-                      className="btn-secondary px-4 py-2"
-                      onClick={() =>
-                        update(
-                          "summary",
-                          result.ai_recommendations.summary_rewrite,
-                        )
-                      }
-                    >
-                      Use this summary
-                    </button>
-                    <button
-                      className="text-sm underline ml-4"
-                      onClick={() => setSkipped((prev) => [...prev, "summary"])}
-                    >
-                      Skip summary
-                    </button>
+                    <div className="border border-purple-300/25 rounded-xl p-4">
+                      <p className="text-sm text-purple-200 mb-2">
+                        Suggested revision
+                      </p>
+                      <p>{result.ai_recommendations.summary_rewrite}</p>
+                    </div>
                   </div>
-                )}
-              {!!result.ai_recommendations.rewritten_bullets?.length && (
-                <>
-                  <label className="block">
-                    Original bullet to replace
-                    <select
-                      aria-label="Original bullet to replace"
-                      className="glass-input w-full p-3"
-                      value={bulletTarget}
-                      onChange={(e) => setBulletTarget(e.target.value)}
-                    >
-                      <option value="">Choose an original bullet</option>
-                      {["experience", "projects"].flatMap((section) =>
-                        (parsedResume[section] || []).flatMap(
-                          (entry: any, i: number) =>
-                            (entry.bullets || []).map(
-                              (bullet: string, j: number) => (
-                                <option
-                                  key={`${section}:${i}:${j}`}
-                                  value={`${section}:${i}:${j}`}
-                                >
-                                  {entry.company ||
-                                    entry.name ||
-                                    entry.role ||
-                                    `${section} ${i + 1}`}
-                                  : {bullet}
-                                </option>
-                              ),
-                            ),
-                        ),
-                      )}
-                    </select>
-                  </label>
-                  {result.ai_recommendations.rewritten_bullets.map(
-                    (bullet, i) =>
-                      !skipped.includes(`bullet-${i}`) && (
-                        <div
-                          key={i}
-                          className="border border-white/15 p-4 rounded-xl"
-                        >
-                          <div className="grid sm:grid-cols-2 gap-4">
-                            <div>
-                              <p className="text-sm text-text-secondary mb-2">
-                                Original
-                              </p>
-                              <p>
-                                {bulletTarget
-                                  ? parsedResume[bulletTarget.split(":")[0]]?.[
-                                      Number(bulletTarget.split(":")[1])
-                                    ]?.bullets?.[
-                                      Number(bulletTarget.split(":")[2])
-                                    ]
-                                  : "Choose an original bullet above to compare."}
-                              </p>
-                            </div>
-                            <div>
-                              <p className="text-sm text-purple-200 mb-2">
-                                Suggested revision
-                              </p>
-                              <p>{bullet}</p>
-                            </div>
-                          </div>
-                          <button
-                            className="btn-secondary mt-3 px-4 py-2"
-                            disabled={!bulletTarget}
-                            onClick={() => {
-                              const [section, index, selectedBullet] =
-                                bulletTarget.split(":");
-                              const expIndex = Number(index);
-                              const bulletIndex = Number(selectedBullet);
-                              update(
-                                section,
-                                parsedResume[section].map(
-                                  (exp: any, j: number) =>
-                                    j === expIndex
-                                      ? {
-                                          ...exp,
-                                          bullets: exp.bullets.map(
-                                            (b: string, k: number) =>
-                                              k === bulletIndex ? bullet : b,
-                                          ),
-                                        }
-                                      : exp,
-                                ),
-                              );
-                              setBulletTarget("");
-                            }}
-                          >
-                            Replace selected bullet
-                          </button>
-                          <button
-                            className="text-sm underline ml-4"
-                            onClick={() =>
-                              setSkipped((prev) => [...prev, `bullet-${i}`])
-                            }
-                          >
-                            Skip suggestion
-                          </button>
-                        </div>
-                      ),
-                  )}
-                </>
+                  <button
+                    className="btn-secondary px-4 py-2"
+                    onClick={() =>
+                      update(
+                        "summary",
+                        result.ai_recommendations.summary_rewrite,
+                      )
+                    }
+                  >
+                    Use this summary
+                  </button>
+                  <button
+                    className="text-sm underline ml-4"
+                    onClick={() => setSkipped((prev) => [...prev, "summary"])}
+                  >
+                    Skip summary
+                  </button>
+                </div>
               )}
-            </section>
-          )}
-          <p className="text-text-secondary">
-            Review and edit your facts before exporting. AI suggestions never
-            replace your experience automatically. Choose a layout and check the
-            exported PDF before applying.
-          </p>
+            {!!result.ai_recommendations.rewritten_bullets?.length && (
+              <>
+                <label className="block">
+                  Original bullet to replace
+                  <select
+                    aria-label="Original bullet to replace"
+                    className="glass-input w-full p-3"
+                    value={bulletTarget}
+                    onChange={(e) => setBulletTarget(e.target.value)}
+                  >
+                    <option value="">Choose an original bullet</option>
+                    {["experience", "projects"].flatMap((section) =>
+                      (parsedResume[section] || []).flatMap(
+                        (entry: any, i: number) =>
+                          (entry.bullets || []).map(
+                            (bullet: string, j: number) => (
+                              <option
+                                key={`${section}:${i}:${j}`}
+                                value={`${section}:${i}:${j}`}
+                              >
+                                {entry.company ||
+                                  entry.name ||
+                                  entry.role ||
+                                  `${section} ${i + 1}`}
+                                : {bullet}
+                              </option>
+                            ),
+                          ),
+                      ),
+                    )}
+                  </select>
+                </label>
+                {result.ai_recommendations.rewritten_bullets.map(
+                  (bullet, i) =>
+                    !skipped.includes(`bullet-${i}`) && (
+                      <div
+                        key={i}
+                        className="border border-white/15 p-4 rounded-xl"
+                      >
+                        <div className="grid sm:grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-sm text-text-secondary mb-2">
+                              Original
+                            </p>
+                            <p>
+                              {bulletTarget
+                                ? parsedResume[bulletTarget.split(":")[0]]?.[
+                                    Number(bulletTarget.split(":")[1])
+                                  ]?.bullets?.[
+                                    Number(bulletTarget.split(":")[2])
+                                  ]
+                                : "Choose an original bullet above to compare."}
+                            </p>
+                          </div>
+                          <div>
+                            <p className="text-sm text-purple-200 mb-2">
+                              Suggested revision
+                            </p>
+                            <p>{bullet}</p>
+                          </div>
+                        </div>
+                        <button
+                          className="btn-secondary mt-3 px-4 py-2"
+                          disabled={!bulletTarget}
+                          onClick={() => {
+                            const [section, index, selectedBullet] =
+                              bulletTarget.split(":");
+                            const expIndex = Number(index);
+                            const bulletIndex = Number(selectedBullet);
+                            update(
+                              section,
+                              parsedResume[section].map(
+                                (exp: any, j: number) =>
+                                  j === expIndex
+                                    ? {
+                                        ...exp,
+                                        bullets: exp.bullets.map(
+                                          (b: string, k: number) =>
+                                            k === bulletIndex ? bullet : b,
+                                        ),
+                                      }
+                                    : exp,
+                              ),
+                            );
+                            setBulletTarget("");
+                          }}
+                        >
+                          Replace selected bullet
+                        </button>
+                        <button
+                          className="text-sm underline ml-4"
+                          onClick={() =>
+                            setSkipped((prev) => [...prev, `bullet-${i}`])
+                          }
+                        >
+                          Skip suggestion
+                        </button>
+                      </div>
+                    ),
+                )}
+              </>
+            )}
+          </div>
+        </details>
+      )}
+
+      <div className="builder-columns grid gap-6 items-start">
+        <div className="min-w-0 space-y-6">
           <section className="glass-card p-5 space-y-4">
             <h2 className="text-xl">Personal information</h2>
             <div className="grid sm:grid-cols-2 gap-4">
@@ -533,7 +530,7 @@ export const ResumeBuilder = () => {
         <aside
           id="pdf-preview"
           aria-label="PDF preview panel"
-          className="xl:sticky xl:top-4 min-w-0 rounded-2xl border border-white/15 bg-[#121214] p-4 space-y-4"
+          className="builder-preview glass-card min-w-0 p-5 space-y-4"
         >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <h2 className="text-xl font-semibold">PDF preview</h2>
@@ -560,6 +557,7 @@ export const ResumeBuilder = () => {
           <div className="flex flex-wrap gap-3">
             <button
               className="btn-secondary px-4 py-2"
+              aria-label={loading ? "Generating PDF…" : "Generate PDF preview"}
               disabled={
                 loading ||
                 needsReview ||
@@ -567,7 +565,11 @@ export const ResumeBuilder = () => {
               }
               onClick={() => void generate()}
             >
-              {loading ? "Generating PDF…" : "Generate PDF preview"}
+              {loading
+                ? "Generating PDF…"
+                : preview
+                  ? "Refresh preview"
+                  : "Generate preview"}
             </button>
             {preview && (
               <a
@@ -587,7 +589,7 @@ export const ResumeBuilder = () => {
           {preview ? (
             <PDFPreview url={preview} />
           ) : (
-            <div className="min-h-[420px] rounded-xl border border-dashed border-white/20 flex items-center justify-center p-8 text-center text-text-secondary">
+            <div className="min-h-[300px] sm:min-h-[420px] rounded-xl border border-dashed border-white/20 flex items-center justify-center p-8 text-center text-text-secondary">
               {!parsedResume.personal_info?.name?.trim()
                 ? "Add your name to create a PDF preview."
                 : "Your PDF will appear here. You can keep editing while it updates."}

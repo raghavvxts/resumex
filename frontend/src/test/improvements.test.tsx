@@ -423,6 +423,7 @@ it("can replace a project bullet without changing experience bullets", () => {
     </ResumeProvider>,
   );
   fireEvent.click(screen.getByText("Seed project rewrite"));
+  fireEvent.click(screen.getByText("Review AI suggestions"));
   fireEvent.change(screen.getByLabelText("Original bullet to replace"), {
     target: { value: "projects:0:0" },
   });

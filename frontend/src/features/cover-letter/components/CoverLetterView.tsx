@@ -66,20 +66,22 @@ export const CoverLetterView = () => {
 
   if (!file && !resumeText) {
     return (
-      <PlaceholderView
-        title="Cover Letter Generator"
-        icon={Mail}
-        description="Upload your resume and a job description to automatically generate a tailored cover letter."
-      />
+      <div className="workspace-page">
+        <PlaceholderView
+          title="Cover Letter Generator"
+          icon={Mail}
+          description="Add your resume to draft and edit a cover letter. A job description is optional."
+        />
+      </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto py-10 px-4 sm:px-6 md:px-8">
+    <div className="workspace-page space-y-6">
       <div className="mb-8">
-        <h2 className="text-title font-bold text-white mb-2">
+        <h1 className="text-title font-bold text-white mb-2">
           Cover Letter Generator
-        </h2>
+        </h1>
         <p className="text-[#9CA3AF] text-body-sm">
           Generate a tailored cover letter based on your resume and job
           description.
@@ -126,7 +128,7 @@ export const CoverLetterView = () => {
       {!loading && (
         <div className="mb-8">
           <p className="label-tiny text-[#A1A1AA] mb-3">TONE</p>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {TONES.map((t) => (
               <button
                 type="button"
@@ -185,7 +187,7 @@ export const CoverLetterView = () => {
       )}
 
       {letter && !loading && (
-        <div className="glass-card p-8 relative group">
+        <div className="glass-card p-5 sm:p-7 relative group">
           <div className="flex justify-end mb-4">
             <CopyButton text={letter} />
           </div>
@@ -205,7 +207,7 @@ export const CoverLetterView = () => {
           >
             Download text
           </a>
-          <div className="mt-8 flex items-center justify-between">
+          <div className="mt-6 flex flex-wrap gap-4 items-center justify-between">
             <p className="text-caption text-[#A1A1AA]">
               Tone: {TONES.find((t) => t.key === tone)?.label}
             </p>

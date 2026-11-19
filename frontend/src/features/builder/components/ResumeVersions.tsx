@@ -15,7 +15,7 @@ export const ResumeVersions = () => {
   const [selected, setSelected] = useState("");
   const [message, setMessage] = useState("");
   return (
-    <details className="rounded-xl border border-white/15 p-4">
+    <details className="resume-versions rounded-xl border border-white/15 p-4 min-w-0">
       <summary className="cursor-pointer font-semibold">
         Application versions{" "}
         <span className="font-normal text-text-secondary">
@@ -42,7 +42,7 @@ export const ResumeVersions = () => {
           }
         }}
       >
-        <label className="flex-1 min-w-[180px] text-sm">
+        <label className="flex-1 min-w-0 basis-48 text-sm">
           Version name
           <input
             maxLength={80}
@@ -61,7 +61,7 @@ export const ResumeVersions = () => {
       </form>
       {!!versions.length && (
         <div className="flex flex-wrap gap-3 mt-4">
-          <label className="flex-1 min-w-[180px] text-sm">
+          <label className="flex-1 min-w-0 basis-48 text-sm">
             Saved versions
             <select
               className="glass-input w-full p-3 mt-2"
