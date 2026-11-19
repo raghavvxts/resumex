@@ -1,4 +1,4 @@
-Resumaxer Frontend Setup
+MatchMyRole Frontend Setup
 
 Use Node.js 24 LTS (also supported: Node 22.12+ or 26+). Run `npm ci` for a reproducible install.
 

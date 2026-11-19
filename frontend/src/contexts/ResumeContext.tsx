@@ -109,6 +109,7 @@ interface ResumeContextType {
 
 const ResumeContext = createContext<ResumeContextType | undefined>(undefined);
 
+// Keep the existing storage key so rebranding does not discard local drafts.
 const DRAFT_KEY = "resumaxer-draft-v1";
 const readDraft = () => {
   try {
@@ -311,7 +312,7 @@ export const ResumeProvider = ({ children }: { children: ReactNode }) => {
   const exportBackup = () =>
     JSON.stringify(
       {
-        format: "resumaxer-backup",
+        format: "matchmyrole-backup",
         version: 1,
         exportedAt: new Date().toISOString(),
         draft: JSON.parse(snapshotJSON || JSON.stringify(snapshot)),

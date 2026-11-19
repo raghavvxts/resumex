@@ -286,3 +286,13 @@ it("server failures prepare the local PDF fallback", async () => {
   expect(frame.srcdoc).toContain("Alex");
   frame.remove();
 });
+
+it("accepts new MatchMyRole backups and legacy Resumaxer backups", () => {
+  const file = JSON.parse(backup());
+  for (const format of ["matchmyrole-backup", "resumaxer-backup"]) {
+    expect(
+      readBackup(JSON.stringify({ ...file, format })).draft.parsedResume
+        .personal_info.name,
+    ).toBe("Restored");
+  }
+});

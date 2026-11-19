@@ -1,6 +1,6 @@
 {
-  "name": "resume-ai",
-  "description": "Resumaxer — resume analysis, editing, and PDF export",
+  "name": "matchmyrole",
+  "description": "MatchMyRole \u2014 resume analysis, editing, and PDF export",
   "private": true,
   "version": "1.0.0",
   "type": "module",

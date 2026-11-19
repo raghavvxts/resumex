@@ -1,4 +1,4 @@
-# Resumaxer frontend
+# MatchMyRole frontend
 
 React and TypeScript with Vite. Feature screens live in `src/features`; shared controls and the application shell live in `src/components`.
 

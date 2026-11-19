@@ -1,4 +1,4 @@
-# Resumaxer
+# MatchMyRole
 
 An intelligent, open-source resume analysis platform that evaluates your resume against job descriptions using AI, providing section checks, keyword estimates, and reviewable writing suggestions. Scores are not hiring predictions.
 
@@ -23,7 +23,7 @@ An intelligent, open-source resume analysis platform that evaluates your resume 
 
 ## 🏗️ Architecture
 
-Resumaxer is designed with a strictly decoupled frontend-backend architecture.
+MatchMyRole is designed with a strictly decoupled frontend-backend architecture.
 
 * **Frontend**: React 18 SPA built with Vite, TypeScript, and Tailwind CSS. Deployment-agnostic (Vercel recommended).
 * **Backend**: Flask REST API powered by Python, utilizing the Gemini AI API for intelligent analysis. (Railway/Render recommended).

@@ -134,7 +134,7 @@ export const Sidebar = () => {
           </div>
           <div>
             <p className="text-[23px] font-bold text-white tracking-tight leading-none font-display">
-              Resumaxer
+              MatchMyRole
             </p>
             <p className="text-[11px] font-bold text-[#A855F7] mt-2.5 tracking-[0.28em] uppercase">
               Intelligence

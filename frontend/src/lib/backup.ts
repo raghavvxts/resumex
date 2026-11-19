@@ -28,13 +28,13 @@ export const readBackup = (text: string) => {
     throw new Error("Backup exceeds 5MB.");
   const file = JSON.parse(text);
   if (
-    file?.format !== "resumaxer-backup" ||
+    !["matchmyrole-backup", "resumaxer-backup"].includes(file?.format) ||
     file.version !== 1 ||
     !validSnapshot(file.draft) ||
     !Array.isArray(file.versions) ||
     file.versions.length > 20
   )
-    throw new Error("This is not a supported Resumaxer backup.");
+    throw new Error("This is not a supported MatchMyRole backup.");
   if (
     file.versions.some(
       (v: any) =>
