@@ -86,6 +86,14 @@ export const ResumeVersions = () => {
           {backupError}
         </p>
       )}
+      <a
+        className="inline-block text-sm underline mt-3"
+        href="https://resumaxer.vercel.app/legacy-backup.html"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Recover drafts saved at the old address
+      </a>
       {activeVersionName && (
         <p className="text-sm mt-3">
           {activeVersionName} ·{" "}

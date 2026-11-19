@@ -106,3 +106,9 @@ Added portable JSON draft/version backups. Imports validate file size and struct
 Original/suggested comparisons now flag new numeric claims, selected leadership/credential/outcome language and selected technical skills. Flagged revisions require a verification checkbox before applying. Suggestion preview also shows source reference and warnings. Simple/Jake single-column guidance is visible before template selection. These are heuristic checks, not factual verification.
 
 Expanded regression coverage and CI to compile actual Jake/Deedy templates. Native Safari browser export, multilingual multipage content, backup round trip and five viewport sizes checked. Physical iPhone/iPad testing remains unverified; see DEVICE_QA.md. Dependency audit remains clean.
+
+## MatchMyRole branding and address
+
+Product name, browser title, sidebar, social metadata, icon accessibility label, package name, documentation and backup filenames now use MatchMyRole. Existing storage keys and legacy backup files remain supported. Vercel project renamed to matchmyrole; canonical production address is https://match-my-role.vercel.app. The exact matchmyrole.vercel.app address belongs to another Vercel account.
+
+Old resumaxer.vercel.app page paths permanently redirect to the corresponding new address. The standalone /legacy-backup.html page stays on the old origin so existing browser-local drafts can be downloaded without cross-origin access or server transmission. Import those backups on the new site.

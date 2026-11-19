@@ -1,5 +1,9 @@
 # MatchMyRole
 
+Live website: [match-my-role.vercel.app](https://match-my-role.vercel.app).
+
+The previous Resumaxer address redirects to the new site. Browser-saved drafts can be exported from the [old-address recovery page](https://resumaxer.vercel.app/legacy-backup.html), then imported under Application versions.
+
 An intelligent, open-source resume analysis platform that evaluates your resume against job descriptions using AI, providing section checks, keyword estimates, and reviewable writing suggestions. Scores are not hiring predictions.
 
 [![React](https://img.shields.io/badge/React-18-blue.svg)](https://reactjs.org/)

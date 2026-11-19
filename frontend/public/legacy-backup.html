@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>MatchMyRole — recover saved drafts</title>
+<style>
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:#080d25;color:#f5f5f7;font:16px/1.6 system-ui,sans-serif}main{max-width:620px;margin:24px;padding:32px;border:1px solid #c084fc55;border-radius:24px;background:#0c1123}h1{line-height:1.2}button,a{display:inline-block;border:1px solid #c084fc66;border-radius:30px;padding:12px 20px;color:white;background:#a855f72e;font:inherit;text-decoration:none;margin:8px 8px 8px 0}button{cursor:pointer}button:disabled{opacity:.5;cursor:default}:focus-visible{outline:2px solid #c084fc;outline-offset:4px}.muted{color:#b8bed1}
+</style>
+</head>
+<body><main>
+<p class="muted">MatchMyRole has a new address</p>
+<h1>Take your saved resumes with you.</h1>
+<p>Browser-saved drafts stay with the address where you created them. Download them here, then open Application versions → Import backup on the new website.</p>
+<button id="download" disabled>Download old-address backup</button>
+<a href="https://match-my-role.vercel.app/builder">Open MatchMyRole</a>
+<p id="status" role="status" aria-live="polite">Reading saved drafts on this browser…</p>
+<p class="muted">Nothing is sent to a server. Your backup contains resume and letter text; keep it private. Saved data on this browser will remain unchanged.</p>
+</main>
+<script>
+(() => {
+  const button = document.getElementById("download");
+  const status = document.getElementById("status");
+  try {
+    const draft = JSON.parse(localStorage.getItem("resumaxer-draft-v1") || "null") || {resumeText:"",parsedResume:null};
+    const versions = JSON.parse(localStorage.getItem("resumaxer-versions-v1") || "[]");
+    if (!Array.isArray(versions)) throw new Error("Invalid saved versions");
+    if (!draft.resumeText && !draft.parsedResume && !versions.length) {
+      status.textContent = "No saved draft or versions were found at this address in this browser. Check the browser or device where you saved them.";
+      return;
+    }
+    button.disabled = false;
+    status.textContent = `Backup available: ${versions.length} saved version(s), plus your current saved draft.`;
+    button.addEventListener("click", () => {
+      const data = JSON.stringify({format:"matchmyrole-backup",version:1,exportedAt:new Date().toISOString(),draft,versions});
+      const url = URL.createObjectURL(new Blob([data], {type:"application/json"}));
+      const link = document.createElement("a");
+      link.href = url; link.download = "matchmyrole-old-address-backup.json";
+      document.body.appendChild(link); link.click(); link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+      status.textContent = "Backup downloaded. Import it on the new MatchMyRole website. Your original saved data is unchanged.";
+    });
+  } catch {
+    status.textContent = "Saved data could not be read. Your original data is unchanged; use the browser or device where you saved your resumes.";
+  }
+})();
+</script>
+</body></html>

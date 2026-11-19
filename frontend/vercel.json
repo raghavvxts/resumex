@@ -44,5 +44,18 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/:path((?!legacy-backup\\.html$).*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "resumaxer.vercel.app"
+        }
+      ],
+      "destination": "https://match-my-role.vercel.app/:path*",
+      "permanent": true
+    }
   ]
 }
