@@ -1,0 +1,18 @@
+{
+  "id": "T05",
+  "type": "Normal",
+  "route": "/cover-letter",
+  "input": {
+    "resume_text": "Robin Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+    "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+    "tone": "concise"
+  },
+  "expected": "200; nonempty cover letter of at most 150 words",
+  "http_status": 200,
+  "actual_output": {
+    "cover_letter": "Dear Hiring Team,\n\nI am writing to apply for the junior software developer position. My background aligns directly with your need for Python, SQL, React, and Flask expertise. During my internship at Example Labs, I built a Flask API and reduced response time by 30% through query optimization. Additionally, I developed an accessible Campus Dashboard using React, Python, and SQL, ensuring the project included automated tests from the start.\n\nMy education is currently underway as a BTech Computer Science student at Example University, expected to graduate in 2026. I possess practical skills in Git and automated testing, which I have applied to deliver efficient code and maintainable systems. I am eager to collaborate with your engineering team to design robust REST APIs and optimize database performance for accessible dashboards.\n\nI look forward to discussing how my foundational experience supports your technical goals.\n\nSincerely,\nRobin Example"
+  },
+  "result": "Pass",
+  "seconds": 5.62,
+  "timestamp_utc": "2026-11-20T12:00:10.976131+00:00"
+}

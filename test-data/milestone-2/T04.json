@@ -1,0 +1,17 @@
+{
+  "id": "T04",
+  "type": "Normal",
+  "route": "/skills-analysis",
+  "input": {
+    "resume_text": "Taylor Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+    "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+  },
+  "expected": "200; technical, soft and domain categories with bounded scores",
+  "http_status": 503,
+  "actual_output": {
+    "error": "Skills analysis is temporarily unavailable. Please retry."
+  },
+  "result": "Fail",
+  "seconds": 6.05,
+  "timestamp_utc": "2026-11-20T12:00:05.351810+00:00"
+}

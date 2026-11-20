@@ -1,0 +1,112 @@
+{
+  "id": "T07",
+  "type": "Edge",
+  "route": "/analyze",
+  "input": {
+    "resume_text": "Morgan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+    "job_description": ""
+  },
+  "expected": "200; general audit with bounded score and AI feedback",
+  "http_status": 200,
+  "actual_output": {
+    "action_plan": [
+      "Use strong action verbs (e.g. Spearheaded, Designed, Optimised) at the start of experience bullets.",
+      "Group skills by category so reviewers can find relevant experience."
+    ],
+    "ai_recommendations": {
+      "interview_focus": [
+        "Prepare to elaborate on the specific queries optimized and the tools used for performance analysis",
+        "Be ready to describe the architecture of the Campus Dashboard and how accessibility was implemented",
+        "Discuss the scope of your work at Example Labs, including team size and deployment environment"
+      ],
+      "message": "",
+      "model_used": "qwen3.5:4b",
+      "rewritten_bullets": [
+        "Developed a Flask REST API serving internal applications, optimizing database queries to reduce average response time by 30%.",
+        "Designed an accessible Campus Dashboard using React and Python, implementing automated unit tests to ensure code reliability."
+      ],
+      "skills_rewrite": "Python (Flask), SQL, React, Git, Automated Testing",
+      "status": "ok",
+      "strengths": [
+        "Clear structure with distinct sections for experience, projects, and education",
+        "Strong alignment of skills (Python, SQL, React) with common junior developer roles",
+        "Demonstrates full-stack capability by listing backend (Flask), database (SQL), and frontend (React) technologies"
+      ],
+      "summary_rewrite": "Junior software developer specializing in full-stack development with Python, SQL, and React. Proven experience building scalable APIs and accessible dashboards while implementing automated testing frameworks.",
+      "weak_points": [
+        "Summary lacks specific years of experience or concrete project outcomes to establish credibility",
+        "Action verbs are generic ('Built') without context on scale, team size, or business impact",
+        "Missing quantifiable metrics for the '30% reduction' claim as it lacks baseline data or scope",
+        "Project description is too vague and fails to highlight technical challenges solved",
+        "Skills section lists tools rather than demonstrating proficiency levels or specific frameworks used"
+      ]
+    },
+    "bullet_templates": [
+      "Spearheaded the design and delivery of [project/system], resulting in [quantified outcome like 25% efficiency gain].",
+      "Optimised backend [service/queries], reducing latency by [measurable metric like 40ms].",
+      "Collaborated with cross-functional teams to integrate [feature/service], improving [delivery speed/adoption]."
+    ],
+    "candidate_name": "Morgan Example",
+    "checklist": {
+      "completion_percent": 100.0,
+      "items": [
+        {
+          "completed": true,
+          "id": "score",
+          "label": "Section completeness score is at least 70",
+          "reason": "Current structural score: 100.0%"
+        },
+        {
+          "completed": true,
+          "id": "coverage",
+          "label": "Core sections coverage is at least 80%",
+          "reason": "Current section coverage: 100.0%"
+        },
+        {
+          "completed": true,
+          "id": "summary",
+          "label": "Profile summary section is present",
+          "reason": "Detected summary section"
+        },
+        {
+          "completed": true,
+          "id": "metrics",
+          "label": "At least one quantified achievement exists",
+          "reason": "Detected numeric impact"
+        },
+        {
+          "completed": true,
+          "id": "experience",
+          "label": "Experience section is present",
+          "reason": "Detected experience section"
+        },
+        {
+          "completed": true,
+          "id": "gaps",
+          "label": "Skills matrix is configured",
+          "reason": "Detected skills section"
+        }
+      ]
+    },
+    "keyword_coverage": 100.0,
+    "matched_keywords": [],
+    "matched_phrases": [],
+    "missing_keywords": [],
+    "missing_phrases": [],
+    "role_level": "junior",
+    "score": 100.0,
+    "section_scores": {
+      "education": 100.0,
+      "experience": 100.0,
+      "projects": 100.0,
+      "skills": 100.0,
+      "summary": 100.0
+    },
+    "source_text": "Morgan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+    "suggestions": "Strengths:\n- Clear structure with distinct sections for experience, projects, and education\n- Strong alignment of skills (Python, SQL, React) with common junior developer roles\n- Demonstrates full-stack capability by listing backend (Flask), database (SQL), and frontend (React) technologies\n\nWeak Points:\n- Summary lacks specific years of experience or concrete project outcomes to establish credibility\n- Action verbs are generic ('Built') without context on scale, team size, or business impact\n- Missing quantifiable metrics for the '30% reduction' claim as it lacks baseline data or scope\n- Project description is too vague and fails to highlight technical challenges solved\n- Skills section lists tools rather than demonstrating proficiency levels or specific frameworks used",
+    "years_experience": 0
+  },
+  "result": "Pass",
+  "seconds": 10.63,
+  "timestamp_utc": "2026-11-20T12:00:24.578009+00:00"
+}

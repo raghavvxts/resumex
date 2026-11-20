@@ -1,0 +1,110 @@
+[
+  {
+    "version": "v1",
+    "change": "Re-run the Milestone 1 baseline supplied in the screenshot. This is a new experiment, not a historical run.",
+    "reason": "Starting point: inspect output structure and factual grounding.",
+    "input": {
+      "resume": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "role_level": "junior",
+      "years_experience": 0
+    },
+    "rendered_prompt": "Act as a resume reviewer. Compare the given resume with the job description and evaluate how well the candidate fits the role. Identify matching skills, missing skills, and areas for improvement. Suggest better resume bullet points without adding fake skills or experience. Give a match score out of 100 with a short explanation.\nResume:\nAlex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n\nJob Description:\nWe seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.\n",
+    "raw_output": "### Resume Review & Analysis\n\n#### **Match Score: 85/100**\n\n**Explanation:**\nThis candidate is an exceptionally strong fit for the role. The resume mirrors the job description almost verbatim in terms of keywords and core competencies. The candidate explicitly lists all four required technologies (Python, SQL, React, Flask) and demonstrates experience with every key requirement mentioned in the JD: building accessible dashboards, designing REST APIs, writing automated tests, and optimizing database performance.\n\nThe only minor deduction from a perfect score is the lack of specific \"collaboration\" metrics or team-based project descriptions in the bullet points, though the summary mentions collaboration as a soft skill. Overall, this is a near-ideal match for a Junior Developer role.\n\n---\n\n#### **Matching Skills**\n*   **Core Technologies:** Python, SQL, React, Flask (All listed in both Resume and JD).\n*   **Key Responsibilities:**\n    *   Building accessible dashboards (Project: Campus Dashboard).\n    *   Designing REST APIs (Experience: Built a Flask API).\n    *   Writing automated tests (Project: Campus Dashboard).\n    *   Optimizing database performance (Experience: Query optimization reducing response time by 30%).\n*   **Tools:** Git.\n\n#### **Missing Skills / Gaps**\n*   **Collaboration Context:** The JD explicitly mentions \"collaborate with engineers.\" While the candidate lists this as a skill, the resume bullets focus heavily on individual contributions (\"Built,\" \"Reduced\") rather than teamwork dynamics (e.g., \"Worked within a team of X to deliver...\").\n*   **Specific Frameworks/Libraries:** The JD asks for experience building *accessible* dashboards. While the candidate built one, they do not specify which accessibility standards (WCAG) or libraries (e.g., ARIA, React Aria) were used, leaving room for technical depth questions during an interview.\n*   **Scale/Impact Metrics:** The resume mentions a 30% reduction in response time but lacks other quantitative metrics regarding code quality, deployment frequency, or bug reduction.\n\n#### **Areas for Improvement**\n1.  **Emphasize Collaboration:** Even as a junior, highlight how you worked with others. Change \"Built\" to \"Collaborated with backend and frontend teams to build...\"\n2.  **Detail Accessibility:** Explicitly mention accessibility standards in the project description to prove alignment with the JD's specific requirement for \"accessible dashboards.\"\n3.  **Quantify More:** Add more numbers to demonstrate impact (e.g., \"Reduced load times by 30%,\" \"Improved test coverage from X% to Y%\").\n\n---\n\n#### **Suggested Resume Bullet Points**\n*Below are rewrites that maintain the candidate's actual experience but align closer with the language and emphasis of the Job Description.*\n\n**Original:** Built a Flask API and reduced response time by 30% through query optimization.\n**Improved:** Designed and deployed a REST API using **Flask**, optimizing SQL queries to reduce average response time by **30%** while collaborating with backend engineers to ensure scalability.\n\n**Original:** Built an accessible dashboard with automated tests.\n**Improved:** Developed an accessible **React** dashboard for the Campus Dashboard project, ensuring WCAG compliance and maintaining **95% code coverage** through a suite of automated unit tests.\n\n**Original:** Summary: Junior software developer with Python, SQL and React project experience.\n**Improved:** Junior Software Developer proficient in **Python, SQL, React, and Flask**, with proven experience designing REST APIs, optimizing database performance, and building accessible web applications.",
+    "checks": {
+      "strict_json": false,
+      "required_keys_present": false,
+      "rewritten_bullet_count": 0,
+      "all_bullets_at_most_40_words": false
+    },
+    "error": null,
+    "seconds": 22.88,
+    "timestamp_utc": "2026-11-20T12:01:16.344081+00:00",
+    "manual_grounding_review": {
+      "result": "Fail",
+      "observation": "Unsupported rewrite claims include WCAG compliance, 95% code coverage and collaboration with backend engineers. Output is prose, not strict JSON.",
+      "scope": "Human-readable source comparison by the assistant; not a comprehensive automated hallucination detector."
+    }
+  },
+  {
+    "version": "v2",
+    "change": "Add the application JSON contract.",
+    "reason": "Assess whether explicit output fields improve machine-readable consistency.",
+    "input": {
+      "resume": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "role_level": "junior",
+      "years_experience": 0
+    },
+    "rendered_prompt": "You are an expert resume coach. Return ONLY a JSON object with these keys: strengths (array), weak_points (array), rewritten_bullets (array), skills_rewrite (string), summary_rewrite (string), interview_focus (array).\nResume:\nAlex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n\nJob Description:\nWe seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.\n",
+    "raw_output": "{\n  \"strengths\": [\n    \"Direct alignment of core skills (Python, SQL, React, Flask) with job requirements\",\n    \"Demonstrates a clear understanding of backend optimization through specific metrics (30% reduction)\",\n    \"Includes relevant project experience that matches the 'accessible dashboard' requirement\",\n    \"Lists essential tools like Git and automated testing explicitly\"\n  ],\n  \"weak_points\": [\n    \"Summary is overly generic and lacks impact or career trajectory context\",\n    \"Experience section contains a future date (2025) which may raise credibility concerns for recruiters\",\n    \"Bullet points lack quantifiable results beyond the single optimization metric\",\n    \"Skills are listed as keywords rather than categorized by proficiency level or domain\",\n    \"Missing soft skills mentioned in the JD such as collaboration with engineers\"\n  ],\n  \"rewritten_bullets\": [\n    \"Developed a scalable Flask REST API serving high-traffic endpoints, reducing average response time by 30% through strategic query optimization and caching strategies.\",\n    \"Designed and deployed an accessible Campus Dashboard using React and Python, implementing automated unit testing suites that increased code coverage to 85%.\",\n    \"Collaborated with cross-functional engineering teams to define API specifications and optimize database schemas for improved performance.\"\n  ],\n  \"skills_rewrite\": \"Core Languages: Python, SQL; Frontend Frameworks: React; Backend & APIs: Flask, REST; Tools & Practices: Git, Automated Testing, Database Optimization\",\n  \"summary_rewrite\": \"Aspiring Junior Software Developer with hands-on experience in building accessible dashboards and designing robust REST APIs using Python, SQL, and React. Proven ability to optimize database performance and implement automated testing pipelines to ensure code quality and scalability.\",\n  \"interview_focus\": [\n    \"Prepare to explain the specific query optimization techniques used to achieve the 30% response time reduction.\",\n    \"Be ready to discuss how you ensured accessibility in the Campus Dashboard project (e.g., WCAG compliance, UI choices).\",\n    \"Demonstrate examples of collaboration with engineers during your internship or projects.\",\n    \"Discuss your experience with automated testing frameworks and how they improved reliability.\"\n  ]\n}",
+    "checks": {
+      "strict_json": true,
+      "required_keys_present": true,
+      "rewritten_bullet_count": 3,
+      "all_bullets_at_most_40_words": true
+    },
+    "error": null,
+    "seconds": 13.99,
+    "timestamp_utc": "2026-11-20T12:01:30.333725+00:00",
+    "manual_grounding_review": {
+      "result": "Fail",
+      "observation": "JSON contract passes, but rewrites invent 85% code coverage, caching strategies and cross-functional collaboration. It also incorrectly calls 2025 a future date during a 2026 run.",
+      "scope": "Human-readable source comparison by the assistant; not a comprehensive automated hallucination detector."
+    }
+  },
+  {
+    "version": "v3",
+    "change": "Add factual-grounding and finished-bullet constraints.",
+    "reason": "Structured output alone does not prevent fabricated achievements or placeholders.",
+    "input": {
+      "resume": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "role_level": "junior",
+      "years_experience": 0
+    },
+    "rendered_prompt": "You are an expert resume coach. Return ONLY a JSON object with these keys: strengths (array), weak_points (array), rewritten_bullets (array), skills_rewrite (string), summary_rewrite (string), interview_focus (array). Preserve supplied facts; never invent metrics, skills or achievements. Ask about missing evidence in weak_points. Each rewritten bullet must be finished, at most 40 words and contain no placeholders or questions.\nResume:\nAlex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n\nJob Description:\nWe seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.\n",
+    "raw_output": "{\n  \"strengths\": [\n    \"Direct alignment of core skills (Python, SQL, React, Flask) with job requirements\",\n    \"Demonstrated experience building accessible dashboards matching the target role's key deliverables\",\n    \"Evidence of contributing to team collaboration through internship work\"\n  ],\n  \"weak_points\": [\n    \"Lack of specific metrics for 'reduced response time by 30%' (e.g., baseline latency, traffic volume)\",\n    \"Missing details on the scale or complexity of projects built\",\n    \"No mention of specific frameworks beyond Flask or libraries used within Python/SQL contexts\"\n  ],\n  \"rewritten_bullets\": [\n    \"Developed a scalable Flask API implementing query optimization strategies that reduced average response time by 30% under peak load.\",\n    \"Designed an accessible Campus Dashboard using React and Python, integrating automated testing suites to ensure code quality before deployment.\"\n  ],\n  \"skills_rewrite\": \"Python, SQL, React, Flask, Git, Automated Testing, REST API Design\",\n  \"summary_rewrite\": \"Junior software developer proficient in Python, SQL, and React with proven experience building accessible dashboards, designing REST APIs, and optimizing database performance through query refinement.\",\n  \"interview_focus\": [\n    \"Provide specific metrics regarding the baseline response time before optimization and the environment where the 30% reduction was measured.\",\n    \"Explain the technical approach used to implement automated tests within the Campus Dashboard project.\",\n    \"Describe a specific instance of collaboration with engineers during the internship at Example Labs.\"\n  ]\n}",
+    "checks": {
+      "strict_json": true,
+      "required_keys_present": true,
+      "rewritten_bullet_count": 2,
+      "all_bullets_at_most_40_words": true
+    },
+    "error": null,
+    "seconds": 10.23,
+    "timestamp_utc": "2026-11-20T12:01:40.566883+00:00",
+    "manual_grounding_review": {
+      "result": "Fail",
+      "observation": "JSON and bullet-length checks pass, but under peak load and evidence of team collaboration are unsupported by the fixture. Grounding is still incomplete.",
+      "scope": "Human-readable source comparison by the assistant; not a comprehensive automated hallucination detector."
+    }
+  },
+  {
+    "version": "v4",
+    "change": "Use the current application job-match prompt, including seniority and its complete output constraints.",
+    "reason": "Compare the production prompt with the newly tested alternatives; final selection follows the existing implementation, not a claim it wins every case.",
+    "input": {
+      "resume": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "role_level": "junior",
+      "years_experience": 0
+    },
+    "rendered_prompt": "\nYou are an expert resume coach.\n\nReturn ONLY strict JSON with this schema:\n{\n  \"strengths\": [\"...\"],\n  \"weak_points\": [\"...\"],\n  \"rewritten_bullets\": [\"...\"],\n  \"skills_rewrite\": \"...\",\n  \"summary_rewrite\": \"...\",\n  \"interview_focus\": [\"...\"]\n}\n\nRules:\n- No markdown, no backticks, no extra fields.\n- Tailor for role level: junior.\n- Tailor for years of experience: 0.\n- Rewritten bullets must preserve original facts. Never invent metrics, achievements or skills; ask the candidate for missing evidence.\n\nResume:\nAlex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n\n\nJob Description:\nWe seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.\n\nOutput constraints:\n- Each rewritten_bullets entry must be a finished resume bullet of at most 40 words, ready for the draft and grounded only in supplied facts.\n- Do not put coaching, questions, bracketed placeholders, example metrics, or X/Y/Z stand-ins into rewrites.\n- Put questions about missing evidence in weak_points. Return an empty rewritten_bullets array if no faithful rewrite is possible.\n",
+    "raw_output": "{\n  \"strengths\": [\"Strong alignment with job requirements for Python, SQL, React, and Flask\", \"Demonstrates practical experience building a Flask API and optimizing database performance\", \"Shows commitment to quality through implementation of automated testing in projects\"],\n  \"weak_points\": [\"Missing specific project names or URLs for the 'Example Labs' internship and 'Campus Dashboard' project\", \"Lack of concrete metrics beyond the stated '30% reduction' which needs verification against baseline data\", \"No mention of collaboration with other engineers despite it being a key JD requirement\"],\n  \"rewritten_bullets\": [\"Developed a Flask API for Example Labs, reducing average response time by 30% through strategic query optimization techniques.\", \"Designed and deployed an accessible Campus Dashboard using React, Python, and SQL with a comprehensive suite of automated tests.\", \"Collaborated with engineering teams to design REST APIs and optimize database performance while implementing automated testing workflows.\"],\n  \"skills_rewrite\": \"Core: Python, SQL, React, Flask; Tools: Git, Automated Testing; Focus Areas: API Design, Database Optimization, Accessible UI Development\",\n  \"summary_rewrite\": \"Junior software developer specializing in Python, SQL, and React with proven experience building accessible dashboards, designing REST APIs, optimizing database performance, and implementing automated testing frameworks.\",\n  \"interview_focus\": [\"Provide specific examples of collaboration with other engineers during the Example Labs internship\", \"Detail the baseline metrics used to calculate the 30% response time reduction in the Flask API project\", \"Describe the specific challenges faced while building the Campus Dashboard and how they were resolved\"]\n}",
+    "checks": {
+      "strict_json": true,
+      "required_keys_present": true,
+      "rewritten_bullet_count": 3,
+      "all_bullets_at_most_40_words": true
+    },
+    "error": null,
+    "seconds": 10.16,
+    "timestamp_utc": "2026-11-20T12:01:50.732382+00:00",
+    "manual_grounding_review": {
+      "result": "Fail",
+      "observation": "JSON and bullet-length checks pass, but the third rewritten bullet invents collaboration with engineering teams; deployment is also not evidenced. Current production prompt still needs factual-review safeguards.",
+      "scope": "Human-readable source comparison by the assistant; not a comprehensive automated hallucination detector."
+    }
+  }
+]

@@ -1,0 +1,125 @@
+{
+  "id": "T09",
+  "type": "Edge",
+  "route": "/analyze",
+  "input": {
+    "resume_text": "Avery Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+    "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+    "role_level": "unsupported-tier",
+    "years_experience": "-5"
+  },
+  "expected": "200; normalize unknown role and negative experience safely",
+  "http_status": 200,
+  "actual_output": {
+    "action_plan": [
+      "Include these role-specific keywords naturally in skills and project bullets: seek, dashboards, design, rest, write.",
+      "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.",
+      "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours."
+    ],
+    "ai_recommendations": {
+      "interview_focus": [],
+      "message": "AI returned non-JSON text. Showing deterministic guidance only.",
+      "model_used": "qwen3.5:4b",
+      "rewritten_bullets": [],
+      "skills_rewrite": "",
+      "status": "unavailable",
+      "strengths": [],
+      "summary_rewrite": "",
+      "weak_points": []
+    },
+    "bullet_templates": [
+      "Collaborated with a team to implement seek in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+      "Designed and shipped [feature] using seek, improving delivery speed for [users/team].",
+      "Collaborated with a team to implement dashboards in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+      "Designed and shipped [feature] using dashboards, improving delivery speed for [users/team]."
+    ],
+    "candidate_name": "Avery Example",
+    "checklist": {
+      "completion_percent": 50.0,
+      "items": [
+        {
+          "completed": false,
+          "id": "score",
+          "label": "Resume score is at least 70",
+          "reason": "Current score: 23.18%"
+        },
+        {
+          "completed": true,
+          "id": "coverage",
+          "label": "Keyword coverage is at least 45%",
+          "reason": "Current coverage: 54.55%"
+        },
+        {
+          "completed": true,
+          "id": "summary",
+          "label": "Profile summary/objective is present",
+          "reason": "Detected summary section"
+        },
+        {
+          "completed": true,
+          "id": "metrics",
+          "label": "At least one quantified achievement exists",
+          "reason": "Detected numeric impact"
+        },
+        {
+          "completed": false,
+          "id": "experience",
+          "label": "Experience section is aligned with job terms",
+          "reason": "Experience alignment: 15.0%"
+        },
+        {
+          "completed": false,
+          "id": "gaps",
+          "label": "High-priority keyword gaps are below 8",
+          "reason": "Current high-priority gaps: 10"
+        }
+      ]
+    },
+    "keyword_coverage": 54.55,
+    "matched_keywords": [
+      "accessible",
+      "api",
+      "automated",
+      "developer",
+      "experience",
+      "flask",
+      "junior",
+      "python",
+      "react",
+      "software",
+      "sql",
+      "tests"
+    ],
+    "matched_phrases": [],
+    "missing_keywords": [
+      "seek",
+      "dashboards",
+      "design",
+      "rest",
+      "write",
+      "collaborate",
+      "engineers",
+      "optimize",
+      "database",
+      "performance"
+    ],
+    "missing_phrases": [
+      "rest-api"
+    ],
+    "role_level": "junior",
+    "score": 23.18,
+    "section_scores": {
+      "education": 0.0,
+      "experience": 15.0,
+      "projects": 30.0,
+      "skills": 25.0,
+      "summary": 30.0
+    },
+    "source_text": "Avery Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+    "suggestions": "AI returned non-JSON text. Showing deterministic guidance only.",
+    "years_experience": 0
+  },
+  "result": "Fail",
+  "seconds": 10.14,
+  "timestamp_utc": "2026-11-20T12:00:43.927427+00:00"
+}

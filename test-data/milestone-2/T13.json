@@ -1,0 +1,17 @@
+{
+  "id": "T13",
+  "type": "Invalid",
+  "route": "/analyze",
+  "input": {
+    "resume_text": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+    "job_description": "Python SQL developer"
+  },
+  "expected": "400; reject job description shorter than 20 words",
+  "http_status": 400,
+  "actual_output": {
+    "error": "Job description is too short (3 words). Please paste at least 20 words for accurate matching."
+  },
+  "result": "Pass",
+  "seconds": 0.0,
+  "timestamp_utc": "2026-11-20T12:00:53.458547+00:00"
+}

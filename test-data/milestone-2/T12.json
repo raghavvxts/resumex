@@ -1,0 +1,17 @@
+{
+  "id": "T12",
+  "type": "Invalid",
+  "route": "/analyze",
+  "input": {
+    "resume_text": "",
+    "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+  },
+  "expected": "400; missing-resume error",
+  "http_status": 400,
+  "actual_output": {
+    "error": "Missing 'resume' file or 'resume_text'."
+  },
+  "result": "Pass",
+  "seconds": 0.0,
+  "timestamp_utc": "2026-11-20T12:00:53.457719+00:00"
+}

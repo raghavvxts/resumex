@@ -1,0 +1,129 @@
+{
+  "id": "T02",
+  "type": "Normal",
+  "route": "/analyze",
+  "input": {
+    "resume_text": "Jordan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+    "job_description": "We seek a graphic designer experienced in typography, illustration, Adobe Photoshop, Illustrator, branding, visual identity, print layouts and client communication to create marketing campaigns and editorial artwork for clients."
+  },
+  "expected": "200; bounded score and nonempty AI feedback for unrelated role",
+  "http_status": 200,
+  "actual_output": {
+    "action_plan": [
+      "Include these role-specific keywords naturally in skills and project bullets: seek, graphic, designer, experienced, typography.",
+      "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.",
+      "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours."
+    ],
+    "ai_recommendations": {
+      "interview_focus": [
+        "Candidate must provide concrete examples of any design work, even if non-professional, to demonstrate potential for a graphic designer role.",
+        "Interviewer will need to verify how the candidate's technical background can be leveraged to support visual identity or branding efforts."
+      ],
+      "message": "",
+      "model_used": "qwen3.5:4b",
+      "rewritten_bullets": [],
+      "skills_rewrite": "",
+      "status": "ok",
+      "strengths": [],
+      "summary_rewrite": "",
+      "weak_points": [
+        "Resume contains zero relevant experience for a graphic designer role; all listed skills (Python, SQL, React) are technical and unrelated to design.",
+        "The job description requires proficiency in Adobe Photoshop/Illustrator, branding, and visual identity, but the resume lists only web development tools.",
+        "No evidence of client communication or marketing campaign creation exists in the provided text."
+      ]
+    },
+    "bullet_templates": [
+      "Collaborated with a team to implement seek in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+      "Designed and shipped [feature] using seek, improving delivery speed for [users/team].",
+      "Collaborated with a team to implement graphic in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+      "Designed and shipped [feature] using graphic, improving delivery speed for [users/team]."
+    ],
+    "candidate_name": "Jordan Example",
+    "checklist": {
+      "completion_percent": 33.33,
+      "items": [
+        {
+          "completed": false,
+          "id": "score",
+          "label": "Resume score is at least 70",
+          "reason": "Current score: 0.0%"
+        },
+        {
+          "completed": false,
+          "id": "coverage",
+          "label": "Keyword coverage is at least 45%",
+          "reason": "Current coverage: 0.0%"
+        },
+        {
+          "completed": true,
+          "id": "summary",
+          "label": "Profile summary/objective is present",
+          "reason": "Detected summary section"
+        },
+        {
+          "completed": true,
+          "id": "metrics",
+          "label": "At least one quantified achievement exists",
+          "reason": "Detected numeric impact"
+        },
+        {
+          "completed": false,
+          "id": "experience",
+          "label": "Experience section is aligned with job terms",
+          "reason": "Experience alignment: 0.0%"
+        },
+        {
+          "completed": false,
+          "id": "gaps",
+          "label": "High-priority keyword gaps are below 8",
+          "reason": "Current high-priority gaps: 22"
+        }
+      ]
+    },
+    "keyword_coverage": 0.0,
+    "matched_keywords": [],
+    "matched_phrases": [],
+    "missing_keywords": [
+      "seek",
+      "graphic",
+      "designer",
+      "experienced",
+      "typography",
+      "illustration",
+      "adobe",
+      "photoshop",
+      "illustrator",
+      "branding",
+      "visual",
+      "identity",
+      "print",
+      "layouts",
+      "client",
+      "communication",
+      "create",
+      "marketing",
+      "campaigns",
+      "editorial",
+      "artwork",
+      "clients"
+    ],
+    "missing_phrases": [
+      "artificial-intelligence"
+    ],
+    "role_level": "junior",
+    "score": 0.0,
+    "section_scores": {
+      "education": 0.0,
+      "experience": 0.0,
+      "projects": 0.0,
+      "skills": 0.0,
+      "summary": 0.0
+    },
+    "source_text": "Jordan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+    "suggestions": "Strengths:\n\nWeak Points:\n- Resume contains zero relevant experience for a graphic designer role; all listed skills (Python, SQL, React) are technical and unrelated to design.\n- The job description requires proficiency in Adobe Photoshop/Illustrator, branding, and visual identity, but the resume lists only web development tools.\n- No evidence of client communication or marketing campaign creation exists in the provided text.",
+    "years_experience": 0
+  },
+  "result": "Pass",
+  "seconds": 5.9,
+  "timestamp_utc": "2026-11-20T11:59:48.491072+00:00"
+}

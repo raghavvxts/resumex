@@ -1,0 +1,27 @@
+{
+  "version": "v2",
+  "change": "Add the application JSON contract.",
+  "reason": "Assess whether explicit output fields improve machine-readable consistency.",
+  "input": {
+    "resume": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+    "job": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+    "role_level": "junior",
+    "years_experience": 0
+  },
+  "rendered_prompt": "You are an expert resume coach. Return ONLY a JSON object with these keys: strengths (array), weak_points (array), rewritten_bullets (array), skills_rewrite (string), summary_rewrite (string), interview_focus (array).\nResume:\nAlex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n\nJob Description:\nWe seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.\n",
+  "raw_output": "{\n  \"strengths\": [\n    \"Direct alignment of core skills (Python, SQL, React, Flask) with job requirements\",\n    \"Demonstrates a clear understanding of backend optimization through specific metrics (30% reduction)\",\n    \"Includes relevant project experience that matches the 'accessible dashboard' requirement\",\n    \"Lists essential tools like Git and automated testing explicitly\"\n  ],\n  \"weak_points\": [\n    \"Summary is overly generic and lacks impact or career trajectory context\",\n    \"Experience section contains a future date (2025) which may raise credibility concerns for recruiters\",\n    \"Bullet points lack quantifiable results beyond the single optimization metric\",\n    \"Skills are listed as keywords rather than categorized by proficiency level or domain\",\n    \"Missing soft skills mentioned in the JD such as collaboration with engineers\"\n  ],\n  \"rewritten_bullets\": [\n    \"Developed a scalable Flask REST API serving high-traffic endpoints, reducing average response time by 30% through strategic query optimization and caching strategies.\",\n    \"Designed and deployed an accessible Campus Dashboard using React and Python, implementing automated unit testing suites that increased code coverage to 85%.\",\n    \"Collaborated with cross-functional engineering teams to define API specifications and optimize database schemas for improved performance.\"\n  ],\n  \"skills_rewrite\": \"Core Languages: Python, SQL; Frontend Frameworks: React; Backend & APIs: Flask, REST; Tools & Practices: Git, Automated Testing, Database Optimization\",\n  \"summary_rewrite\": \"Aspiring Junior Software Developer with hands-on experience in building accessible dashboards and designing robust REST APIs using Python, SQL, and React. Proven ability to optimize database performance and implement automated testing pipelines to ensure code quality and scalability.\",\n  \"interview_focus\": [\n    \"Prepare to explain the specific query optimization techniques used to achieve the 30% response time reduction.\",\n    \"Be ready to discuss how you ensured accessibility in the Campus Dashboard project (e.g., WCAG compliance, UI choices).\",\n    \"Demonstrate examples of collaboration with engineers during your internship or projects.\",\n    \"Discuss your experience with automated testing frameworks and how they improved reliability.\"\n  ]\n}",
+  "checks": {
+    "strict_json": true,
+    "required_keys_present": true,
+    "rewritten_bullet_count": 3,
+    "all_bullets_at_most_40_words": true
+  },
+  "error": null,
+  "seconds": 13.99,
+  "timestamp_utc": "2026-11-20T12:01:30.333725+00:00",
+  "manual_grounding_review": {
+    "result": "Fail",
+    "observation": "JSON contract passes, but rewrites invent 85% code coverage, caching strategies and cross-functional collaboration. It also incorrectly calls 2025 a future date during a 2026 run.",
+    "scope": "Human-readable source comparison by the assistant; not a comprehensive automated hallucination detector."
+  }
+}

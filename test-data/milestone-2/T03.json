@@ -1,0 +1,61 @@
+{
+  "id": "T03",
+  "type": "Normal",
+  "route": "/parse-resume",
+  "input": {
+    "resume_text": "Sam Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n"
+  },
+  "expected": "200; preserve Sam Example and the supplied 30% metric",
+  "http_status": 200,
+  "actual_output": {
+    "education": [
+      {
+        "date": "2026",
+        "degree": "BTech Computer Science",
+        "gpa": "",
+        "institution": "Example University",
+        "location": ""
+      }
+    ],
+    "experience": [
+      {
+        "bullets": [
+          "Built a Flask API and reduced response time by 30% through query optimization."
+        ],
+        "company": "Example Labs",
+        "date": "2025 - Present",
+        "location": "",
+        "role": "Software Intern"
+      }
+    ],
+    "parsing_warnings": [],
+    "personal_info": {
+      "email": "alex@example.com",
+      "github": "",
+      "linkedin": "",
+      "name": "Sam Example",
+      "phone": "",
+      "portfolio": ""
+    },
+    "projects": [
+      {
+        "bullets": [
+          "Built an accessible dashboard with automated tests."
+        ],
+        "date": "",
+        "name": "Campus Dashboard",
+        "technologies": "React, Python, SQL"
+      }
+    ],
+    "skills": {
+      "frameworks": "React, Flask",
+      "languages": "Python, SQL",
+      "tools": "Git, automated testing"
+    },
+    "source_text": "Sam Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+    "summary": "Junior software developer with Python, SQL and React project experience."
+  },
+  "result": "Pass",
+  "seconds": 10.81,
+  "timestamp_utc": "2026-11-20T11:59:59.302902+00:00"
+}

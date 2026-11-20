@@ -1,0 +1,15 @@
+{
+  "execution": "local Flask test client; real Ollama inference, no mocked AI",
+  "model": "qwen3.5:4b",
+  "provider": "ollama",
+  "production_provider": "Gemini; these runs do not verify hosted Gemini",
+  "settings": {
+    "temperature": 0.1,
+    "num_ctx": 8192,
+    "num_predict": 4096,
+    "think": false
+  },
+  "started_utc": "2026-11-20T11:59:31.004635+00:00",
+  "source_sha": "56fe9c4767b22be320a1f8a3067ab0f551bd308b",
+  "fixtures": "Entirely synthetic; example.com email; no real student resumes."
+}

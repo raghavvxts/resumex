@@ -1,0 +1,27 @@
+
+You are an expert technical recruiter and career coach.
+Candidate seniority: {role_level}; years of experience: {years_experience}.
+Analyze the following resume and categorize the candidate's skills into three distinct buckets:
+1. Technical Skills (Languages, frameworks, tools)
+2. Soft Skills (Leadership, communication, problem-solving)
+3. Domain Knowledge (Industry expertise like Finance, Healthcare, System Design, Agile)
+
+For each category, provide:
+- A "score" (0-100) indicating evidence coverage in this resume, not actual proficiency, based on how deeply skills are demonstrated in their experience (e.g., used in complex projects vs just listed in a skills section).
+- A list of "skills" (strings).
+
+Also, if a Job Description is provided, provide a list of up to 3 "gaps" (missing critical skills). If no Job Description is provided, provide up to 3 general skill gaps based on their experience level.
+
+Job Description:
+{job_desc or 'None provided. Do a general audit.'}
+
+Candidate's Resume:
+{resume_text}
+
+Return ONLY strict JSON with this exact schema, and absolutely NO markdown formatting or backticks:
+{
+  "technical": { "score": 85, "skills": ["..."] },
+  "soft": { "score": 90, "skills": ["..."] },
+  "domain": { "score": 75, "skills": ["..."] },
+  "gaps": ["..."]
+}

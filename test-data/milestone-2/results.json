@@ -1,0 +1,966 @@
+[
+  {
+    "id": "T01",
+    "type": "Normal",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+    },
+    "expected": "200; bounded score and nonempty AI feedback",
+    "http_status": 200,
+    "actual_output": {
+      "action_plan": [
+        "Include these role-specific keywords naturally in skills and project bullets: seek, dashboards, design, rest, write.",
+        "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.",
+        "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours."
+      ],
+      "ai_recommendations": {
+        "interview_focus": [],
+        "message": "AI returned non-JSON text. Showing deterministic guidance only.",
+        "model_used": "qwen3.5:4b",
+        "rewritten_bullets": [],
+        "skills_rewrite": "",
+        "status": "unavailable",
+        "strengths": [],
+        "summary_rewrite": "",
+        "weak_points": []
+      },
+      "bullet_templates": [
+        "Collaborated with a team to implement seek in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using seek, improving delivery speed for [users/team].",
+        "Collaborated with a team to implement dashboards in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using dashboards, improving delivery speed for [users/team]."
+      ],
+      "candidate_name": "Alex Example",
+      "checklist": {
+        "completion_percent": 50.0,
+        "items": [
+          {
+            "completed": false,
+            "id": "score",
+            "label": "Resume score is at least 70",
+            "reason": "Current score: 22.83%"
+          },
+          {
+            "completed": true,
+            "id": "coverage",
+            "label": "Keyword coverage is at least 45%",
+            "reason": "Current coverage: 54.55%"
+          },
+          {
+            "completed": true,
+            "id": "summary",
+            "label": "Profile summary/objective is present",
+            "reason": "Detected summary section"
+          },
+          {
+            "completed": true,
+            "id": "metrics",
+            "label": "At least one quantified achievement exists",
+            "reason": "Detected numeric impact"
+          },
+          {
+            "completed": false,
+            "id": "experience",
+            "label": "Experience section is aligned with job terms",
+            "reason": "Experience alignment: 15.0%"
+          },
+          {
+            "completed": false,
+            "id": "gaps",
+            "label": "High-priority keyword gaps are below 8",
+            "reason": "Current high-priority gaps: 10"
+          }
+        ]
+      },
+      "keyword_coverage": 54.55,
+      "matched_keywords": [
+        "accessible",
+        "api",
+        "automated",
+        "developer",
+        "experience",
+        "flask",
+        "junior",
+        "python",
+        "react",
+        "software",
+        "sql",
+        "tests"
+      ],
+      "matched_phrases": [],
+      "missing_keywords": [
+        "seek",
+        "dashboards",
+        "design",
+        "rest",
+        "write",
+        "collaborate",
+        "engineers",
+        "optimize",
+        "database",
+        "performance"
+      ],
+      "missing_phrases": [
+        "rest-api"
+      ],
+      "role_level": "junior",
+      "score": 22.83,
+      "section_scores": {
+        "education": 0.0,
+        "experience": 15.0,
+        "projects": 30.0,
+        "skills": 25.0,
+        "summary": 30.0
+      },
+      "source_text": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+      "suggestions": "AI returned non-JSON text. Showing deterministic guidance only.",
+      "years_experience": 0
+    },
+    "result": "Fail",
+    "seconds": 11.56,
+    "timestamp_utc": "2026-11-20T11:59:42.589809+00:00"
+  },
+  {
+    "id": "T02",
+    "type": "Normal",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Jordan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": "We seek a graphic designer experienced in typography, illustration, Adobe Photoshop, Illustrator, branding, visual identity, print layouts and client communication to create marketing campaigns and editorial artwork for clients."
+    },
+    "expected": "200; bounded score and nonempty AI feedback for unrelated role",
+    "http_status": 200,
+    "actual_output": {
+      "action_plan": [
+        "Include these role-specific keywords naturally in skills and project bullets: seek, graphic, designer, experienced, typography.",
+        "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.",
+        "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours."
+      ],
+      "ai_recommendations": {
+        "interview_focus": [
+          "Candidate must provide concrete examples of any design work, even if non-professional, to demonstrate potential for a graphic designer role.",
+          "Interviewer will need to verify how the candidate's technical background can be leveraged to support visual identity or branding efforts."
+        ],
+        "message": "",
+        "model_used": "qwen3.5:4b",
+        "rewritten_bullets": [],
+        "skills_rewrite": "",
+        "status": "ok",
+        "strengths": [],
+        "summary_rewrite": "",
+        "weak_points": [
+          "Resume contains zero relevant experience for a graphic designer role; all listed skills (Python, SQL, React) are technical and unrelated to design.",
+          "The job description requires proficiency in Adobe Photoshop/Illustrator, branding, and visual identity, but the resume lists only web development tools.",
+          "No evidence of client communication or marketing campaign creation exists in the provided text."
+        ]
+      },
+      "bullet_templates": [
+        "Collaborated with a team to implement seek in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using seek, improving delivery speed for [users/team].",
+        "Collaborated with a team to implement graphic in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using graphic, improving delivery speed for [users/team]."
+      ],
+      "candidate_name": "Jordan Example",
+      "checklist": {
+        "completion_percent": 33.33,
+        "items": [
+          {
+            "completed": false,
+            "id": "score",
+            "label": "Resume score is at least 70",
+            "reason": "Current score: 0.0%"
+          },
+          {
+            "completed": false,
+            "id": "coverage",
+            "label": "Keyword coverage is at least 45%",
+            "reason": "Current coverage: 0.0%"
+          },
+          {
+            "completed": true,
+            "id": "summary",
+            "label": "Profile summary/objective is present",
+            "reason": "Detected summary section"
+          },
+          {
+            "completed": true,
+            "id": "metrics",
+            "label": "At least one quantified achievement exists",
+            "reason": "Detected numeric impact"
+          },
+          {
+            "completed": false,
+            "id": "experience",
+            "label": "Experience section is aligned with job terms",
+            "reason": "Experience alignment: 0.0%"
+          },
+          {
+            "completed": false,
+            "id": "gaps",
+            "label": "High-priority keyword gaps are below 8",
+            "reason": "Current high-priority gaps: 22"
+          }
+        ]
+      },
+      "keyword_coverage": 0.0,
+      "matched_keywords": [],
+      "matched_phrases": [],
+      "missing_keywords": [
+        "seek",
+        "graphic",
+        "designer",
+        "experienced",
+        "typography",
+        "illustration",
+        "adobe",
+        "photoshop",
+        "illustrator",
+        "branding",
+        "visual",
+        "identity",
+        "print",
+        "layouts",
+        "client",
+        "communication",
+        "create",
+        "marketing",
+        "campaigns",
+        "editorial",
+        "artwork",
+        "clients"
+      ],
+      "missing_phrases": [
+        "artificial-intelligence"
+      ],
+      "role_level": "junior",
+      "score": 0.0,
+      "section_scores": {
+        "education": 0.0,
+        "experience": 0.0,
+        "projects": 0.0,
+        "skills": 0.0,
+        "summary": 0.0
+      },
+      "source_text": "Jordan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+      "suggestions": "Strengths:\n\nWeak Points:\n- Resume contains zero relevant experience for a graphic designer role; all listed skills (Python, SQL, React) are technical and unrelated to design.\n- The job description requires proficiency in Adobe Photoshop/Illustrator, branding, and visual identity, but the resume lists only web development tools.\n- No evidence of client communication or marketing campaign creation exists in the provided text.",
+      "years_experience": 0
+    },
+    "result": "Pass",
+    "seconds": 5.9,
+    "timestamp_utc": "2026-11-20T11:59:48.491072+00:00"
+  },
+  {
+    "id": "T03",
+    "type": "Normal",
+    "route": "/parse-resume",
+    "input": {
+      "resume_text": "Sam Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n"
+    },
+    "expected": "200; preserve Sam Example and the supplied 30% metric",
+    "http_status": 200,
+    "actual_output": {
+      "education": [
+        {
+          "date": "2026",
+          "degree": "BTech Computer Science",
+          "gpa": "",
+          "institution": "Example University",
+          "location": ""
+        }
+      ],
+      "experience": [
+        {
+          "bullets": [
+            "Built a Flask API and reduced response time by 30% through query optimization."
+          ],
+          "company": "Example Labs",
+          "date": "2025 - Present",
+          "location": "",
+          "role": "Software Intern"
+        }
+      ],
+      "parsing_warnings": [],
+      "personal_info": {
+        "email": "alex@example.com",
+        "github": "",
+        "linkedin": "",
+        "name": "Sam Example",
+        "phone": "",
+        "portfolio": ""
+      },
+      "projects": [
+        {
+          "bullets": [
+            "Built an accessible dashboard with automated tests."
+          ],
+          "date": "",
+          "name": "Campus Dashboard",
+          "technologies": "React, Python, SQL"
+        }
+      ],
+      "skills": {
+        "frameworks": "React, Flask",
+        "languages": "Python, SQL",
+        "tools": "Git, automated testing"
+      },
+      "source_text": "Sam Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+      "summary": "Junior software developer with Python, SQL and React project experience."
+    },
+    "result": "Pass",
+    "seconds": 10.81,
+    "timestamp_utc": "2026-11-20T11:59:59.302902+00:00"
+  },
+  {
+    "id": "T04",
+    "type": "Normal",
+    "route": "/skills-analysis",
+    "input": {
+      "resume_text": "Taylor Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+    },
+    "expected": "200; technical, soft and domain categories with bounded scores",
+    "http_status": 503,
+    "actual_output": {
+      "error": "Skills analysis is temporarily unavailable. Please retry."
+    },
+    "result": "Fail",
+    "seconds": 6.05,
+    "timestamp_utc": "2026-11-20T12:00:05.351810+00:00"
+  },
+  {
+    "id": "T05",
+    "type": "Normal",
+    "route": "/cover-letter",
+    "input": {
+      "resume_text": "Robin Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "tone": "concise"
+    },
+    "expected": "200; nonempty cover letter of at most 150 words",
+    "http_status": 200,
+    "actual_output": {
+      "cover_letter": "Dear Hiring Team,\n\nI am writing to apply for the junior software developer position. My background aligns directly with your need for Python, SQL, React, and Flask expertise. During my internship at Example Labs, I built a Flask API and reduced response time by 30% through query optimization. Additionally, I developed an accessible Campus Dashboard using React, Python, and SQL, ensuring the project included automated tests from the start.\n\nMy education is currently underway as a BTech Computer Science student at Example University, expected to graduate in 2026. I possess practical skills in Git and automated testing, which I have applied to deliver efficient code and maintainable systems. I am eager to collaborate with your engineering team to design robust REST APIs and optimize database performance for accessible dashboards.\n\nI look forward to discussing how my foundational experience supports your technical goals.\n\nSincerely,\nRobin Example"
+    },
+    "result": "Pass",
+    "seconds": 5.62,
+    "timestamp_utc": "2026-11-20T12:00:10.976131+00:00"
+  },
+  {
+    "id": "T06",
+    "type": "Normal",
+    "route": "/chat",
+    "input": {
+      "resume_text": "Casey Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "message": "Rewrite the Flask API bullet using only the supplied achievement.",
+      "history": "[]"
+    },
+    "expected": "200; response preserves the supplied 30% achievement",
+    "http_status": 200,
+    "actual_output": {
+      "reply": "Here is a rewritten version of that bullet point based strictly on the information provided:\n\nBuilt a Flask API and reduced response time by 30% through query optimization.\n\n*Note: Since you requested to use only the supplied achievement, I kept the \"30%\" metric as it appears in your original text under the Experience section. If this number is not verified or if you prefer to remove it entirely, please let me know so I can adjust.*"
+    },
+    "result": "Pass",
+    "seconds": 2.97,
+    "timestamp_utc": "2026-11-20T12:00:13.947723+00:00",
+    "evaluation_note": "Checker corrected to use the documented reply field, rather than response. Re-evaluated the unchanged saved HTTP output; no new inference or output editing."
+  },
+  {
+    "id": "T07",
+    "type": "Edge",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Morgan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": ""
+    },
+    "expected": "200; general audit with bounded score and AI feedback",
+    "http_status": 200,
+    "actual_output": {
+      "action_plan": [
+        "Use strong action verbs (e.g. Spearheaded, Designed, Optimised) at the start of experience bullets.",
+        "Group skills by category so reviewers can find relevant experience."
+      ],
+      "ai_recommendations": {
+        "interview_focus": [
+          "Prepare to elaborate on the specific queries optimized and the tools used for performance analysis",
+          "Be ready to describe the architecture of the Campus Dashboard and how accessibility was implemented",
+          "Discuss the scope of your work at Example Labs, including team size and deployment environment"
+        ],
+        "message": "",
+        "model_used": "qwen3.5:4b",
+        "rewritten_bullets": [
+          "Developed a Flask REST API serving internal applications, optimizing database queries to reduce average response time by 30%.",
+          "Designed an accessible Campus Dashboard using React and Python, implementing automated unit tests to ensure code reliability."
+        ],
+        "skills_rewrite": "Python (Flask), SQL, React, Git, Automated Testing",
+        "status": "ok",
+        "strengths": [
+          "Clear structure with distinct sections for experience, projects, and education",
+          "Strong alignment of skills (Python, SQL, React) with common junior developer roles",
+          "Demonstrates full-stack capability by listing backend (Flask), database (SQL), and frontend (React) technologies"
+        ],
+        "summary_rewrite": "Junior software developer specializing in full-stack development with Python, SQL, and React. Proven experience building scalable APIs and accessible dashboards while implementing automated testing frameworks.",
+        "weak_points": [
+          "Summary lacks specific years of experience or concrete project outcomes to establish credibility",
+          "Action verbs are generic ('Built') without context on scale, team size, or business impact",
+          "Missing quantifiable metrics for the '30% reduction' claim as it lacks baseline data or scope",
+          "Project description is too vague and fails to highlight technical challenges solved",
+          "Skills section lists tools rather than demonstrating proficiency levels or specific frameworks used"
+        ]
+      },
+      "bullet_templates": [
+        "Spearheaded the design and delivery of [project/system], resulting in [quantified outcome like 25% efficiency gain].",
+        "Optimised backend [service/queries], reducing latency by [measurable metric like 40ms].",
+        "Collaborated with cross-functional teams to integrate [feature/service], improving [delivery speed/adoption]."
+      ],
+      "candidate_name": "Morgan Example",
+      "checklist": {
+        "completion_percent": 100.0,
+        "items": [
+          {
+            "completed": true,
+            "id": "score",
+            "label": "Section completeness score is at least 70",
+            "reason": "Current structural score: 100.0%"
+          },
+          {
+            "completed": true,
+            "id": "coverage",
+            "label": "Core sections coverage is at least 80%",
+            "reason": "Current section coverage: 100.0%"
+          },
+          {
+            "completed": true,
+            "id": "summary",
+            "label": "Profile summary section is present",
+            "reason": "Detected summary section"
+          },
+          {
+            "completed": true,
+            "id": "metrics",
+            "label": "At least one quantified achievement exists",
+            "reason": "Detected numeric impact"
+          },
+          {
+            "completed": true,
+            "id": "experience",
+            "label": "Experience section is present",
+            "reason": "Detected experience section"
+          },
+          {
+            "completed": true,
+            "id": "gaps",
+            "label": "Skills matrix is configured",
+            "reason": "Detected skills section"
+          }
+        ]
+      },
+      "keyword_coverage": 100.0,
+      "matched_keywords": [],
+      "matched_phrases": [],
+      "missing_keywords": [],
+      "missing_phrases": [],
+      "role_level": "junior",
+      "score": 100.0,
+      "section_scores": {
+        "education": 100.0,
+        "experience": 100.0,
+        "projects": 100.0,
+        "skills": 100.0,
+        "summary": 100.0
+      },
+      "source_text": "Morgan Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+      "suggestions": "Strengths:\n- Clear structure with distinct sections for experience, projects, and education\n- Strong alignment of skills (Python, SQL, React) with common junior developer roles\n- Demonstrates full-stack capability by listing backend (Flask), database (SQL), and frontend (React) technologies\n\nWeak Points:\n- Summary lacks specific years of experience or concrete project outcomes to establish credibility\n- Action verbs are generic ('Built') without context on scale, team size, or business impact\n- Missing quantifiable metrics for the '30% reduction' claim as it lacks baseline data or scope\n- Project description is too vague and fails to highlight technical challenges solved\n- Skills section lists tools rather than demonstrating proficiency levels or specific frameworks used",
+      "years_experience": 0
+    },
+    "result": "Pass",
+    "seconds": 10.63,
+    "timestamp_utc": "2026-11-20T12:00:24.578009+00:00"
+  },
+  {
+    "id": "T08",
+    "type": "Edge",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Lee Example\nPython SQL Flask React Git\nBuilt a dashboard and tested REST APIs.",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+    },
+    "expected": "200; handle resume without standard section headings",
+    "http_status": 200,
+    "actual_output": {
+      "action_plan": [
+        "Include these role-specific keywords naturally in skills and project bullets: seek, junior, software, developer, experience.",
+        "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.",
+        "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours.",
+        "Add a dedicated Skills section with grouped tools and languages.",
+        "Add a Projects section with 2-4 relevant projects."
+      ],
+      "ai_recommendations": {
+        "interview_focus": [
+          "Provide concrete examples of specific projects built using the mentioned stack",
+          "Detail the testing frameworks used and their impact on code quality",
+          "Explain how you collaborated with other engineers during your development process"
+        ],
+        "message": "",
+        "model_used": "qwen3.5:4b",
+        "rewritten_bullets": [
+          "Developed a responsive dashboard using React and Flask backend with Python data processing capabilities.",
+          "Designed and tested RESTful APIs ensuring reliability through automated unit testing frameworks.",
+          "Optimized SQL database queries to improve system performance for dashboard data retrieval."
+        ],
+        "skills_rewrite": "Core Stack: Python, SQL, Flask, React; Soft Skills: API Design, Automated Testing, Database Optimization",
+        "status": "ok",
+        "strengths": [
+          "Demonstrates foundational knowledge of core stack (Python, SQL, Flask, React)",
+          "Shows awareness of full development lifecycle including testing and API design",
+          "Aligns technical keywords with job requirements for junior level"
+        ],
+        "summary_rewrite": "Junior developer proficient in Python, SQL, Flask, and React with experience building dashboards, designing REST APIs, writing automated tests, collaborating with engineering teams, and optimizing database performance.",
+        "weak_points": [
+          "Resume lacks specific project context or business impact",
+          "Missing evidence of actual implementation experience vs. theoretical knowledge",
+          "No metrics provided to validate dashboard functionality or performance optimization results",
+          "Lack of collaboration examples suggests potential gap in team integration skills"
+        ]
+      },
+      "bullet_templates": [
+        "Collaborated with a team to implement seek in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using seek, improving delivery speed for [users/team].",
+        "Collaborated with a team to implement junior in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using junior, improving delivery speed for [users/team]."
+      ],
+      "candidate_name": "Lee Example",
+      "checklist": {
+        "completion_percent": 0.0,
+        "items": [
+          {
+            "completed": false,
+            "id": "score",
+            "label": "Resume score is at least 70",
+            "reason": "Current score: 14.48%"
+          },
+          {
+            "completed": false,
+            "id": "coverage",
+            "label": "Keyword coverage is at least 45%",
+            "reason": "Current coverage: 27.27%"
+          },
+          {
+            "completed": false,
+            "id": "summary",
+            "label": "Profile summary/objective is present",
+            "reason": "No summary/objective section detected"
+          },
+          {
+            "completed": false,
+            "id": "metrics",
+            "label": "At least one quantified achievement exists",
+            "reason": "No measurable metrics found"
+          },
+          {
+            "completed": false,
+            "id": "experience",
+            "label": "Experience section is aligned with job terms",
+            "reason": "Experience alignment: 0.0%"
+          },
+          {
+            "completed": false,
+            "id": "gaps",
+            "label": "High-priority keyword gaps are below 8",
+            "reason": "Current high-priority gaps: 16"
+          }
+        ]
+      },
+      "keyword_coverage": 27.27,
+      "matched_keywords": [
+        "api",
+        "flask",
+        "python",
+        "react",
+        "rest",
+        "sql"
+      ],
+      "matched_phrases": [
+        "rest-api"
+      ],
+      "missing_keywords": [
+        "seek",
+        "junior",
+        "software",
+        "developer",
+        "experience",
+        "accessible",
+        "dashboards",
+        "design",
+        "write",
+        "automated",
+        "tests",
+        "collaborate",
+        "engineers",
+        "optimize",
+        "database",
+        "performance"
+      ],
+      "missing_phrases": [],
+      "role_level": "junior",
+      "score": 14.48,
+      "section_scores": {
+        "education": 0.0,
+        "experience": 0.0,
+        "projects": 0.0,
+        "skills": 0.0,
+        "summary": 0.0
+      },
+      "source_text": "Lee Example\nPython SQL Flask React Git\nBuilt a dashboard and tested REST APIs.",
+      "suggestions": "Strengths:\n- Demonstrates foundational knowledge of core stack (Python, SQL, Flask, React)\n- Shows awareness of full development lifecycle including testing and API design\n- Aligns technical keywords with job requirements for junior level\n\nWeak Points:\n- Resume lacks specific project context or business impact\n- Missing evidence of actual implementation experience vs. theoretical knowledge\n- No metrics provided to validate dashboard functionality or performance optimization results\n- Lack of collaboration examples suggests potential gap in team integration skills",
+      "years_experience": 0
+    },
+    "result": "Pass",
+    "seconds": 9.21,
+    "timestamp_utc": "2026-11-20T12:00:33.787286+00:00"
+  },
+  {
+    "id": "T09",
+    "type": "Edge",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Avery Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "role_level": "unsupported-tier",
+      "years_experience": "-5"
+    },
+    "expected": "200; normalize unknown role and negative experience safely",
+    "http_status": 200,
+    "actual_output": {
+      "action_plan": [
+        "Include these role-specific keywords naturally in skills and project bullets: seek, dashboards, design, rest, write.",
+        "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.",
+        "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours."
+      ],
+      "ai_recommendations": {
+        "interview_focus": [],
+        "message": "AI returned non-JSON text. Showing deterministic guidance only.",
+        "model_used": "qwen3.5:4b",
+        "rewritten_bullets": [],
+        "skills_rewrite": "",
+        "status": "unavailable",
+        "strengths": [],
+        "summary_rewrite": "",
+        "weak_points": []
+      },
+      "bullet_templates": [
+        "Collaborated with a team to implement seek in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using seek, improving delivery speed for [users/team].",
+        "Collaborated with a team to implement dashboards in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+        "Designed and shipped [feature] using dashboards, improving delivery speed for [users/team]."
+      ],
+      "candidate_name": "Avery Example",
+      "checklist": {
+        "completion_percent": 50.0,
+        "items": [
+          {
+            "completed": false,
+            "id": "score",
+            "label": "Resume score is at least 70",
+            "reason": "Current score: 23.18%"
+          },
+          {
+            "completed": true,
+            "id": "coverage",
+            "label": "Keyword coverage is at least 45%",
+            "reason": "Current coverage: 54.55%"
+          },
+          {
+            "completed": true,
+            "id": "summary",
+            "label": "Profile summary/objective is present",
+            "reason": "Detected summary section"
+          },
+          {
+            "completed": true,
+            "id": "metrics",
+            "label": "At least one quantified achievement exists",
+            "reason": "Detected numeric impact"
+          },
+          {
+            "completed": false,
+            "id": "experience",
+            "label": "Experience section is aligned with job terms",
+            "reason": "Experience alignment: 15.0%"
+          },
+          {
+            "completed": false,
+            "id": "gaps",
+            "label": "High-priority keyword gaps are below 8",
+            "reason": "Current high-priority gaps: 10"
+          }
+        ]
+      },
+      "keyword_coverage": 54.55,
+      "matched_keywords": [
+        "accessible",
+        "api",
+        "automated",
+        "developer",
+        "experience",
+        "flask",
+        "junior",
+        "python",
+        "react",
+        "software",
+        "sql",
+        "tests"
+      ],
+      "matched_phrases": [],
+      "missing_keywords": [
+        "seek",
+        "dashboards",
+        "design",
+        "rest",
+        "write",
+        "collaborate",
+        "engineers",
+        "optimize",
+        "database",
+        "performance"
+      ],
+      "missing_phrases": [
+        "rest-api"
+      ],
+      "role_level": "junior",
+      "score": 23.18,
+      "section_scores": {
+        "education": 0.0,
+        "experience": 15.0,
+        "projects": 30.0,
+        "skills": 25.0,
+        "summary": 30.0
+      },
+      "source_text": "Avery Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing",
+      "suggestions": "AI returned non-JSON text. Showing deterministic guidance only.",
+      "years_experience": 0
+    },
+    "result": "Fail",
+    "seconds": 10.14,
+    "timestamp_utc": "2026-11-20T12:00:43.927427+00:00"
+  },
+  {
+    "id": "T10",
+    "type": "Edge",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Boundary Example\nSkills\nPython SQL Flask\n project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project",
+      "job_description": ""
+    },
+    "expected": "200; accept a resume near but below the 30000-character limit",
+    "http_status": 200,
+    "actual_output": {
+      "action_plan": [
+        "Add a high-impact profile summary explaining your core value proposition.",
+        "Add a detailed professional experience section with chronological order.",
+        "Add a projects section highlighting at least 2 relevant projects.",
+        "Incorporate measurable achievements (percentages, time saved, dollar value) in your bullet points.",
+        "Use strong action verbs (e.g. Spearheaded, Designed, Optimised) at the start of experience bullets.",
+        "Group skills by category so reviewers can find relevant experience."
+      ],
+      "ai_recommendations": {
+        "interview_focus": [
+          "Prepare to explain specific projects built using Python, SQL, or Flask.",
+          "Be ready to discuss how you learned these technologies independently.",
+          "Demonstrate understanding of basic concepts like database queries, web frameworks, and scripting logic."
+        ],
+        "message": "",
+        "model_used": "qwen3.5:4b",
+        "rewritten_bullets": [],
+        "skills_rewrite": "Python | SQL | Flask",
+        "status": "ok",
+        "strengths": [],
+        "summary_rewrite": "Entry-level developer with foundational knowledge of Python, SQL, and Flask. Seeking to leverage technical fundamentals for junior roles while building practical project experience.",
+        "weak_points": [
+          "Resume contains only a skills list with no work experience, education, or project history.",
+          "The 'Boundary Example' title suggests a placeholder rather than a real role.",
+          "Skills section lists Python, SQL, and Flask but lacks context on how they were applied.",
+          "No quantifiable achievements or specific outcomes are present to demonstrate impact.",
+          "Repetitive text in the skills section indicates poor formatting and potential copy-paste errors."
+        ]
+      },
+      "bullet_templates": [
+        "Spearheaded the design and delivery of [project/system], resulting in [quantified outcome like 25% efficiency gain].",
+        "Optimised backend [service/queries], reducing latency by [measurable metric like 40ms].",
+        "Collaborated with cross-functional teams to integrate [feature/service], improving [delivery speed/adoption]."
+      ],
+      "candidate_name": "Boundary Example",
+      "checklist": {
+        "completion_percent": 20.0,
+        "items": [
+          {
+            "completed": false,
+            "id": "score",
+            "label": "Section completeness score is at least 70",
+            "reason": "Current structural score: 20.0%"
+          },
+          {
+            "completed": false,
+            "id": "coverage",
+            "label": "Core sections coverage is at least 80%",
+            "reason": "Current section coverage: 20.0%"
+          },
+          {
+            "completed": false,
+            "id": "summary",
+            "label": "Profile summary section is present",
+            "reason": "No summary section detected"
+          },
+          {
+            "completed": false,
+            "id": "metrics",
+            "label": "At least one quantified achievement exists",
+            "reason": "No measurable metrics found"
+          },
+          {
+            "completed": false,
+            "id": "experience",
+            "label": "Experience section is present",
+            "reason": "No experience section detected"
+          },
+          {
+            "completed": true,
+            "id": "gaps",
+            "label": "Skills matrix is configured",
+            "reason": "Detected skills section"
+          }
+        ]
+      },
+      "keyword_coverage": 20.0,
+      "matched_keywords": [],
+      "matched_phrases": [],
+      "missing_keywords": [],
+      "missing_phrases": [],
+      "role_level": "junior",
+      "score": 20.0,
+      "section_scores": {
+        "education": 0.0,
+        "experience": 0.0,
+        "projects": 0.0,
+        "skills": 100.0,
+        "summary": 0.0
+      },
+      "source_text": "Boundary Example\nSkills\nPython SQL Flask\n project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project project",
+      "suggestions": "Strengths:\n\nWeak Points:\n- Resume contains only a skills list with no work experience, education, or project history.\n- The 'Boundary Example' title suggests a placeholder rather than a real role.\n- Skills section lists Python, SQL, and Flask but lacks context on how they were applied.\n- No quantifiable achievements or specific outcomes are present to demonstrate impact.\n- Repetitive text in the skills section indicates poor formatting and potential copy-paste errors.",
+      "years_experience": 0
+    },
+    "result": "Pass",
+    "seconds": 9.48,
+    "timestamp_utc": "2026-11-20T12:00:53.404239+00:00"
+  },
+  {
+    "id": "T11",
+    "type": "Edge",
+    "route": "/analyze",
+    "input": {
+      "file_kind": "blank_pdf",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "fixture_file": "blank.pdf",
+      "sha256": "ba4840d880299007136a3315c294996de5a2502a32646664604123a5851f9de1"
+    },
+    "expected": "400; explain missing extractable text and OCR/paste alternative",
+    "http_status": 400,
+    "actual_output": {
+      "error": "Could not extract text. Scanned PDFs need OCR; paste the resume text instead."
+    },
+    "result": "Pass",
+    "seconds": 0.05,
+    "timestamp_utc": "2026-11-20T12:00:53.456763+00:00"
+  },
+  {
+    "id": "T12",
+    "type": "Invalid",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+    },
+    "expected": "400; missing-resume error",
+    "http_status": 400,
+    "actual_output": {
+      "error": "Missing 'resume' file or 'resume_text'."
+    },
+    "result": "Pass",
+    "seconds": 0.0,
+    "timestamp_utc": "2026-11-20T12:00:53.457719+00:00"
+  },
+  {
+    "id": "T13",
+    "type": "Invalid",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Alex Example\nalex@example.com\nSummary\nJunior software developer with Python, SQL and React project experience.\nExperience\nExample Labs | Software Intern | 2025\nBuilt a Flask API and reduced response time by 30% through query optimization.\nProjects\nCampus Dashboard | React, Python, SQL\nBuilt an accessible dashboard with automated tests.\nEducation\nExample University | BTech Computer Science | 2026\nSkills\nPython, SQL, React, Flask, Git, automated testing\n",
+      "job_description": "Python SQL developer"
+    },
+    "expected": "400; reject job description shorter than 20 words",
+    "http_status": 400,
+    "actual_output": {
+      "error": "Job description is too short (3 words). Please paste at least 20 words for accurate matching."
+    },
+    "result": "Pass",
+    "seconds": 0.0,
+    "timestamp_utc": "2026-11-20T12:00:53.458547+00:00"
+  },
+  {
+    "id": "T14",
+    "type": "Invalid",
+    "route": "/analyze",
+    "input": {
+      "file_kind": "text_file",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "fixture_file": "resume.txt",
+      "sha256": "2e8c7e3f66cc38c219a04d3ddd4d1a8b00545539740c2c9b3864682462c7dc2b"
+    },
+    "expected": "400; reject unsupported .txt upload",
+    "http_status": 400,
+    "actual_output": {
+      "error": "Only PDF files are accepted."
+    },
+    "result": "Pass",
+    "seconds": 0.0,
+    "timestamp_utc": "2026-11-20T12:00:53.459583+00:00"
+  },
+  {
+    "id": "T15",
+    "type": "Invalid",
+    "route": "/analyze",
+    "input": {
+      "file_kind": "corrupt_pdf",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance.",
+      "fixture_file": "corrupt.pdf",
+      "sha256": "2e8c7e3f66cc38c219a04d3ddd4d1a8b00545539740c2c9b3864682462c7dc2b"
+    },
+    "expected": "400; reject corrupt PDF",
+    "http_status": 400,
+    "actual_output": {
+      "error": "Invalid or corrupted PDF file."
+    },
+    "result": "Pass",
+    "seconds": 0.0,
+    "timestamp_utc": "2026-11-20T12:00:53.460526+00:00"
+  },
+  {
+    "id": "T16",
+    "type": "Invalid",
+    "route": "/analyze",
+    "input": {
+      "resume_text": "Oversize Example\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+    },
+    "expected": "400; reject resume exceeding 30000 characters",
+    "http_status": 400,
+    "actual_output": {
+      "error": "Resume exceeds 30,000 characters or job description exceeds 20,000 characters."
+    },
+    "result": "Pass",
+    "seconds": 0.0,
+    "timestamp_utc": "2026-11-20T12:00:53.462029+00:00"
+  }
+]

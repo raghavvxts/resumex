@@ -1,0 +1,142 @@
+{
+  "id": "T08",
+  "type": "Edge",
+  "route": "/analyze",
+  "input": {
+    "resume_text": "Lee Example\nPython SQL Flask React Git\nBuilt a dashboard and tested REST APIs.",
+    "job_description": "We seek a junior software developer with Python, SQL, React and Flask experience to build accessible dashboards, design REST APIs, write automated tests, collaborate with engineers and optimize database performance."
+  },
+  "expected": "200; handle resume without standard section headings",
+  "http_status": 200,
+  "actual_output": {
+    "action_plan": [
+      "Include these role-specific keywords naturally in skills and project bullets: seek, junior, software, developer, experience.",
+      "Rewrite the top 2 project bullets so they directly mirror this job's responsibilities.",
+      "Add metrics to at least 3 bullets using a format like: improved X by Y% / reduced Z by Y hours.",
+      "Add a dedicated Skills section with grouped tools and languages.",
+      "Add a Projects section with 2-4 relevant projects."
+    ],
+    "ai_recommendations": {
+      "interview_focus": [
+        "Provide concrete examples of specific projects built using the mentioned stack",
+        "Detail the testing frameworks used and their impact on code quality",
+        "Explain how you collaborated with other engineers during your development process"
+      ],
+      "message": "",
+      "model_used": "qwen3.5:4b",
+      "rewritten_bullets": [
+        "Developed a responsive dashboard using React and Flask backend with Python data processing capabilities.",
+        "Designed and tested RESTful APIs ensuring reliability through automated unit testing frameworks.",
+        "Optimized SQL database queries to improve system performance for dashboard data retrieval."
+      ],
+      "skills_rewrite": "Core Stack: Python, SQL, Flask, React; Soft Skills: API Design, Automated Testing, Database Optimization",
+      "status": "ok",
+      "strengths": [
+        "Demonstrates foundational knowledge of core stack (Python, SQL, Flask, React)",
+        "Shows awareness of full development lifecycle including testing and API design",
+        "Aligns technical keywords with job requirements for junior level"
+      ],
+      "summary_rewrite": "Junior developer proficient in Python, SQL, Flask, and React with experience building dashboards, designing REST APIs, writing automated tests, collaborating with engineering teams, and optimizing database performance.",
+      "weak_points": [
+        "Resume lacks specific project context or business impact",
+        "Missing evidence of actual implementation experience vs. theoretical knowledge",
+        "No metrics provided to validate dashboard functionality or performance optimization results",
+        "Lack of collaboration examples suggests potential gap in team integration skills"
+      ]
+    },
+    "bullet_templates": [
+      "Collaborated with a team to implement seek in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+      "Designed and shipped [feature] using seek, improving delivery speed for [users/team].",
+      "Collaborated with a team to implement junior in [project/system], resulting in [measurable outcome such as 20% faster processing].",
+      "Designed and shipped [feature] using junior, improving delivery speed for [users/team]."
+    ],
+    "candidate_name": "Lee Example",
+    "checklist": {
+      "completion_percent": 0.0,
+      "items": [
+        {
+          "completed": false,
+          "id": "score",
+          "label": "Resume score is at least 70",
+          "reason": "Current score: 14.48%"
+        },
+        {
+          "completed": false,
+          "id": "coverage",
+          "label": "Keyword coverage is at least 45%",
+          "reason": "Current coverage: 27.27%"
+        },
+        {
+          "completed": false,
+          "id": "summary",
+          "label": "Profile summary/objective is present",
+          "reason": "No summary/objective section detected"
+        },
+        {
+          "completed": false,
+          "id": "metrics",
+          "label": "At least one quantified achievement exists",
+          "reason": "No measurable metrics found"
+        },
+        {
+          "completed": false,
+          "id": "experience",
+          "label": "Experience section is aligned with job terms",
+          "reason": "Experience alignment: 0.0%"
+        },
+        {
+          "completed": false,
+          "id": "gaps",
+          "label": "High-priority keyword gaps are below 8",
+          "reason": "Current high-priority gaps: 16"
+        }
+      ]
+    },
+    "keyword_coverage": 27.27,
+    "matched_keywords": [
+      "api",
+      "flask",
+      "python",
+      "react",
+      "rest",
+      "sql"
+    ],
+    "matched_phrases": [
+      "rest-api"
+    ],
+    "missing_keywords": [
+      "seek",
+      "junior",
+      "software",
+      "developer",
+      "experience",
+      "accessible",
+      "dashboards",
+      "design",
+      "write",
+      "automated",
+      "tests",
+      "collaborate",
+      "engineers",
+      "optimize",
+      "database",
+      "performance"
+    ],
+    "missing_phrases": [],
+    "role_level": "junior",
+    "score": 14.48,
+    "section_scores": {
+      "education": 0.0,
+      "experience": 0.0,
+      "projects": 0.0,
+      "skills": 0.0,
+      "summary": 0.0
+    },
+    "source_text": "Lee Example\nPython SQL Flask React Git\nBuilt a dashboard and tested REST APIs.",
+    "suggestions": "Strengths:\n- Demonstrates foundational knowledge of core stack (Python, SQL, Flask, React)\n- Shows awareness of full development lifecycle including testing and API design\n- Aligns technical keywords with job requirements for junior level\n\nWeak Points:\n- Resume lacks specific project context or business impact\n- Missing evidence of actual implementation experience vs. theoretical knowledge\n- No metrics provided to validate dashboard functionality or performance optimization results\n- Lack of collaboration examples suggests potential gap in team integration skills",
+    "years_experience": 0
+  },
+  "result": "Pass",
+  "seconds": 9.21,
+  "timestamp_utc": "2026-11-20T12:00:33.787286+00:00"
+}

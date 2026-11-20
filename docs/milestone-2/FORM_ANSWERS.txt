@@ -1,0 +1,10 @@
+Q17 - Number of test inputs: 16
+Q18 - Number of prompt versions: 4
+
+Evidence: EVIDENCE.md, TeamTower_TestAndPromptEvidence.pdf and ../../test-data/milestone-2/.
+16 distinct input rows: 6 Normal, 5 Edge, 5 Invalid. 13 Pass, 3 Fail against the declared criteria.
+4 intentional versions of the job-match prompt were saved and actually executed on 20 November 2026.
+
+Important: these are real LOCAL Ollama qwen3.5:4b runs, not hosted Gemini results. Tests verify stated contracts and selected fixture facts, not complete factual accuracy. Manual prompt-output review found unsupported claims in all four sampled versions, including the current application prompt. Do not describe these experiments as all passing or as proof the model is hallucination-free.
+
+Use the same 16 and 4 in the main Milestone 2 PDF, and include this test table and iteration log. This evidence appendix does not replace the required seven-section Milestone 2 document or its real browser screenshots and team-agreed contribution table.

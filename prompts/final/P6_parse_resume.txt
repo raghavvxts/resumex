@@ -1,0 +1,55 @@
+
+You are an expert resume data extractor.
+Extract the information from the following resume into a STRICT JSON object perfectly matching this schema:
+
+{
+  "summary": "Original summary if present, otherwise empty",
+  "personal_info": {
+    "name": "Full Name",
+    "email": "email@example.com",
+    "phone": "Phone Number",
+    "linkedin": "LinkedIn URL or handle",
+    "github": "GitHub URL or handle",
+    "portfolio": "Portfolio URL"
+  },
+  "education": [
+    {
+      "institution": "University Name",
+      "degree": "Degree and Major",
+      "location": "City, State",
+      "date": "Graduation Date (e.g. May 2024)",
+      "gpa": "GPA if present"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Company Name",
+      "role": "Job Title",
+      "location": "City, State",
+      "date": "Start - End Date",
+      "bullets": ["Bullet point 1", "Bullet point 2"]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Project Name",
+      "technologies": "Comma separated technologies",
+      "date": "Date if present",
+      "bullets": ["Bullet point 1", "Bullet point 2"]
+    }
+  ],
+  "skills": {
+    "languages": "Comma separated languages",
+    "frameworks": "Comma separated frameworks",
+    "tools": "Comma separated tools"
+  }
+}
+
+Rules:
+- Return ONLY valid JSON. Absolutely no markdown backticks, no explanatory text.
+- If a field is missing, leave it as an empty string "".
+- Ensure all bullet points are parsed individually into the 'bullets' arrays.
+- Do not make up information.
+
+Resume Text:
+{resume_text}

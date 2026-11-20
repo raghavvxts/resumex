@@ -88,3 +88,7 @@ Run `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` in fron
 The report leads with priority fixes. The editor provides a live PDF preview with page navigation and zoom. Named application versions are stored on this browser (up to 20), with automatic recovery copies before loading over unsaved edits. Clear data removes these copies as well as the current draft. PDF previews are rendered with a lazy-loaded PDF.js worker; install frontend packages from the updated lockfile. Use Node 22.13+ or Node 24+ for frontend tooling.
 
 See [local model checks](docs/LOCAL_MODEL_BENCHMARK.md), [loading measurements](docs/PERFORMANCE.md), and [implementation verification](docs/FIXES.md). To exercise the actual TeX compiler after `backend/build.sh`, run `RUN_TEMPLATE_TESTS=1 python -m unittest test_app test_exports -v` in backend.
+
+## Milestone 2 evidence
+
+[Real test results and prompt experiments](docs/milestone-2/EVIDENCE.md): 16 distinct synthetic inputs, 4 newly executed prompt versions, raw outputs and reproducible runners. Local Ollama runs are clearly separated from hosted Gemini claims. See the [PDF evidence appendix](docs/milestone-2/TeamTower_TestAndPromptEvidence.pdf) and [form counts](docs/milestone-2/FORM_ANSWERS.txt).
